@@ -2,7 +2,7 @@
 #define ATMEGASIM_SRC_LOG_OPS_H
 
 #include <cstdint>
-#include "simple_utils.h"
+#include "types.h"
 #include "environment.h"
 
 class LogOps {
@@ -12,7 +12,7 @@ public:
     static void AND_(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);
 
     static void ANDI(Environ& env, uint32_t instrn);
-    static void ANDI_(Environ &env, FiveBit tgtAddr, UChar immData);
+    static void ANDI_(Environ &env, FiveBit tgtAddr, uchar_t immData);
 
     static void OR(Environ& env, uint32_t instrn);
     static void OR_(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);

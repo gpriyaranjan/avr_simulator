@@ -2,7 +2,7 @@
 #define ATMEGASIM_ALUOPS_H
 
 #include <cstdint>
-#include "simple_utils.h"
+#include "types.h"
 #include "environment.h"
 
 class AluOps {
@@ -79,26 +79,26 @@ public:
 
 class AddTwoFlags {
 public:
-    static bool NF(UChar result);
-    static bool ZF(UChar result);
-    static bool VF(UChar target, UChar source, UChar result);
-    static bool CF(UChar target, UChar source, UChar result);
-    static bool SF(UChar target, UChar source, UChar result);
-    static bool HF(UChar target, UChar source, UChar result);
+    static bool NF(uchar_t result);
+    static bool ZF(uchar_t result);
+    static bool VF(uchar_t target, uchar_t source, uchar_t result);
+    static bool CF(uchar_t target, uchar_t source, uchar_t result);
+    static bool SF(uchar_t target, uchar_t source, uchar_t result);
+    static bool HF(uchar_t target, uchar_t source, uchar_t result);
 
-    static void statusFlags(UChar target, UChar source, UChar result, SReg &status);
+    static void statusFlags(uchar_t target, uchar_t source, uchar_t result, SReg &status);
 };
 
 class SubTwoFlags {
 public:
-    static bool NF(UChar result);
-    static bool ZF(UChar result);
-    static bool VF(UChar target, UChar source, UChar result);
-    static bool CF(UChar target, UChar source, UChar result);
-    static bool SF(UChar target, UChar source, UChar result);
-    static bool HF(UChar target, UChar source, UChar result);
+    static bool NF(uchar_t result);
+    static bool ZF(uchar_t result);
+    static bool VF(uchar_t target, uchar_t source, uchar_t result);
+    static bool CF(uchar_t target, uchar_t source, uchar_t result);
+    static bool SF(uchar_t target, uchar_t source, uchar_t result);
+    static bool HF(uchar_t target, uchar_t source, uchar_t result);
 
-    static void statusFlags(UChar target, UChar source, UChar result, SReg &status);
+    static void statusFlags(uchar_t target, uchar_t source, uchar_t result, SReg &status);
 };
 
 #endif //ATMEGASIM_ALUOPS_H

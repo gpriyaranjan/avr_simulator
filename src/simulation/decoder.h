@@ -2,7 +2,7 @@
 #define ATMEGASIM_EXECCOMMON_H
 
 #include <strings.h>
-#include "simple_utils.h"
+#include "types.h"
 #include "environment.h"
 
 enum Cmds {
@@ -92,6 +92,19 @@ public:
     inline static void Reg5SBit3(uint32_t instrn, FiveBit& tgtReg, ThreeBit& regNum) {
         regNum = instrn & 0x7;
         tgtReg = (instrn >> 4) & 0x1F;
+    }
+
+    /* 1100	kkkk kkkk kkkk */
+    inline static void Addr12(uint32_t instrn, TwelveBit& offset) {
+        offset = offset & 0x0FFF;
+    }
+
+    /* 1001	010k kkkk 110k kkkk	kkkk kkkk kkkk */
+    inline static void Addr22(uint64_t instrn, TwentyTwoBit& tgtAddr) {
+        uint32_t additionalBits;
+        tgtAddr = instrn & 0x1FFFF;
+        additionalBits = (instrn & 0x1F00000) >> 3;
+        tgtAddr = tgtAddr | additionalBits;
     }
 };
 

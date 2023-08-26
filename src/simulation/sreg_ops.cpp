@@ -3,7 +3,7 @@
 
 void SRegOps::WriteBit(Environ &env, ThreeBit regNum, bool value) {
 
-    UChar regBit = 1 << regNum;
+    auto regBit = (SMasks)(1 << regNum);
 
     switch(regBit) {
         case CMask:
@@ -174,7 +174,7 @@ void SRegOps::BST(Environ &env, uint32_t instrn) {
 }
 
 void SRegOps::BST_(Environ &env, FiveBit tgtAddr, ThreeBit bitNum) {
-    UChar tgtValue = env.mem[tgtAddr];
+    uchar_t tgtValue = env.read_register(tgtAddr);
     bool tBit = is_bi(tgtValue, bitNum);
     env.sReg.T = tBit;
 }
@@ -186,9 +186,9 @@ void SRegOps::BLD(Environ &env, uint32_t instrn) {
 }
 
 void SRegOps::BLD_(Environ &env, FiveBit tgtAddr, ThreeBit bitNum) {
-    UChar tgtValue = env.mem[tgtAddr];
-    UChar tBitMask = ((env.sReg.T) ? 0 : 1) << bitNum;
-    UChar result = tgtValue | tBitMask;
-    env.mem[tgtAddr] = result;
+    uchar_t tgtValue = env.read_register(tgtAddr);
+    uchar_t tBitMask = ((env.sReg.T) ? 0 : 1) << bitNum;
+    uchar_t result = tgtValue | tBitMask;
+    env.write_register(tgtAddr, result);
 }
 

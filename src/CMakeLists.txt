@@ -15,11 +15,13 @@ set(HEADER_FILES
         simulation/alu_ops.h
         simulation/environment.h
         simulation/decoder.h
-        simulation/simple_utils.h
+        simulation/types.h
         simulation/log_ops.h
         simulation/sreg_ops.h
         simulation/all_ops.h
         simulation/branch_ops.h
+        simulation/status_reg.h
+        simulation/regs_mems.h
 )
 
 add_library(
