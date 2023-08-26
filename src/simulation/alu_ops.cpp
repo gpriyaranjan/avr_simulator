@@ -354,7 +354,7 @@ void AluOps::TST(Environ &env, uint32_t instrn) {
 }
 
 void AluOps::TST(Environ &env, FiveBit tgtAddr) {
-    LogOps::AND_(env, tgtAddr, tgtAddr);
+    LogOps::AND(env, tgtAddr, tgtAddr);
 }
 
 void AluOps::CP(Environ &env, uint32_t instrn) {

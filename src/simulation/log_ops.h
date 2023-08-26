@@ -9,46 +9,46 @@ class LogOps {
 public:
 
     static void AND(Environ& env, uint32_t instrn);
-    static void AND_(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);
+    static void AND(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);
 
     static void ANDI(Environ& env, uint32_t instrn);
-    static void ANDI_(Environ &env, FiveBit tgtAddr, uchar_t immData);
+    static void ANDI(Environ &env, FiveBit tgtAddr, uchar_t immData);
 
     static void OR(Environ& env, uint32_t instrn);
-    static void OR_(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);
+    static void OR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);
 
     static void ORI(Environ& env, uint32_t instrn);
-    static void ORI_(Environ &env, FiveBit tgtAddr, EightBit immData);
+    static void ORI(Environ &env, FiveBit tgtAddr, EightBit immData);
 
     static void EOR(Environ& env, uint32_t instrn);
-    static void EOR_(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);
+    static void EOR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);
 
     static void COM(Environ& env, uint32_t instrn);
-    static void COM_(Environ &env, FiveBit tgtAddr);
+    static void COM(Environ &env, FiveBit tgtAddr);
 
     static void SBR(Environ& env, uint32_t instrn);
-    static void SBR_(Environ &env, FiveBit tgtAddr, EightBit immData);
+    static void SBR(Environ &env, FiveBit tgtAddr, EightBit immData);
 
     static void CBR(Environ& env, uint32_t instrn);
-    static void CBR_(Environ &env, FiveBit tgtAddr, EightBit immData);
+    static void CBR(Environ &env, FiveBit tgtAddr, EightBit immData);
 
     static void SER(Environ& env, uint32_t instrn);
-    static void SER_(Environ &env, FiveBit tgtAddr);
+    static void SER(Environ &env, FiveBit tgtAddr);
 
     static void CLR(Environ& env, uint32_t instrn);
-    static void CLR_(Environ &env, FiveBit tgtAddr);
+    static void CLR(Environ &env, FiveBit tgtAddr);
 
     static void LSL(Environ& env, uint32_t instrn);
-    static void LSL_(Environ &env, FiveBit tgtAddr);
+    static void LSL(Environ &env, FiveBit tgtAddr);
 
     static void LSR(Environ& env, uint32_t instrn);
-    static void LSR_(Environ &env, FiveBit tgtAddr);
+    static void LSR(Environ &env, FiveBit tgtAddr);
 
     static void ROL(Environ& env, uint32_t instrn);
-    static void ROL_(Environ &env, FiveBit tgtAddr);
+    static void ROL(Environ &env, FiveBit tgtAddr);
 
     static void ROR(Environ& env, uint32_t instrn);
-    static void ROR_(Environ &env, FiveBit tgtAddr);
+    static void ROR(Environ &env, FiveBit tgtAddr);
 
 };
 
