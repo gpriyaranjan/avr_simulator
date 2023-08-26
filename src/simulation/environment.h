@@ -58,12 +58,15 @@ class Environ {
 public:
     UChar mem[1L << 32];
     SReg sReg;
+    short PC;
 
     Environ() {
+        PC = 0;
         bzero(this->mem, 1L << 32);
     }
 
     void init() {
+        PC = 0;
         bzero(this->mem, 1L << 32);
         sReg.init();
     }

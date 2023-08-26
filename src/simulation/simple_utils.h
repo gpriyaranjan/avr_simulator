@@ -27,4 +27,7 @@ typedef unsigned char EightBit;
 typedef unsigned char UChar;
 typedef   signed char SChar;
 
+// typedef uint32_t  FourBytes;
+typedef uint64_t EightBytes;
+
 #endif //ATMEGASIM_TESTS_SIMPLE_UTILS_H

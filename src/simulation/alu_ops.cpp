@@ -3,7 +3,7 @@
 #include "alu_ops.h"
 #include "log_ops.h"
 
-void AluOps::ADD(Environ& env, unsigned int instrn) {
+void AluOps::ADD(Environ& env, u_int32_t instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
     ADD(env, tgtAddr, srcAddr);
@@ -18,7 +18,7 @@ void AluOps::ADD(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     env.mem[tgtAddr] = result;
 }
 
-void AluOps::ADC(Environ& env, unsigned int instrn) {
+void AluOps::ADC(Environ& env, uint32_t instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
     ADC(env, tgtAddr, srcAddr);
@@ -33,7 +33,7 @@ void AluOps::ADC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     env.mem[tgtAddr] = result;
 }
 
-void AluOps::ADIW(Environ& env, unsigned int instrn) {
+void AluOps::ADIW(Environ& env, uint32_t instrn) {
     TwoBit tgtId;
     SixBit immData;
     ArgsDecode::Reg2Imm6(instrn, tgtId, immData);
@@ -61,7 +61,7 @@ void AluOps::ADIW(Environ& env, FiveBit tgtAddr, SixBit immData) {
     env.mem[tgtAddr+1] = result2;
 }
 
-void AluOps::SUB(Environ& env, unsigned int instrn) {
+void AluOps::SUB(Environ& env, uint32_t instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
     SUB(env, tgtAddr, srcAddr);
@@ -76,7 +76,7 @@ void AluOps::SUB(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     env.mem[tgtAddr] = result;
 }
 
-void AluOps::SBC(Environ& env, unsigned int instrn) {
+void AluOps::SBC(Environ& env, uint32_t instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
     SBC(env, tgtAddr, srcAddr);
@@ -92,7 +92,7 @@ void AluOps::SBC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     env.mem[tgtAddr] = result;
 }
 
-void AluOps::SUBI(Environ& env, unsigned int instrn) {
+void AluOps::SUBI(Environ& env, uint32_t instrn) {
     FourBit tgtId;
     EightBit immData;
     ArgsDecode::Reg4Imm8(instrn, tgtId, immData);
@@ -108,7 +108,7 @@ void AluOps::SUBI(Environ& env, FiveBit tgtAddr, EightBit immData) {
     env.mem[tgtAddr] = result;
 }
 
-void AluOps::SBCI(Environ& env, unsigned int instrn) {
+void AluOps::SBCI(Environ& env, uint32_t instrn) {
     FourBit tgtId;
     EightBit immData;
     ArgsDecode::Reg4Imm8(instrn, tgtId, immData);
@@ -124,7 +124,7 @@ void AluOps::SBCI(Environ& env, FiveBit tgtAddr, EightBit immData) {
     env.mem[tgtAddr] = result;
 }
 
-void AluOps::SBIW(Environ& env, unsigned int instrn) {
+void AluOps::SBIW(Environ& env, uint32_t instrn) {
     TwoBit tgtId;
     SixBit immData;
     ArgsDecode::Reg2Imm6(instrn, tgtId, immData);
@@ -151,7 +151,7 @@ void AluOps::SBIW(Environ& env, FiveBit tgtAddr, SixBit immData) {
     env.mem[tgtAddr+1] = result1;
 }
 
-void AluOps::NEG(Environ& env, unsigned int instrn) {
+void AluOps::NEG(Environ& env, uint32_t instrn) {
     FiveBit tgtAddr;
     ArgsDecode::Reg5(instrn, tgtAddr);
     NEG(env, tgtAddr);
@@ -172,7 +172,7 @@ void AluOps::NEG(Environ& env, FiveBit tgtAddr) {
     env.mem[tgtAddr] = result;
 }
 
-void AluOps::INC(Environ& env, unsigned int instrn) {
+void AluOps::INC(Environ& env, uint32_t instrn) {
     FiveBit tgtAddr;
     ArgsDecode::Reg5(instrn, tgtAddr);
     INC(env, tgtAddr);
@@ -191,7 +191,7 @@ void AluOps::INC(Environ& env, FiveBit tgtAddr) {
     env.mem[tgtAddr] = result;
 }
 
-void AluOps::DEC(Environ& env, unsigned int instrn) {
+void AluOps::DEC(Environ& env, uint32_t instrn) {
     FiveBit tgtAddr;
     ArgsDecode::Reg5(instrn, tgtAddr);
     DEC(env, tgtAddr);
@@ -210,7 +210,7 @@ void AluOps::DEC(Environ& env, FiveBit tgtAddr) {
     env.mem[tgtAddr] = result;
 }
 
-void AluOps::ASR(Environ& env, unsigned int instrn) {
+void AluOps::ASR(Environ& env, uint32_t instrn) {
     FiveBit tgtAddr;
     ArgsDecode::Reg5(instrn, tgtAddr);
     ASR(env, tgtAddr);
@@ -230,7 +230,7 @@ void AluOps::ASR(Environ& env, FiveBit tgtAddr) {
     env.mem[tgtAddr] = result;
 }
 
-void AluOps::MUL(Environ& env, unsigned int instrn) {
+void AluOps::MUL(Environ& env, uint32_t instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
     MUL(env, tgtAddr, srcAddr);
@@ -245,7 +245,7 @@ void AluOps::MUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     env.mem[0x00001] = (result >> 8) & 0xFF;
 }
 
-void AluOps::MULS(Environ& env, unsigned int instrn) {
+void AluOps::MULS(Environ& env, uint32_t instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
     MULS(env, tgtAddr, srcAddr);
@@ -265,7 +265,7 @@ void AluOps::MULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
 }
 
 
-void AluOps::MULSU(Environ& env, unsigned int instrn) {
+void AluOps::MULSU(Environ& env, uint32_t instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
     MULSU(env, tgtAddr, srcAddr);
@@ -284,7 +284,7 @@ void AluOps::MULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     env.mem[0x00001] = (result >> 8) & 0xFF;
 }
 
-void AluOps::FMUL(Environ& env, unsigned int instrn) {
+void AluOps::FMUL(Environ& env, uint32_t instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
     MUL(env, tgtAddr, srcAddr);
@@ -300,7 +300,7 @@ void AluOps::FMUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     env.mem[0x00001] = (result >> 8) & 0xFF;
 }
 
-void AluOps::FMULS(Environ& env, unsigned int instrn) {
+void AluOps::FMULS(Environ& env, uint32_t instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
     MULS(env, tgtAddr, srcAddr);
@@ -321,7 +321,7 @@ void AluOps::FMULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
 }
 
 
-void AluOps::FMULSU(Environ& env, unsigned int instrn) {
+void AluOps::FMULSU(Environ& env, uint32_t instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
     MULSU(env, tgtAddr, srcAddr);
@@ -341,7 +341,7 @@ void AluOps::FMULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     env.mem[0x00001] = (result >> 8) & 0xFF;
 }
 
-void AluOps::TST(Environ &env, unsigned int instrn) {
+void AluOps::TST(Environ &env, uint32_t instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
     TST(env, tgtAddr);
@@ -351,7 +351,7 @@ void AluOps::TST(Environ &env, FiveBit tgtAddr) {
     LogOps::AND_(env, tgtAddr, tgtAddr);
 }
 
-void AluOps::CP(Environ &env, unsigned int instrn) {
+void AluOps::CP(Environ &env, uint32_t instrn) {
     FiveBit tgtAddr, srcAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
     CP(env, tgtAddr, srcAddr);
@@ -364,7 +364,7 @@ void AluOps::CP(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     SubTwoFlags::statusFlags(tgtVal, srcVal, result, env.sReg);
 }
 
-void AluOps::CPC(Environ &env, unsigned int instrn) {
+void AluOps::CPC(Environ &env, uint32_t instrn) {
     FiveBit tgtAddr, srcAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
     CPC(env, tgtAddr, srcAddr);
@@ -378,7 +378,7 @@ void AluOps::CPC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     SubTwoFlags::statusFlags(tgtVal, srcVal, result, env.sReg);
 }
 
-void AluOps::CPCI(Environ &env, unsigned int instrn) {
+void AluOps::CPCI(Environ &env, uint32_t instrn) {
     FourBit tgtId; EightBit immData;
     ArgsDecode::Reg4Imm8(instrn, tgtId, immData);
     FiveBit tgtAddr = tgtId + 0x100;
