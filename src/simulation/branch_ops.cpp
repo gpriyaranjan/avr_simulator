@@ -84,7 +84,167 @@ bool BranchOps::BRBS(Environ &env, uint32_t instrn) {
 bool BranchOps::BRBS(Environ &env, SevenBit offset, ThreeBit regBit) {
     uchar_t status = env.sReg.getFlags();
     bool isSet = is_bi(status, regBit);
-    if (isSet) {
+    return Branchif(env, isSet, offset);
+}
+
+bool BranchOps::BRBC(Environ &env, uint32_t instrn) {
+    SevenBit offset; ThreeBit regBit;
+    ArgsDecode::Addr7Bit3(instrn, offset, regBit);
+    return BRBC(env, offset, regBit);
+}
+
+bool BranchOps::BRBC(Environ &env, SevenBit offset, ThreeBit regBit) {
+    uchar_t status = env.sReg.getFlags();
+    bool isSet = is_nbi(status, regBit);
+    return Branchif(env, isSet, offset);
+}
+
+bool BranchOps::BREQ(Environ &env, uint32_t instrn) {
+    return BRBS(env, instrn);
+}
+
+bool BranchOps::BREQ(Environ &env, SevenBit offset) {
+    return BRBS(env, offset, ZBit);
+}
+
+bool BranchOps::BRNE(Environ &env, uint32_t instrn) {
+    return BRBC(env, instrn);
+}
+
+bool BranchOps::BRNE(Environ &env, SevenBit offset) {
+    return BRBS(env, offset, ZBit);
+}
+
+bool BranchOps::BRCS(Environ &env, uint32_t instrn) {
+    return BRBS(env, instrn);
+}
+
+bool BranchOps::BRCS(Environ &env, SevenBit offset) {
+    return BRBS(env, offset, CBit);
+}
+
+bool BranchOps::BRCC(Environ &env, uint32_t instrn) {
+    return BRBC(env, instrn);
+}
+
+bool BranchOps::BRCC(Environ &env, SevenBit offset) {
+    return BRBC(env, offset, CBit);
+}
+
+bool BranchOps::BRLO(Environ &env, uint32_t instrn) {
+    return BRBS(env, instrn);
+}
+
+bool BranchOps::BRLO(Environ &env, SevenBit offset) {
+    return BRBS(env, offset, CBit);
+}
+
+bool BranchOps::BRSH(Environ &env, uint32_t instrn) {
+    return BRBC(env, instrn);
+}
+
+bool BranchOps::BRSH(Environ &env, SevenBit offset) {
+    return BRBC(env, offset, CBit);
+}
+
+bool BranchOps::BRMI(Environ &env, uint32_t instrn) {
+    return BRBS(env, instrn);
+}
+
+bool BranchOps::BRMI(Environ &env, SevenBit offset) {
+    return BRBS(env, offset, NBit);
+}
+
+bool BranchOps::BRPL(Environ &env, uint32_t instrn) {
+    return BRBC(env, instrn);
+}
+
+bool BranchOps::BRPL(Environ &env, SevenBit offset) {
+    return BRBC(env, offset, NBit);
+}
+
+bool BranchOps::BRVS(Environ &env, uint32_t instrn) {
+    return BRBS(env, instrn);
+}
+
+bool BranchOps::BRVS(Environ &env, SevenBit offset) {
+    return BRBS(env, offset, VBit);
+}
+
+bool BranchOps::BRVC(Environ &env, uint32_t instrn) {
+    return BRBC(env, instrn);
+}
+
+bool BranchOps::BRVC(Environ &env, SevenBit offset) {
+    return BRBC(env, offset, VBit);
+}
+
+bool BranchOps::BRLT(Environ &env, uint32_t instrn) {
+    return BRBS(env, instrn);
+}
+
+bool BranchOps::BRLT(Environ &env, SevenBit offset) {
+    return BRBS(env, offset, SBit);
+}
+
+bool BranchOps::BRGE(Environ &env, uint32_t instrn) {
+    return BRBC(env, instrn);
+}
+
+bool BranchOps::BRGE(Environ &env, SevenBit offset) {
+    return BRBC(env, offset, SBit);
+}
+
+bool BranchOps::BRHS(Environ &env, uint32_t instrn) {
+    return BRBS(env, instrn);
+}
+
+bool BranchOps::BRHS(Environ &env, SevenBit offset) {
+    return BRBS(env, offset, HBit);
+}
+
+bool BranchOps::BRHC(Environ &env, uint32_t instrn) {
+    return BRBC(env, instrn);
+}
+
+bool BranchOps::BRHC(Environ &env, SevenBit offset) {
+    return BRBC(env, offset, HBit);
+}
+
+bool BranchOps::BRTS(Environ &env, uint32_t instrn) {
+    return BRBS(env, instrn);
+}
+
+bool BranchOps::BRTS(Environ &env, SevenBit offset) {
+    return BRBS(env, offset, TBit);
+}
+
+bool BranchOps::BRTC(Environ &env, uint32_t instrn) {
+    return BRBC(env, instrn);
+}
+
+bool BranchOps::BRTC(Environ &env, SevenBit offset) {
+    return BRBC(env, offset, TBit);
+}
+
+bool BranchOps::BRIE(Environ &env, uint32_t instrn) {
+    return BRBS(env, instrn);
+}
+
+bool BranchOps::BRIE(Environ &env, SevenBit offset) {
+    return BRBS(env, offset, IBit);
+}
+
+bool BranchOps::BRID(Environ &env, uint32_t instrn) {
+    return BRBC(env, instrn);
+}
+
+bool BranchOps::BRID(Environ &env, SevenBit offset) {
+    return BRBC(env, offset, IBit);
+}
+
+bool BranchOps::Branchif(Environ& env, bool toSkip, SevenBit offset) {
+    if (toSkip) {
         env.PC = env.PC + offset;
         return true;
     } else {
@@ -92,4 +252,3 @@ bool BranchOps::BRBS(Environ &env, SevenBit offset, ThreeBit regBit) {
         return true;
     }
 }
-

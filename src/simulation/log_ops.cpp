@@ -72,7 +72,7 @@ bool LogOps::ORI(Environ &env, uint32_t instrn) {
     FourBit tgtId; EightBit immData;
     ArgsDecode::Reg4Imm8(instrn, tgtId, immData);
     FiveBit tgtAddr = tgtId + 0x10;
-    return ORI(env, tgtId, immData);
+    return ORI(env, tgtAddr, immData);
 }
 
 bool LogOps::ORI(Environ &env, FiveBit tgtAddr, EightBit immData) {

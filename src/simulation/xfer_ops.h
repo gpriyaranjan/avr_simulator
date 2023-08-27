@@ -1,0 +1,9 @@
+#ifndef ATMEGASIM_SRC_XFER_OPS_H
+#define ATMEGASIM_SRC_XFER_OPS_H
+
+class XferOps {
+
+};
+
+
+#endif //ATMEGASIM_SRC_XFER_OPS_H

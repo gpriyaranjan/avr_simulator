@@ -30,8 +30,65 @@ public:
     static bool BRBS(Environ& env, uint32_t instrn);
     static bool BRBS(Environ& env, SevenBit offset, ThreeBit regBit);
 
+    static bool BRBC(Environ& env, uint32_t instrn);
+    static bool BRBC(Environ& env, SevenBit offset, ThreeBit regBit);
+
+    static bool BREQ(Environ& env, uint32_t instrn);
+    static bool BREQ(Environ& env, SevenBit offset);
+
+    static bool BRNE(Environ& env, uint32_t instrn);
+    static bool BRNE(Environ& env, SevenBit offset);
+
+    static bool BRCS(Environ& env, uint32_t instrn);
+    static bool BRCS(Environ& env, SevenBit offset);
+
+    static bool BRCC(Environ& env, uint32_t instrn);
+    static bool BRCC(Environ& env, SevenBit offset);
+
+    static bool BRLO(Environ& env, uint32_t instrn);
+    static bool BRLO(Environ& env, SevenBit offset);
+
+    static bool BRSH(Environ& env, uint32_t instrn);
+    static bool BRSH(Environ& env, SevenBit offset);
+
+    static bool BRMI(Environ& env, uint32_t instrn);
+    static bool BRMI(Environ& env, SevenBit offset);
+
+    static bool BRPL(Environ& env, uint32_t instrn);
+    static bool BRPL(Environ& env, SevenBit offset);
+
+    static bool BRVS(Environ& env, uint32_t instrn);
+    static bool BRVS(Environ& env, SevenBit offset);
+
+    static bool BRVC(Environ& env, uint32_t instrn);
+    static bool BRVC(Environ& env, SevenBit offset);
+
+    static bool BRLT(Environ& env, uint32_t instrn);
+    static bool BRLT(Environ& env, SevenBit offset);
+
+    static bool BRGE(Environ& env, uint32_t instrn);
+    static bool BRGE(Environ& env, SevenBit offset);
+
+    static bool BRHS(Environ& env, uint32_t instrn);
+    static bool BRHS(Environ& env, SevenBit offset);
+
+    static bool BRHC(Environ& env, uint32_t instrn);
+    static bool BRHC(Environ& env, SevenBit offset);
+
+    static bool BRTS(Environ& env, uint32_t instrn);
+    static bool BRTS(Environ& env, SevenBit offset);
+
+    static bool BRTC(Environ& env, uint32_t instrn);
+    static bool BRTC(Environ& env, SevenBit offset);
+
+    static bool BRIE(Environ& env, uint32_t instrn);
+    static bool BRIE(Environ& env, SevenBit offset);
+
+    static bool BRID(Environ& env, uint32_t instrn);
+    static bool BRID(Environ& env, SevenBit offset);
+
 private:
-    static bool BranchIf(Environ& env, bool toBranch, CPUAddr addr);
+    static bool Branchif(Environ& env, bool toSkip, SevenBit offset);
 };
 
 

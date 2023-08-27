@@ -137,6 +137,7 @@ bool CallOps::RETI(Environ &env, bool dummy) {
     TwentyTwoBit pcValue;
     Pop3Bytes(env, pcValue);
     env.PC = pcValue;
+    return true;
 }
 
 void CallOps::Push1Byte(Environ& env, uchar_t value) {

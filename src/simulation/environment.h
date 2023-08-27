@@ -3,6 +3,7 @@
 
 #include <strings.h>
 #include "types.h"
+#include "exceptions.h"
 
 #include "status_reg.h"
 #include "regs_mems.h"

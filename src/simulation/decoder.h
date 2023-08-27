@@ -5,53 +5,6 @@
 #include "types.h"
 #include "environment.h"
 
-enum Cmds {
-    // Arithmetic Operations
-    ADD,
-    ADC,
-    ADIW,
-
-    SUB,
-    SBC,
-    SUBI,
-    SBCI,
-    SBIW,
-
-    NEG,
-    INC,
-    DEC,
-    ASR,
-
-    MUL,
-    MULS,
-    MULSU,
-
-    FMUL,
-    FMULS,
-    FMULSU,
-
-    // Logical Operations
-    AND,
-    ANDI,
-    OR,
-    ORI,
-    EOR,
-
-    COM,
-
-    SBR,
-    CBR,
-    SER,
-    CLR,
-
-    LSL,
-    LSR,
-
-    ROL,
-    ROR
-
-};
-
 class ArgsDecode {
 public:
 

@@ -18,15 +18,6 @@
 
 #define is_zero(byte) (byte == 0)
 
-typedef unsigned char OneBit;
-typedef unsigned char TwoBit;
-typedef unsigned char ThreeBit;
-typedef unsigned char FourBit;
-typedef unsigned char FiveBit;
-typedef unsigned char SixBit;
-typedef unsigned char SevenBit;
-typedef unsigned char EightBit;
-
 typedef unsigned char uchar_t;
 typedef   signed char schar_t;
 
@@ -43,20 +34,32 @@ inline uint16_t make_word(uchar_t hi_byte, uchar_t lo_byte) {
     return (hi_byte>>8) | lo_byte;
 }
 
-class IllegalAddress : public std::exception {
+class ValueTooBig : public std::exception {
 public:
-    CPUAddr addr;
-    CPUAddr pc;
-    IllegalAddress(CPUAddr addr_, CPUAddr pc_)
-        : addr(addr_), pc(pc_) {}
+    uchar_t value;
+    ValueTooBig(uchar_t v) : value(v) {}
 };
 
-class IllegalRegister : public std::exception {
+template <int size> class BitField {
+private:
+    uchar_t value;
 public:
-    FiveBit addr;
-    CPUAddr pc;
-    IllegalRegister(FiveBit addr_, CPUAddr pc_)
-    : addr(addr_), pc(pc_) {}
+    BitField();
+    BitField(uchar_t ch) {
+        if (ch >= 1 >> size)
+            throw ValueTooBig(ch);
+        value = ch;
+    }
+    operator uchar_t() {return value; }
 };
+
+typedef BitField<1> OneBit;
+typedef BitField<2> TwoBit;
+typedef BitField<3> ThreeBit;
+typedef BitField<4> FourBit;
+typedef BitField<5> FiveBit;
+typedef BitField<6> SixBit;
+typedef BitField<7> SevenBit;
+typedef BitField<8> EightBit;
 
 #endif //ATMEGASIM_TYPES_H
