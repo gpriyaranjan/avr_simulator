@@ -1,4 +1,5 @@
 #include "decoder.h"
+#include "environment.h"
 #include "branch_ops.h"
 
 void BranchOps::RJMP(Environ &env, uint32_t instrn) {
@@ -27,6 +28,14 @@ void BranchOps::IJMP(Environ &env) {
 }
 
 void BranchOps::IJMP(Environ &env, bool dummy) {
+    env.PC = env.read_reg_pair(M::Z);
+}
+
+void BranchOps::EIJMP(Environ &env) {
+
+}
+
+void BranchOps::EIJMP(Environ &env, bool dummy) {
 
 }
 

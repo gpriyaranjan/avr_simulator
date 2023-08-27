@@ -1,38 +1,6 @@
 #ifndef ATMEGASIM_SRC_STATUS_REG_H
 #define ATMEGASIM_SRC_STATUS_REG_H
 
-typedef struct SReg_ {
-    bool C: 1; // Carry flag
-    bool Z: 1; // Zero flag
-    bool N: 1; // Negative flag
-    bool V: 1; // Overflow flag
-    bool S: 1; // Signed flag
-    bool H: 1; // Half carry flag
-    bool T: 1; // T flag
-    bool I: 1; // I flag
-
-public:
-    SReg_() {
-        C = Z = N = V = S = H = T = I = false;
-    }
-
-    void init() {
-        C = Z = N = V = S = H = T = I = false;
-    }
-
-    SReg_& setC(bool c) { C = c; return *this; }
-    SReg_& setZ(bool z) { Z = z; return *this; }
-    SReg_& setN(bool n) { N = n; return *this; }
-    SReg_& setV(bool v) { V = v; return *this; }
-    SReg_& setS(bool s) { S = s; return *this; }
-    SReg_& setH(bool h) { H = h; return *this; }
-    SReg_& setT(bool t) { T = t; return *this; }
-    SReg_& setI(bool i) { I = i; return *this; }
-
-    SReg_& setS() { S = N^V; return *this; }
-
-} __attribute__((packed)) SReg;
-
 enum SBits {
     CBit = 0,
     ZBit = 1,
@@ -53,6 +21,41 @@ enum SMasks {
     HMask = 1<<HBit,
     TMask = 1<<TBit,
     IMask = 1<<IBit
+};
+
+
+class SReg {
+private:
+    uchar_t& value;
+
+public:
+    explicit SReg(uchar_t& value_) : value(value_) {};
+
+    [[nodiscard]] bool Z() const { return (bool)(value >> ZBit); }
+    SReg setZ(bool c) { value |= (c << ZBit); return *this; }
+
+    [[nodiscard]] bool C() const { return (bool)(value >> CBit); }
+    SReg setC(bool c) { value |= (c << CBit); return *this; }
+
+    [[nodiscard]] bool N() const { return (bool)(value >> NBit); }
+    SReg setN(bool c) { value |= (c << NBit); return *this; }
+
+    [[nodiscard]] bool V() const { return (bool)(value >> VBit); }
+    SReg setV(bool c) { value |= (c << VBit); return *this; }
+
+    [[nodiscard]] bool S() const { return (bool)(value >> SBit); }
+    SReg setS(bool c) { value |= (c << SBit); return *this; }
+    SReg setS() { value = N()^V(); return *this; }
+
+    [[nodiscard]] bool H() const { return (bool)(value >> HBit); }
+    SReg setH(bool c) { value |= (c << HBit); return *this; }
+
+    [[nodiscard]] bool T() const { return (bool)(value >> TBit); }
+    SReg setT(bool c) { value |= (c << TBit); return *this; }
+
+    [[nodiscard]] bool I() const { return (bool)(value >> TBit); }
+    SReg setI(bool c) { value |= (c << IBit); return *this; }
+
 };
 
 #endif //ATMEGASIM_SRC_STATUS_REG_H

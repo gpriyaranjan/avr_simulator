@@ -3,6 +3,8 @@
 #include "alu_ops.h"
 #include "log_ops.h"
 
+using namespace M;
+
 void AluOps::ADD(Environ& env, u_int32_t instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
@@ -379,7 +381,7 @@ void AluOps::CPC(Environ &env, uint32_t instrn) {
 void AluOps::CPC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_register(tgtAddr);
     uchar_t srcVal = env.read_register(srcAddr);
-    uchar_t carry = env.sReg.C ? 0 : 1;
+    uchar_t carry = env.sReg.C();
     uchar_t result = (tgtVal + ~srcVal + carry) & 0xFF;
     SubTwoFlags::statusFlags(tgtVal, srcVal, result, env.sReg);
 }
@@ -430,13 +432,12 @@ bool AddTwoFlags::HF(uchar_t target, uchar_t source, uchar_t result) {
 }
 
 void AddTwoFlags::statusFlags(uchar_t target, uchar_t source, uchar_t result, SReg &status) {
-    status.init();
-    status.N = NF(result);
-    status.Z = ZF(result);
-    status.V = VF(target, source, result);
-    status.C = CF(target, source, result);
-    status.S = SF(target, source, result);
-    status.H = HF(target, source, result);
+    status.setN(NF(result));
+    status.setZ(ZF(result));
+    status.setV(VF(target, source, result));
+    status.setC(CF(target, source, result));
+    status.setS(SF(target, source, result));
+    status.setH(HF(target, source, result));
 }
 
 bool SubTwoFlags::CF(uchar_t target, uchar_t source, uchar_t result) {
@@ -474,11 +475,11 @@ bool SubTwoFlags::HF(uchar_t target, uchar_t source, uchar_t result) {
 }
 
 void SubTwoFlags::statusFlags(uchar_t target, uchar_t source, uchar_t result, SReg &status) {
-    status.init();
-    status.N = NF(result);
-    status.Z = ZF(result);
-    status.V = VF(target, source, result);
-    status.C = CF(target, source, result);
-    status.S = SF(target, source, result);
-    status.H = HF(target, source, result);
+
+    status.setN(NF(result));
+    status.setZ(ZF(result));
+    status.setV(VF(target, source, result));
+    status.setC(CF(target, source, result));
+    status.setS(SF(target, source, result));
+    status.setH(HF(target, source, result));
 }

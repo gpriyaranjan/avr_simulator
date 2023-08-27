@@ -16,6 +16,9 @@ public:
     static void IJMP(Environ& env);
     static void IJMP(Environ& env, bool dummy);
 
+    static void EIJMP(Environ& env);
+    static void EIJMP(Environ& env, bool dummy);
+
 };
 
 

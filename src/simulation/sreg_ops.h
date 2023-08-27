@@ -9,10 +9,10 @@ class SRegOps {
 public:
 
     static void BSET(Environ& env, u_int32_t instrn);
-    static void BSET(Environ& env, ThreeBit regNum);
+    static void BSET(Environ& env, ThreeBit regNum, bool dummy);
 
     static void BCLR(Environ& env, u_int32_t instrn);
-    static void BCLR(Environ& env, ThreeBit regNum);
+    static void BCLR(Environ& env, ThreeBit regNum, bool dummy);
 
     static void SEC(Environ& env, u_int32_t instrn);
     static void SEC(Environ& env);

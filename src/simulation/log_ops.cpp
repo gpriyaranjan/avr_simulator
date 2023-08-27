@@ -155,7 +155,6 @@ void LogOps::SER(Environ &env, uint32_t instrn) {
 void LogOps::SER(Environ &env, FiveBit tgtAddr) {
     // uchar_t tgtVal = env.mem[tgtAddr];
     uchar_t result = 0xFF;
-    env.sReg.init();
     env.write_register(tgtAddr, result);
 }
 
@@ -190,7 +189,7 @@ void LogOps::LSR(Environ &env, FiveBit tgtAddr) {
         .setC(is_b0(tgtVal))
         .setZ(is_zero(result))
         .setN(0)
-        .setV(env.sReg.N ^ env.sReg.C)
+        .setV(env.sReg.N() ^ env.sReg.C())
         .setS();
 
     env.write_register(tgtAddr, result);
@@ -214,14 +213,14 @@ void LogOps::ROR(Environ &env, uint32_t instrn) {
 
 void LogOps::ROR(Environ &env, FiveBit tgtAddr) {
     uchar_t tgtVal = env.read_register(tgtAddr);
-    bool carry = env.sReg.C;
+    bool carry = env.sReg.C();
     uchar_t result = (tgtVal >> 1) | (carry ? 0x80 : 0x00);
 
     env.sReg
         .setC(is_b0(tgtVal))
         .setZ(is_zero(result))
         .setN(is_b7(result))
-        .setV(env.sReg.N ^ env.sReg.C)
+        .setV(env.sReg.N() ^ env.sReg.C())
         .setS();
     env.write_register(tgtVal, result);
 }

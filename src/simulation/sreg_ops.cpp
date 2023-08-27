@@ -7,28 +7,28 @@ void SRegOps::WriteBit(Environ &env, ThreeBit regNum, bool value) {
 
     switch(regBit) {
         case CMask:
-            env.sReg.C = true;
+            env.sReg.setC(true);
             break;
         case ZMask:
-            env.sReg.Z = true;
+            env.sReg.setZ(true);
             break;
         case NMask:
-            env.sReg.N = true;
+            env.sReg.setN(true);
             break;
         case VMask:
-            env.sReg.V = true;
+            env.sReg.setV(true);
             break;
         case SMask:
-            env.sReg.S = true;
+            env.sReg.setS(true);
             break;
         case HMask:
-            env.sReg.H = true;
+            env.sReg.setH(true);
             break;
         case TMask:
-            env.sReg.T = true;
+            env.sReg.setT(true);
             break;
         case IMask:
-            env.sReg.I = true;
+            env.sReg.setI(true);
             break;
         default:
             break;
@@ -38,20 +38,20 @@ void SRegOps::WriteBit(Environ &env, ThreeBit regNum, bool value) {
 void SRegOps::BSET(Environ &env, u_int32_t instrn) {
     ThreeBit regNum;
     ArgsDecode::SBit3(instrn, regNum);
-    BSET(env, regNum);
+    BSET(env, regNum, true);
 }
 
-void SRegOps::BSET(Environ &env, ThreeBit regNum) {
+void SRegOps::BSET(Environ &env, ThreeBit regNum, bool dummy) {
     WriteBit(env, regNum, true);
 }
 
 void SRegOps::BCLR(Environ &env, u_int32_t instrn) {
     ThreeBit regNum;
     ArgsDecode::SBit3(instrn, regNum);
-    BCLR(env, regNum);
+    BCLR(env, regNum, true);
 }
 
-void SRegOps::BCLR(Environ &env, ThreeBit regNum) {
+void SRegOps::BCLR(Environ &env, ThreeBit regNum, bool dummy) {
     WriteBit(env, regNum, false);
 }
 
@@ -176,7 +176,7 @@ void SRegOps::BST(Environ &env, uint32_t instrn) {
 void SRegOps::BST(Environ &env, FiveBit tgtAddr, ThreeBit regNum) {
     uchar_t tgtValue = env.read_register(tgtAddr);
     bool tBit = is_bi(tgtValue, regNum);
-    env.sReg.T = tBit;
+    env.sReg.setT(tBit);
 }
 
 void SRegOps::BLD(Environ &env, uint32_t instrn) {
@@ -187,7 +187,7 @@ void SRegOps::BLD(Environ &env, uint32_t instrn) {
 
 void SRegOps::BLD(Environ &env, FiveBit tgtAddr, ThreeBit regNum) {
     uchar_t tgtValue = env.read_register(tgtAddr);
-    uchar_t tBitMask = ((env.sReg.T) ? 0 : 1) << regNum;
+    uchar_t tBitMask = env.sReg.T() << regNum;
     uchar_t result = tgtValue | tBitMask;
     env.write_register(tgtAddr, result);
 }

@@ -18,7 +18,7 @@ public:
     SReg sReg;
     CPUAddr PC;
 
-    Environ() {
+    Environ() : sReg(mem[M::SREG]) {
         PC = 0;
         bzero(this->mem, sizeof(this->mem));
     }
@@ -26,7 +26,6 @@ public:
     void init() {
         PC = 0;
         bzero(this->mem, sizeof(this->mem));
-        sReg.init();
     }
 
     uchar_t read_memory(CPUAddr addr);
@@ -35,6 +34,7 @@ public:
     uchar_t read_register(FiveBit regAddr);
     void write_register(FiveBit regAddr, uchar_t value);
 
+    uint16_t read_reg_pair(FiveBit regAddr);
 };
 
 inline uchar_t Environ::read_memory(CPUAddr addr) {
@@ -53,6 +53,10 @@ inline uchar_t Environ::read_register(FiveBit regAddr) {
     if (regAddr >= NUM_REGISTERS)
         throw IllegalAddress(regAddr, PC);
     return mem[regAddr];
+}
+
+inline uint16_t Environ::read_reg_pair(FiveBit regAddr) {
+    return make_word( read_register(regAddr+1), read_register(regAddr) );
 }
 
 inline void Environ::write_register(FiveBit regAddr, uchar_t value) {
