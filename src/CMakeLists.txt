@@ -22,6 +22,7 @@ set(HEADER_FILES
         simulation/branch_ops.h
         simulation/status_reg.h
         simulation/regs_mems.h
+        simulation/bitset_wrappers.h
 )
 
 add_library(

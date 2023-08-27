@@ -246,8 +246,8 @@ void AluOps::MUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
 
     unsigned short result = tgtVal * srcVal;
 
-    env.write_register(R0, result & 0xFF);
-    env.write_register(R1, (result >> 8) & 0xFF);
+    env.write_register(R0, lo_byte(result));
+    env.write_register(R1, hi_byte(result));
 }
 
 void AluOps::MULS(Environ& env, uint32_t instrn) {
@@ -266,8 +266,8 @@ void AluOps::MULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
         .setC( (result & 0x8000) == 0x8000)
         .setZ( result == 0x0000);
 
-    env.write_register(R0, result & 0xFF);
-    env.write_register(R1, (result >> 8) & 0xFF);
+    env.write_register(R0, lo_byte(result));
+    env.write_register(R1, hi_byte(result));
 }
 
 
@@ -286,8 +286,8 @@ void AluOps::MULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
             .setC( (result & 0x8000) == 0x8000)
             .setZ( result == 0x0000);
 
-    env.write_register(R0, result & 0xFF);
-    env.write_register(R1, (result >> 8) & 0xFF);
+    env.write_register(R0, hi_byte(result));
+    env.write_register(R1, lo_byte(result));
 }
 
 void AluOps::FMUL(Environ& env, uint32_t instrn) {
@@ -302,8 +302,8 @@ void AluOps::FMUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     unsigned short result = tgtVal * srcVal;
         result = result << 1;
 
-    env.write_register(R0, result & 0xFF);
-    env.write_register(R1, (result >> 8) & 0xFF);
+    env.write_register(R0, lo_byte(result));
+    env.write_register(R1, hi_byte(result));
 }
 
 void AluOps::FMULS(Environ& env, uint32_t instrn) {
@@ -322,8 +322,8 @@ void AluOps::FMULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
             .setC( (result & 0x8000) == 0x8000)
             .setZ( result == 0x0000);
 
-    env.write_register(R0, result & 0xFF);
-    env.write_register(R1, (result >> 8) & 0xFF);
+    env.write_register(R0, lo_byte(result));
+    env.write_register(R1, hi_byte(result));
 }
 
 
@@ -336,15 +336,15 @@ void AluOps::FMULSU(Environ& env, uint32_t instrn) {
 void AluOps::FMULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     auto tgtVal = (schar_t)env.read_register(tgtAddr);
     auto srcVal = (uchar_t)env.read_register(srcAddr);
-    auto result = (unsigned short)(tgtVal * srcVal);
+    auto result = (uint16_t)(tgtVal * srcVal);
          result = result << 1;
 
     env.sReg
             .setC( (result & 0x8000) == 0x8000)
             .setZ( result == 0x0000);
 
-    env.write_register(R0, result & 0xFF);
-    env.write_register(R1, (result >> 8) & 0xFF);
+    env.write_register(R0, lo_byte(result));
+    env.write_register(R1, hi_byte(result));
 }
 
 void AluOps::TST(Environ &env, uint32_t instrn) {

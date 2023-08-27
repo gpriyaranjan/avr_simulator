@@ -23,7 +23,7 @@ void BranchOps::JMP(Environ &env, TwentyTwoBit jmpAddr, bool dummy) {
 }
 
 void BranchOps::IJMP(Environ &env) {
-
+    IJMP(env, true);
 }
 
 void BranchOps::IJMP(Environ &env, bool dummy) {
