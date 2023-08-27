@@ -5,12 +5,14 @@
 #include "log_ops.h"
 #include "sreg_ops.h"
 #include "branch_ops.h"
+#include "call_ops.h"
 
 class AllOps : public
         AluOps,
         LogOps,
         SRegOps,
-        BranchOps
+        BranchOps,
+        CallOps
         {
 };
 

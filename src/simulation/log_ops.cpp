@@ -9,8 +9,8 @@ void LogOps::AND(Environ &env, uint32_t instrn) {
 }
 
 void LogOps::AND(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
-    uchar_t tgtVal = env.read_register(tgtAddr);
-    uchar_t srcVal = env.read_register(srcAddr);
+    uchar_t tgtVal = env.read_reg_byte(tgtAddr);
+    uchar_t srcVal = env.read_reg_byte(srcAddr);
 
     uchar_t result = tgtVal & srcVal;
 
@@ -20,7 +20,7 @@ void LogOps::AND(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
         .setV(0)
         .setS();
 
-    env.write_register(tgtAddr, result);
+    env.write_reg_byte(tgtAddr, result);
 }
 
 void LogOps::ANDI(Environ &env, uint32_t instrn) {
@@ -31,7 +31,7 @@ void LogOps::ANDI(Environ &env, uint32_t instrn) {
 }
 
 void LogOps::ANDI(Environ &env, FiveBit tgtAddr, uchar_t immData) {
-    uchar_t tgtVal = env.read_register(tgtAddr);
+    uchar_t tgtVal = env.read_reg_byte(tgtAddr);
 
     uchar_t result = tgtVal & immData;
 
@@ -41,7 +41,7 @@ void LogOps::ANDI(Environ &env, FiveBit tgtAddr, uchar_t immData) {
             .setV(false)
             .setS();
 
-    env.write_register(tgtAddr, result);
+    env.write_reg_byte(tgtAddr, result);
 }
 
 void LogOps::OR(Environ &env, uint32_t instrn) {
@@ -51,8 +51,8 @@ void LogOps::OR(Environ &env, uint32_t instrn) {
 }
 
 void LogOps::OR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
-    uchar_t tgtVal = env.read_register(tgtAddr);
-    uchar_t srcVal = env.read_register(srcAddr);
+    uchar_t tgtVal = env.read_reg_byte(tgtAddr);
+    uchar_t srcVal = env.read_reg_byte(srcAddr);
 
     uchar_t result = tgtVal | srcVal;
 
@@ -62,7 +62,7 @@ void LogOps::OR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
             .setV(0)
             .setS();
 
-    env.write_register(tgtAddr, result);
+    env.write_reg_byte(tgtAddr, result);
 }
 
 void LogOps::ORI(Environ &env, uint32_t instrn) {
@@ -73,7 +73,7 @@ void LogOps::ORI(Environ &env, uint32_t instrn) {
 }
 
 void LogOps::ORI(Environ &env, FiveBit tgtAddr, EightBit immData) {
-    uchar_t tgtVal = env.read_register(tgtAddr);
+    uchar_t tgtVal = env.read_reg_byte(tgtAddr);
 
     uchar_t result = tgtVal | immData;
 
@@ -83,7 +83,7 @@ void LogOps::ORI(Environ &env, FiveBit tgtAddr, EightBit immData) {
             .setV(false)
             .setS();
 
-    env.write_register(tgtAddr, result);
+    env.write_reg_byte(tgtAddr, result);
 }
 
 void LogOps::EOR(Environ &env, uint32_t instrn) {
@@ -93,8 +93,8 @@ void LogOps::EOR(Environ &env, uint32_t instrn) {
 }
 
 void LogOps::EOR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
-    uchar_t tgtVal = env.read_register(tgtAddr);
-    uchar_t srcVal = env.read_register(srcAddr);
+    uchar_t tgtVal = env.read_reg_byte(tgtAddr);
+    uchar_t srcVal = env.read_reg_byte(srcAddr);
 
     uchar_t result = tgtVal ^ srcVal;
 
@@ -104,7 +104,7 @@ void LogOps::EOR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
             .setV(0)
             .setS();
 
-    env.write_register(tgtAddr, result);
+    env.write_reg_byte(tgtAddr, result);
 }
 
 void LogOps::COM(Environ &env, uint32_t instrn) {
@@ -114,7 +114,7 @@ void LogOps::COM(Environ &env, uint32_t instrn) {
 }
 
 void LogOps::COM(Environ &env, FiveBit tgtAddr) {
-    uchar_t tgtVal = env.read_register(tgtAddr);
+    uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = ~tgtVal;
 
     env.sReg
@@ -124,7 +124,7 @@ void LogOps::COM(Environ &env, FiveBit tgtAddr) {
             .setV(0)
             .setS();
 
-    env.write_register(tgtAddr, result);
+    env.write_reg_byte(tgtAddr, result);
 }
 
 void LogOps::SBR(Environ &env, uint32_t instrn) {
@@ -155,7 +155,7 @@ void LogOps::SER(Environ &env, uint32_t instrn) {
 void LogOps::SER(Environ &env, FiveBit tgtAddr) {
     // uchar_t tgtVal = env.mem[tgtAddr];
     uchar_t result = 0xFF;
-    env.write_register(tgtAddr, result);
+    env.write_reg_byte(tgtAddr, result);
 }
 
 
@@ -182,7 +182,7 @@ void LogOps::LSR(Environ &env, uint32_t instrn) {
 }
 
 void LogOps::LSR(Environ &env, FiveBit tgtAddr) {
-    uchar_t tgtVal = env.read_register(tgtAddr);
+    uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = tgtVal >> 1;
 
     env.sReg
@@ -192,7 +192,7 @@ void LogOps::LSR(Environ &env, FiveBit tgtAddr) {
         .setV(env.sReg.N() ^ env.sReg.C())
         .setS();
 
-    env.write_register(tgtAddr, result);
+    env.write_reg_byte(tgtAddr, result);
 }
 
 void LogOps::ROL(Environ &env, uint32_t instrn) {
@@ -212,7 +212,7 @@ void LogOps::ROR(Environ &env, uint32_t instrn) {
 }
 
 void LogOps::ROR(Environ &env, FiveBit tgtAddr) {
-    uchar_t tgtVal = env.read_register(tgtAddr);
+    uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     bool carry = env.sReg.C();
     uchar_t result = (tgtVal >> 1) | (carry ? 0x80 : 0x00);
 
@@ -222,5 +222,5 @@ void LogOps::ROR(Environ &env, FiveBit tgtAddr) {
         .setN(is_b7(result))
         .setV(env.sReg.N() ^ env.sReg.C())
         .setS();
-    env.write_register(tgtVal, result);
+    env.write_reg_byte(tgtVal, result);
 }

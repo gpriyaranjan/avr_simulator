@@ -32,11 +32,12 @@ void BranchOps::IJMP(Environ &env, bool dummy) {
 }
 
 void BranchOps::EIJMP(Environ &env) {
-
+    EIJMP(env, true);
 }
 
 void BranchOps::EIJMP(Environ &env, bool dummy) {
-
+    env.PC = env.read_reg_pair(M::Z);
+    env.PC |= (env.read_mem_byte(M::EIND) & 0x3F) << 24;
 }
 
 

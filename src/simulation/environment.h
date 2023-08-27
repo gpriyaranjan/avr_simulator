@@ -28,41 +28,47 @@ public:
         bzero(this->mem, sizeof(this->mem));
     }
 
-    uchar_t read_memory(CPUAddr addr);
-    void write_memory(CPUAddr addr, uchar_t value);
+    uchar_t read_mem_byte(CPUAddr addr);
+    void write_mem_byte(CPUAddr addr, uchar_t value);
 
-    uchar_t read_register(FiveBit regAddr);
-    void write_register(FiveBit regAddr, uchar_t value);
+    uchar_t read_reg_byte(FiveBit regAddr);
+    void write_reg_byte(FiveBit regAddr, uchar_t value);
 
     uint16_t read_reg_pair(FiveBit regAddr);
+    void write_reg_pair(FiveBit regAddr, uint16_t value);
 };
 
-inline uchar_t Environ::read_memory(CPUAddr addr) {
+inline uchar_t Environ::read_mem_byte(CPUAddr addr) {
     if (addr >= MEMORY_SIZE)
         throw IllegalAddress(addr, PC);
     return mem[addr];
 }
 
-inline void Environ::write_memory(CPUAddr addr, uchar_t value) {
+inline void Environ::write_mem_byte(CPUAddr addr, uchar_t value) {
     if (addr >= MEMORY_SIZE)
         throw IllegalAddress(addr, PC);
     mem[addr] = value;
 }
 
-inline uchar_t Environ::read_register(FiveBit regAddr) {
+inline uchar_t Environ::read_reg_byte(FiveBit regAddr) {
     if (regAddr >= NUM_REGISTERS)
         throw IllegalAddress(regAddr, PC);
     return mem[regAddr];
 }
 
 inline uint16_t Environ::read_reg_pair(FiveBit regAddr) {
-    return make_word( read_register(regAddr+1), read_register(regAddr) );
+    return make_word(read_reg_byte(regAddr + 1), read_reg_byte(regAddr) );
 }
 
-inline void Environ::write_register(FiveBit regAddr, uchar_t value) {
+inline void Environ::write_reg_byte(FiveBit regAddr, uchar_t value) {
     if (regAddr >= NUM_REGISTERS)
         throw IllegalRegister(regAddr, PC);
     mem[regAddr] = value;
+}
+
+void Environ::write_reg_pair(FiveBit regAddr, uint16_t value) {
+    write_reg_byte(regAddr, lo_byte(value));
+    write_reg_byte(regAddr, hi_byte(value));
 }
 
 #endif //ATMEGASIM_ENVIRONMENT_H

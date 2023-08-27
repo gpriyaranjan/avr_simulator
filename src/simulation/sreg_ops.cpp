@@ -174,7 +174,7 @@ void SRegOps::BST(Environ &env, uint32_t instrn) {
 }
 
 void SRegOps::BST(Environ &env, FiveBit tgtAddr, ThreeBit regNum) {
-    uchar_t tgtValue = env.read_register(tgtAddr);
+    uchar_t tgtValue = env.read_reg_byte(tgtAddr);
     bool tBit = is_bi(tgtValue, regNum);
     env.sReg.setT(tBit);
 }
@@ -186,9 +186,9 @@ void SRegOps::BLD(Environ &env, uint32_t instrn) {
 }
 
 void SRegOps::BLD(Environ &env, FiveBit tgtAddr, ThreeBit regNum) {
-    uchar_t tgtValue = env.read_register(tgtAddr);
+    uchar_t tgtValue = env.read_reg_byte(tgtAddr);
     uchar_t tBitMask = env.sReg.T() << regNum;
     uchar_t result = tgtValue | tBitMask;
-    env.write_register(tgtAddr, result);
+    env.write_reg_byte(tgtAddr, result);
 }
 

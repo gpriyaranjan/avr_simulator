@@ -9,6 +9,7 @@ set(SOURCE_FILES
         simulation/log_ops.cpp
         simulation/sreg_ops.cpp
         simulation/branch_ops.cpp
+        simulation/call_ops.cpp
 )
 
 set(HEADER_FILES
@@ -23,6 +24,7 @@ set(HEADER_FILES
         simulation/status_reg.h
         simulation/regs_mems.h
         simulation/bitset_wrappers.h
+        simulation/call_ops.h
 )
 
 add_library(
