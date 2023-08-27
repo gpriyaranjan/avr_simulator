@@ -106,6 +106,20 @@ public:
         additionalBits = (instrn & 0x1F00000) >> 3;
         tgtAddr = tgtAddr | additionalBits;
     }
+
+
+    /* XXXX	XXXX AAAA Abbb */
+    inline static void IO5Bit3(uint32_t instrn, FiveBit& tgtReg, ThreeBit& bitNum) {
+        bitNum = instrn & 0x7;
+        tgtReg = (instrn >> 3) & 0x1F;
+    }
+
+    /* 1111-00kk-kkkk-ksss */
+    inline static void Addr7Bit3(uint32_t instrn, SevenBit& addr, ThreeBit& regBits) {
+        addr = (instrn >> 3) & 0x7F;
+        regBits = instrn & 0x07;
+    }
+
 };
 
 #endif //ATMEGASIM_EXECCOMMON_H

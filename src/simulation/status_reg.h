@@ -56,6 +56,7 @@ public:
     [[nodiscard]] bool I() const { return (bool)(value >> TBit); }
     SReg setI(bool c) { value |= (c << IBit); return *this; }
 
+    [[nodiscard]] uchar_t getFlags() const {return value; }
 };
 
 #endif //ATMEGASIM_SRC_STATUS_REG_H
