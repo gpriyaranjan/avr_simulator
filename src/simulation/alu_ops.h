@@ -71,8 +71,8 @@ public:
     static void CPC(Environ& env, uint32_t instrn);
     static void CPC(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
 
-    static void CPCI(Environ& env, uint32_t instrn);
-    static void CPCI(Environ& env, FiveBit tgtAddr, EightBit immData);
+    static void CPI(Environ& env, uint32_t instrn);
+    static void CPI(Environ& env, FiveBit tgtAddr, EightBit immData);
 
 };
 

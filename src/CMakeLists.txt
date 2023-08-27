@@ -23,8 +23,12 @@ set(HEADER_FILES
         simulation/branch_ops.h
         simulation/status_reg.h
         simulation/regs_mems.h
-        simulation/bitset_wrappers.h
+        utils/bitset_wrappers.h
         simulation/call_ops.h
+        utils/hash_map.h
+        simulation/instructions.h
+        sim_gen/instrn_info.h
+        sim_gen/sim_gen.h
 )
 
 add_library(

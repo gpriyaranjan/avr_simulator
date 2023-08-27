@@ -386,14 +386,14 @@ void AluOps::CPC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     SubTwoFlags::statusFlags(tgtVal, srcVal, result, env.sReg);
 }
 
-void AluOps::CPCI(Environ &env, uint32_t instrn) {
+void AluOps::CPI(Environ &env, uint32_t instrn) {
     FourBit tgtId; EightBit immData;
     ArgsDecode::Reg4Imm8(instrn, tgtId, immData);
     FiveBit tgtAddr = tgtId + 0x100;
-    CPCI(env, tgtAddr, immData);
+    CPI(env, tgtAddr, immData);
 }
 
-void AluOps::CPCI(Environ &env, FiveBit tgtAddr, EightBit immData) {
+void AluOps::CPI(Environ &env, FiveBit tgtAddr, EightBit immData) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = (tgtVal + ~immData + 1) & 0xFF;
     SubTwoFlags::statusFlags(tgtVal, immData, result, env.sReg);
