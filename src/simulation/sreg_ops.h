@@ -8,56 +8,55 @@
 class SRegOps {
 public:
 
-    static void BSET(Environ& env, u_int32_t instrn);
-    static void BSET(Environ& env, ThreeBit regNum, bool dummy);
+    static bool BSET(Environ& env, u_int32_t instrn);
+    static bool BSET(Environ& env, ThreeBit regNum, bool dummy);
 
-    static void BCLR(Environ& env, u_int32_t instrn);
-    static void BCLR(Environ& env, ThreeBit regNum, bool dummy);
+    static bool BCLR(Environ& env, u_int32_t instrn);
+    static bool BCLR(Environ& env, ThreeBit regNum, bool dummy);
 
-    static void SEC(Environ& env, u_int32_t instrn);
-    static void SEC(Environ& env);
-    static void CLC(Environ& env, u_int32_t instrn);
-    static void CLC(Environ& env);
+    static bool SEC(Environ& env, u_int32_t instrn);
+    static bool SEC(Environ& env);
+    static bool CLC(Environ& env, u_int32_t instrn);
+    static bool CLC(Environ& env);
 
-    static void SEZ(Environ& env, u_int32_t instrn);
-    static void SEZ(Environ& env);
-    static void CLZ(Environ& env, u_int32_t instrn);
-    static void CLZ(Environ& env);
+    static bool SEZ(Environ& env, u_int32_t instrn);
+    static bool SEZ(Environ& env);
+    static bool CLZ(Environ& env, u_int32_t instrn);
+    static bool CLZ(Environ& env);
 
-    static void SEN(Environ& env, u_int32_t instrn);
-    static void SEN(Environ& env);
-    static void CLN(Environ& env, u_int32_t instrn);
-    static void CLN(Environ& env);
+    static bool SEN(Environ& env, u_int32_t instrn);
+    static bool SEN(Environ& env);
+    static bool CLN(Environ& env, u_int32_t instrn);
+    static bool CLN(Environ& env);
 
-    static void SEV(Environ& env, uint32_t instrn);
-    static void SEV(Environ& env);
-    static void CLV(Environ& env, uint32_t instrn);
-    static void CLV(Environ& env);
+    static bool SEV(Environ& env, uint32_t instrn);
+    static bool SEV(Environ& env);
+    static bool CLV(Environ& env, uint32_t instrn);
+    static bool CLV(Environ& env);
 
-    static void SES(Environ& env, uint32_t instrn);
-    static void SES(Environ& env);
-    static void CLS(Environ& env, uint32_t instrn);
-    static void CLS(Environ& env);
+    static bool SES(Environ& env, uint32_t instrn);
+    static bool SES(Environ& env);
+    static bool CLS(Environ& env, uint32_t instrn);
+    static bool CLS(Environ& env);
 
-    static void SEH(Environ& env, uint32_t instrn);
-    static void SEH(Environ& env);
-    static void CLH(Environ& env, uint32_t instrn);
-    static void CLH(Environ& env);
+    static bool SEH(Environ& env, uint32_t instrn);
+    static bool SEH(Environ& env);
+    static bool CLH(Environ& env, uint32_t instrn);
+    static bool CLH(Environ& env);
+
+    static bool SET(Environ& env, uint32_t instrn);
+    static bool SET(Environ& env);
+    static bool CLT(Environ& env, uint32_t instrn);
+    static bool CLT(Environ& env);
+
+    static bool BST(Environ& env, uint32_t instrn);
+    static bool BST(Environ& env, FiveBit tgtAddr, ThreeBit regNum);
+
+    static bool BLD(Environ& env, uint32_t instrn);
+    static bool BLD(Environ& env, FiveBit tgtAddr, ThreeBit regNum);
 
 
-    static void SET(Environ& env, uint32_t instrn);
-    static void SET(Environ& env);
-    static void CLT(Environ& env, uint32_t instrn);
-    static void CLT(Environ& env);
-
-    static void BST(Environ& env, uint32_t instrn);
-    static void BST(Environ& env, FiveBit tgtAddr, ThreeBit regNum);
-
-    static void BLD(Environ& env, uint32_t instrn);
-    static void BLD(Environ& env, FiveBit tgtAddr, ThreeBit regNum);
-
-
-    static void WriteBit(Environ& env, ThreeBit regNum, bool value);
+    static bool WriteBit(Environ& env, ThreeBit regNum, bool value);
 
 };
 

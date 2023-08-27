@@ -2,13 +2,13 @@
 #include "decoder.h"
 #include "alu_ops.h"
 
-void LogOps::AND(Environ &env, uint32_t instrn) {
+bool LogOps::AND(Environ &env, uint32_t instrn) {
     FiveBit tgtAddr, srcAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    AND(env, tgtAddr, srcAddr);
+    return AND(env, tgtAddr, srcAddr);
 }
 
-void LogOps::AND(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool LogOps::AND(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
 
@@ -21,16 +21,17 @@ void LogOps::AND(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
         .setS();
 
     env.write_reg_byte(tgtAddr, result);
+    return false;
 }
 
-void LogOps::ANDI(Environ &env, uint32_t instrn) {
+bool LogOps::ANDI(Environ &env, uint32_t instrn) {
     FourBit tgtId; EightBit immData;
     ArgsDecode::Reg4Imm8(instrn, tgtId, immData);
     FiveBit tgtAddr = tgtId + 0x10;
-    ANDI(env, tgtAddr, immData);
+    return ANDI(env, tgtAddr, immData);
 }
 
-void LogOps::ANDI(Environ &env, FiveBit tgtAddr, uchar_t immData) {
+bool LogOps::ANDI(Environ &env, FiveBit tgtAddr, uchar_t immData) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
 
     uchar_t result = tgtVal & immData;
@@ -42,15 +43,16 @@ void LogOps::ANDI(Environ &env, FiveBit tgtAddr, uchar_t immData) {
             .setS();
 
     env.write_reg_byte(tgtAddr, result);
+    return false;
 }
 
-void LogOps::OR(Environ &env, uint32_t instrn) {
+bool LogOps::OR(Environ &env, uint32_t instrn) {
     FiveBit tgtAddr, srcAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    OR(env, tgtAddr, srcAddr);
+    return OR(env, tgtAddr, srcAddr);
 }
 
-void LogOps::OR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool LogOps::OR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
 
@@ -63,16 +65,17 @@ void LogOps::OR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
             .setS();
 
     env.write_reg_byte(tgtAddr, result);
+    return false;
 }
 
-void LogOps::ORI(Environ &env, uint32_t instrn) {
+bool LogOps::ORI(Environ &env, uint32_t instrn) {
     FourBit tgtId; EightBit immData;
     ArgsDecode::Reg4Imm8(instrn, tgtId, immData);
     FiveBit tgtAddr = tgtId + 0x10;
-    ORI(env, tgtId, immData);
+    return ORI(env, tgtId, immData);
 }
 
-void LogOps::ORI(Environ &env, FiveBit tgtAddr, EightBit immData) {
+bool LogOps::ORI(Environ &env, FiveBit tgtAddr, EightBit immData) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
 
     uchar_t result = tgtVal | immData;
@@ -84,15 +87,16 @@ void LogOps::ORI(Environ &env, FiveBit tgtAddr, EightBit immData) {
             .setS();
 
     env.write_reg_byte(tgtAddr, result);
+    return false;
 }
 
-void LogOps::EOR(Environ &env, uint32_t instrn) {
+bool LogOps::EOR(Environ &env, uint32_t instrn) {
     FiveBit tgtAddr, srcAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    EOR(env, tgtAddr, srcAddr);
+    return EOR(env, tgtAddr, srcAddr);
 }
 
-void LogOps::EOR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool LogOps::EOR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
 
@@ -105,15 +109,16 @@ void LogOps::EOR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
             .setS();
 
     env.write_reg_byte(tgtAddr, result);
+    return false;
 }
 
-void LogOps::COM(Environ &env, uint32_t instrn) {
+bool LogOps::COM(Environ &env, uint32_t instrn) {
     FiveBit tgtAddr;
     ArgsDecode::Reg5(instrn, tgtAddr);
-    COM(env, tgtAddr);
+    return COM(env, tgtAddr);
 }
 
-void LogOps::COM(Environ &env, FiveBit tgtAddr) {
+bool LogOps::COM(Environ &env, FiveBit tgtAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = ~tgtVal;
 
@@ -125,63 +130,65 @@ void LogOps::COM(Environ &env, FiveBit tgtAddr) {
             .setS();
 
     env.write_reg_byte(tgtAddr, result);
+    return false;
 }
 
-void LogOps::SBR(Environ &env, uint32_t instrn) {
-    ORI(env, instrn);
+bool LogOps::SBR(Environ &env, uint32_t instrn) {
+    return ORI(env, instrn);
 }
 
-void LogOps::SBR(Environ &env, FiveBit tgtAddr, EightBit immData) {
-    ORI(env, tgtAddr, immData);
+bool LogOps::SBR(Environ &env, FiveBit tgtAddr, EightBit immData) {
+    return ORI(env, tgtAddr, immData);
 }
 
 
-void LogOps::CBR(Environ &env, uint32_t instrn) {
-    ANDI(env, instrn);
+bool LogOps::CBR(Environ &env, uint32_t instrn) {
+    return ANDI(env, instrn);
 }
 
-void LogOps::CBR(Environ &env, FiveBit tgtAddr, EightBit immData) {
-    ANDI(env, tgtAddr, immData);
+bool LogOps::CBR(Environ &env, FiveBit tgtAddr, EightBit immData) {
+    return ANDI(env, tgtAddr, immData);
 }
 
-void LogOps::SER(Environ &env, uint32_t instrn) {
+bool LogOps::SER(Environ &env, uint32_t instrn) {
     FourBit tgtId;
     ArgsDecode::Reg4(instrn, tgtId);
     FiveBit tgtAddr = tgtId + 0x10;
 
-    SER(env, tgtAddr);
+    return SER(env, tgtAddr);
 }
 
-void LogOps::SER(Environ &env, FiveBit tgtAddr) {
+bool LogOps::SER(Environ &env, FiveBit tgtAddr) {
     // uchar_t tgtVal = env.mem[tgtAddr];
     uchar_t result = 0xFF;
     env.write_reg_byte(tgtAddr, result);
+    return false;
 }
 
 
-void LogOps::CLR(Environ &env, uint32_t instrn) {
-    EOR(env, instrn);
+bool LogOps::CLR(Environ &env, uint32_t instrn) {
+    return EOR(env, instrn);
 }
 
-void LogOps::CLR(Environ &env, FiveBit tgtAddr) {
-    EOR(env, tgtAddr, tgtAddr);
+bool LogOps::CLR(Environ &env, FiveBit tgtAddr) {
+    return EOR(env, tgtAddr, tgtAddr);
 }
 
-void LogOps::LSL(Environ &env, uint32_t instrn) {
-    AluOps::ADD(env, instrn);
+bool LogOps::LSL(Environ &env, uint32_t instrn) {
+    return AluOps::ADD(env, instrn);
 }
 
-void LogOps::LSL(Environ &env, FiveBit tgtAddr) {
-    AluOps::ADD(env, tgtAddr, tgtAddr);
+bool LogOps::LSL(Environ &env, FiveBit tgtAddr) {
+    return AluOps::ADD(env, tgtAddr, tgtAddr);
 }
 
-void LogOps::LSR(Environ &env, uint32_t instrn) {
+bool LogOps::LSR(Environ &env, uint32_t instrn) {
     FiveBit tgtAddr;
     ArgsDecode::Reg5(instrn, tgtAddr);
-    LSR(env, tgtAddr);
+    return LSR(env, tgtAddr);
 }
 
-void LogOps::LSR(Environ &env, FiveBit tgtAddr) {
+bool LogOps::LSR(Environ &env, FiveBit tgtAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = tgtVal >> 1;
 
@@ -193,25 +200,26 @@ void LogOps::LSR(Environ &env, FiveBit tgtAddr) {
         .setS();
 
     env.write_reg_byte(tgtAddr, result);
+    return false;
 }
 
-void LogOps::ROL(Environ &env, uint32_t instrn) {
+bool LogOps::ROL(Environ &env, uint32_t instrn) {
     FiveBit tgtAddr, srcAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    ROL(env, tgtAddr);
+    return ROL(env, tgtAddr);
 }
 
-void LogOps::ROL(Environ &env, FiveBit tgtAddr) {
-    AluOps::ADC(env, tgtAddr, tgtAddr);
+bool LogOps::ROL(Environ &env, FiveBit tgtAddr) {
+    return AluOps::ADC(env, tgtAddr, tgtAddr);
 }
 
-void LogOps::ROR(Environ &env, uint32_t instrn) {
+bool LogOps::ROR(Environ &env, uint32_t instrn) {
     FiveBit tgtAddr;
     ArgsDecode::Reg5(instrn, tgtAddr);
-    ROR(env, tgtAddr);
+    return ROR(env, tgtAddr);
 }
 
-void LogOps::ROR(Environ &env, FiveBit tgtAddr) {
+bool LogOps::ROR(Environ &env, FiveBit tgtAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     bool carry = env.sReg.C();
     uchar_t result = (tgtVal >> 1) | (carry ? 0x80 : 0x00);
@@ -223,4 +231,5 @@ void LogOps::ROR(Environ &env, FiveBit tgtAddr) {
         .setV(env.sReg.N() ^ env.sReg.C())
         .setS();
     env.write_reg_byte(tgtVal, result);
+    return false;
 }

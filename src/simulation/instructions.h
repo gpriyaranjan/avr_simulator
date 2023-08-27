@@ -155,4 +155,17 @@ enum InstrnEnum {
     SLEEP,
     WDR
 };
+
+bool isLongInstrn(InstrnEnum instrnEnum) {
+    switch(instrnEnum) {
+        case InstrnEnum::JMP:
+        case InstrnEnum::CALL:
+        case InstrnEnum::LDS:
+        case InstrnEnum::STS:
+            return true;
+        default:
+            return false;
+    }
+}
+
 #endif //ATMEGASIM_SRC_INSTRUCTIONS_H

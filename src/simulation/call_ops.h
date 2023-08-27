@@ -8,41 +8,41 @@
 class CallOps {
 public:
 
-    static void RJMP(Environ& env, uint32_t instrn);
-    static void RJMP(Environ& env, TwelveBit tgtOffset, bool dummy);
+    static bool RJMP(Environ& env, uint32_t instrn);
+    static bool RJMP(Environ& env, TwelveBit tgtOffset, bool dummy);
 
-    static void JMP(Environ& env, uint64_t instrn);
-    static void JMP(Environ &env, TwentyTwoBit instrn, bool dummy);
+    static bool JMP(Environ& env, uint64_t instrn);
+    static bool JMP(Environ &env, TwentyTwoBit instrn, bool dummy);
 
-    static void IJMP(Environ& env);
-    static void IJMP(Environ& env, bool dummy);
+    static bool IJMP(Environ& env);
+    static bool IJMP(Environ& env, bool dummy);
 
-    static void EIJMP(Environ& env);
-    static void EIJMP(Environ& env, bool dummy);
+    static bool EIJMP(Environ& env);
+    static bool EIJMP(Environ& env, bool dummy);
 
-    static void PUSH(Environ& env, uint32_t instrn);
-    static void PUSH(Environ& env, FiveBit regAddr, bool dummy);
+    static bool PUSH(Environ& env, uint32_t instrn);
+    static bool PUSH(Environ& env, FiveBit regAddr, bool dummy);
 
-    static void POP(Environ& env, uint32_t instrn);
-    static void POP(Environ& env, FiveBit regAddr, bool dummy);
+    static bool POP(Environ& env, uint32_t instrn);
+    static bool POP(Environ& env, FiveBit regAddr, bool dummy);
 
-    static void RCALL(Environ& env, uint32_t instrn);
-    static void RCALL(Environ& env, TwelveBit tgtOffset, bool dummy);
+    static bool RCALL(Environ& env, uint32_t instrn);
+    static bool RCALL(Environ& env, TwelveBit tgtOffset, bool dummy);
 
-    static void CALL(Environ& env, uint64_t instrn);
-    static void CALL(Environ &env, TwentyTwoBit instrn, bool dummy);
+    static bool CALL(Environ& env, uint64_t instrn);
+    static bool CALL(Environ &env, TwentyTwoBit instrn, bool dummy);
 
-    static void ICALL(Environ& env);
-    static void ICALL(Environ& env, bool dummy);
+    static bool ICALL(Environ& env);
+    static bool ICALL(Environ& env, bool dummy);
 
-    static void EICALL(Environ& env);
-    static void EICALL(Environ& env, bool dummy);
+    static bool EICALL(Environ& env);
+    static bool EICALL(Environ& env, bool dummy);
 
-    static void RET(Environ& env);
-    static void RET(Environ& env, bool dummy);
+    static bool RET(Environ& env);
+    static bool RET(Environ& env, bool dummy);
 
-    static void RETI(Environ& env);
-    static void RETI(Environ& env, bool dummy);
+    static bool RETI(Environ& env);
+    static bool RETI(Environ& env, bool dummy);
 
     static void Push1Byte(Environ& env, uchar_t value);
     static void Pop1Byte(Environ& env, uchar_t& value);

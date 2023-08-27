@@ -8,71 +8,71 @@
 class AluOps {
 public:
 
-    static void ADD(Environ& env, u_int32_t instrn);
-    static void ADD(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);
+    static bool ADD(Environ& env, u_int32_t instrn);
+    static bool ADD(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);
 
-    static void ADC(Environ& env, uint32_t instrn);
-    static void ADC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);
+    static bool ADC(Environ& env, uint32_t instrn);
+    static bool ADC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);
 
-    static void ADIW(Environ& env, uint32_t instrn);
-    static void ADIW(Environ& env, FiveBit tgtAddr, SixBit immData);
+    static bool ADIW(Environ& env, uint32_t instrn);
+    static bool ADIW(Environ& env, FiveBit tgtAddr, SixBit immData);
 
-    static void SUB(Environ& env, uint32_t instrn);
-    static void SUB(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);
+    static bool SUB(Environ& env, uint32_t instrn);
+    static bool SUB(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);
 
-    static void SBC(Environ& env, uint32_t instrn);
-    static void SBC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);
+    static bool SBC(Environ& env, uint32_t instrn);
+    static bool SBC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);
 
-    static void SUBI(Environ& env, uint32_t instrn);
-    static void SUBI(Environ& env, FiveBit tgtAddr, EightBit immData);
+    static bool SUBI(Environ& env, uint32_t instrn);
+    static bool SUBI(Environ& env, FiveBit tgtAddr, EightBit immData);
 
-    static void SBCI(Environ& env, uint32_t instrn);
-    static void SBCI(Environ& env, FiveBit tgtAddr, EightBit immData);
+    static bool SBCI(Environ& env, uint32_t instrn);
+    static bool SBCI(Environ& env, FiveBit tgtAddr, EightBit immData);
 
-    static void SBIW(Environ& env, uint32_t instrn);
-    static void SBIW(Environ& env, FiveBit tgtAddr, SixBit immData);
+    static bool SBIW(Environ& env, uint32_t instrn);
+    static bool SBIW(Environ& env, FiveBit tgtAddr, SixBit immData);
 
-    static void NEG(Environ& env, uint32_t instrn);
-    static void NEG(Environ& env, FiveBit tgtAddr);
+    static bool NEG(Environ& env, uint32_t instrn);
+    static bool NEG(Environ& env, FiveBit tgtAddr);
 
-    static void INC(Environ& env, uint32_t instrn);
-    static void INC(Environ& env, FiveBit tgtAddr);
+    static bool INC(Environ& env, uint32_t instrn);
+    static bool INC(Environ& env, FiveBit tgtAddr);
 
-    static void DEC(Environ& env, uint32_t instrn);
-    static void DEC(Environ& env, FiveBit tgtAddr);
+    static bool DEC(Environ& env, uint32_t instrn);
+    static bool DEC(Environ& env, FiveBit tgtAddr);
 
-    static void ASR(Environ& env, uint32_t instrn);
-    static void ASR(Environ& env, FiveBit tgtAddr);
+    static bool ASR(Environ& env, uint32_t instrn);
+    static bool ASR(Environ& env, FiveBit tgtAddr);
 
-    static void MUL(Environ& env, uint32_t instrn);
-    static void MUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
+    static bool MUL(Environ& env, uint32_t instrn);
+    static bool MUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
 
-    static void MULS(Environ& env, uint32_t instrn);
-    static void MULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
+    static bool MULS(Environ& env, uint32_t instrn);
+    static bool MULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
 
-    static void MULSU(Environ& env, uint32_t instrn);
-    static void MULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
+    static bool MULSU(Environ& env, uint32_t instrn);
+    static bool MULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
 
-    static void FMUL(Environ& env, uint32_t instrn);
-    static void FMUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
+    static bool FMUL(Environ& env, uint32_t instrn);
+    static bool FMUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
 
-    static void FMULS(Environ& env, uint32_t instrn);
-    static void FMULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
+    static bool FMULS(Environ& env, uint32_t instrn);
+    static bool FMULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
 
-    static void FMULSU(Environ& env, uint32_t instrn);
-    static void FMULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
+    static bool FMULSU(Environ& env, uint32_t instrn);
+    static bool FMULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
 
-    static void TST(Environ& env, uint32_t instrn);
-    static void TST(Environ& env, FiveBit tgtAddr);
+    static bool TST(Environ& env, uint32_t instrn);
+    static bool TST(Environ& env, FiveBit tgtAddr);
 
-    static void CP(Environ& env, uint32_t instrn);
-    static void CP(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
+    static bool CP(Environ& env, uint32_t instrn);
+    static bool CP(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
 
-    static void CPC(Environ& env, uint32_t instrn);
-    static void CPC(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
+    static bool CPC(Environ& env, uint32_t instrn);
+    static bool CPC(Environ& env, FiveBit tgtAddr, FiveBit srcAddr);
 
-    static void CPI(Environ& env, uint32_t instrn);
-    static void CPI(Environ& env, FiveBit tgtAddr, EightBit immData);
+    static bool CPI(Environ& env, uint32_t instrn);
+    static bool CPI(Environ& env, FiveBit tgtAddr, EightBit immData);
 
 };
 

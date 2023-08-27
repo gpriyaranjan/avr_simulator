@@ -1,7 +1,7 @@
 #include "decoder.h"
 #include "sreg_ops.h"
 
-void SRegOps::WriteBit(Environ &env, ThreeBit regNum, bool value) {
+bool SRegOps::WriteBit(Environ &env, ThreeBit regNum, bool value) {
 
     auto regBit = (SMasks)(1 << regNum);
 
@@ -33,162 +33,165 @@ void SRegOps::WriteBit(Environ &env, ThreeBit regNum, bool value) {
         default:
             break;
     }
+    return false;
 }
 
-void SRegOps::BSET(Environ &env, u_int32_t instrn) {
+bool SRegOps::BSET(Environ &env, u_int32_t instrn) {
     ThreeBit regNum;
     ArgsDecode::SBit3(instrn, regNum);
-    BSET(env, regNum, true);
+    return BSET(env, regNum, true);
 }
 
-void SRegOps::BSET(Environ &env, ThreeBit regNum, bool dummy) {
-    WriteBit(env, regNum, true);
+bool SRegOps::BSET(Environ &env, ThreeBit regNum, bool dummy) {
+    return WriteBit(env, regNum, true);
 }
 
-void SRegOps::BCLR(Environ &env, u_int32_t instrn) {
+bool SRegOps::BCLR(Environ &env, u_int32_t instrn) {
     ThreeBit regNum;
     ArgsDecode::SBit3(instrn, regNum);
-    BCLR(env, regNum, true);
+    return BCLR(env, regNum, true);
 }
 
-void SRegOps::BCLR(Environ &env, ThreeBit regNum, bool dummy) {
-    WriteBit(env, regNum, false);
+bool SRegOps::BCLR(Environ &env, ThreeBit regNum, bool dummy) {
+    return WriteBit(env, regNum, false);
 }
 
-void SRegOps::SEC(Environ &env, u_int32_t instrn) {
-    SEC(env);
+bool SRegOps::SEC(Environ &env, u_int32_t instrn) {
+    return SEC(env);
 }
 
-void SRegOps::SEC(Environ &env) {
-    BSET(env, CBit);
+bool SRegOps::SEC(Environ &env) {
+    return BSET(env, CBit);
 }
 
-void SRegOps::CLC(Environ &env, u_int32_t instrn) {
-    CLC(env);
+bool SRegOps::CLC(Environ &env, u_int32_t instrn) {
+    return CLC(env);
 }
 
-void SRegOps::CLC(Environ &env) {
-    BCLR(env, CBit);
+bool SRegOps::CLC(Environ &env) {
+    return BCLR(env, CBit);
 }
 
-void SRegOps::SEZ(Environ &env, u_int32_t instrn) {
-    SEZ(env);
+bool SRegOps::SEZ(Environ &env, u_int32_t instrn) {
+    return SEZ(env);
 }
 
-void SRegOps::SEZ(Environ &env) {
-    BSET(env, ZBit);
+bool SRegOps::SEZ(Environ &env) {
+    return BSET(env, ZBit);
 }
 
-void SRegOps::CLZ(Environ &env, u_int32_t instrn) {
-    CLZ(env);
+bool SRegOps::CLZ(Environ &env, u_int32_t instrn) {
+    return CLZ(env);
 }
 
-void SRegOps::CLZ(Environ &env) {
-    BCLR(env, ZBit);
+bool SRegOps::CLZ(Environ &env) {
+    return BCLR(env, ZBit);
 }
 
-void SRegOps::SEN(Environ &env, u_int32_t instrn) {
-    SEN(env);
+bool SRegOps::SEN(Environ &env, u_int32_t instrn) {
+    return SEN(env);
 }
 
-void SRegOps::SEN(Environ &env) {
-    BSET(env, NBit);
+bool SRegOps::SEN(Environ &env) {
+    return BSET(env, NBit);
 }
 
-void SRegOps::CLN(Environ &env, u_int32_t instrn) {
-    CLN(env);
+bool SRegOps::CLN(Environ &env, u_int32_t instrn) {
+    return CLN(env);
 }
 
-void SRegOps::CLN(Environ &env) {
-    BCLR(env, NBit);
+bool SRegOps::CLN(Environ &env) {
+    return BCLR(env, NBit);
 }
 
-void SRegOps::SEV(Environ &env, uint32_t instrn) {
-    SEV(env);
+bool SRegOps::SEV(Environ &env, uint32_t instrn) {
+    return SEV(env);
 }
 
-void SRegOps::SEV(Environ &env) {
-    BSET(env, VBit);
+bool SRegOps::SEV(Environ &env) {
+    return BSET(env, VBit);
 }
 
-void SRegOps::CLV(Environ &env, uint32_t instrn) {
-    CLV(env);
+bool SRegOps::CLV(Environ &env, uint32_t instrn) {
+    return CLV(env);
 }
 
-void SRegOps::CLV(Environ &env) {
-    BCLR(env, VBit);
+bool SRegOps::CLV(Environ &env) {
+    return BCLR(env, VBit);
 }
 
-void SRegOps::SES(Environ &env, uint32_t instrn) {
-    SES(env);
+bool SRegOps::SES(Environ &env, uint32_t instrn) {
+    return SES(env);
 }
 
-void SRegOps::SES(Environ &env) {
-    BSET(env, SBit);
+bool SRegOps::SES(Environ &env) {
+    return BSET(env, SBit);
 }
 
-void SRegOps::CLS(Environ &env, uint32_t instrn) {
-    CLS(env);
+bool SRegOps::CLS(Environ &env, uint32_t instrn) {
+    return CLS(env);
 }
 
-void SRegOps::CLS(Environ &env) {
-    BCLR(env, SBit);
+bool SRegOps::CLS(Environ &env) {
+    return BCLR(env, SBit);
 }
 
-void SRegOps::SEH(Environ &env, uint32_t instrn) {
-    SEH(env);
+bool SRegOps::SEH(Environ &env, uint32_t instrn) {
+    return SEH(env);
 }
 
-void SRegOps::SEH(Environ &env) {
-    BSET(env, HBit);
+bool SRegOps::SEH(Environ &env) {
+    return BSET(env, HBit);
 }
 
-void SRegOps::CLH(Environ &env, uint32_t instrn) {
-    CLH(env);
+bool SRegOps::CLH(Environ &env, uint32_t instrn) {
+    return CLH(env);
 }
 
-void SRegOps::CLH(Environ &env) {
-    BCLR(env, HBit);
+bool SRegOps::CLH(Environ &env) {
+    return BCLR(env, HBit);
 }
 
-void SRegOps::SET(Environ &env, uint32_t instrn) {
-    SET(env);
+bool SRegOps::SET(Environ &env, uint32_t instrn) {
+    return SET(env);
 }
 
-void SRegOps::SET(Environ &env) {
-    BSET(env, SBit);
+bool SRegOps::SET(Environ &env) {
+    return BSET(env, SBit);
 }
 
-void SRegOps::CLT(Environ &env, uint32_t instrn) {
-    CLT(env);
+bool SRegOps::CLT(Environ &env, uint32_t instrn) {
+    return CLT(env);
 }
 
-void SRegOps::CLT(Environ &env) {
-    BCLR(env, TBit);
+bool SRegOps::CLT(Environ &env) {
+    return BCLR(env, TBit);
 }
 
-void SRegOps::BST(Environ &env, uint32_t instrn) {
+bool SRegOps::BST(Environ &env, uint32_t instrn) {
     FiveBit tgtReg; ThreeBit bitNum;
     ArgsDecode::Reg5SBit3(instrn, tgtReg, bitNum);
-    BST(env, tgtReg, bitNum);
+    return BST(env, tgtReg, bitNum);
 }
 
-void SRegOps::BST(Environ &env, FiveBit tgtAddr, ThreeBit regNum) {
+bool SRegOps::BST(Environ &env, FiveBit tgtAddr, ThreeBit regNum) {
     uchar_t tgtValue = env.read_reg_byte(tgtAddr);
     bool tBit = is_bi(tgtValue, regNum);
     env.sReg.setT(tBit);
+    return false;
 }
 
-void SRegOps::BLD(Environ &env, uint32_t instrn) {
+bool SRegOps::BLD(Environ &env, uint32_t instrn) {
     FiveBit tgtReg; ThreeBit bitNum;
     ArgsDecode::Reg5SBit3(instrn, tgtReg, bitNum);
-    BLD(env, tgtReg, bitNum);
+    return BLD(env, tgtReg, bitNum);
 }
 
-void SRegOps::BLD(Environ &env, FiveBit tgtAddr, ThreeBit regNum) {
+bool SRegOps::BLD(Environ &env, FiveBit tgtAddr, ThreeBit regNum) {
     uchar_t tgtValue = env.read_reg_byte(tgtAddr);
     uchar_t tBitMask = env.sReg.T() << regNum;
     uchar_t result = tgtValue | tBitMask;
     env.write_reg_byte(tgtAddr, result);
+    return false;
 }
 

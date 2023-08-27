@@ -3,122 +3,137 @@
 #include "branch_ops.h"
 #include "call_ops.h"
 
-void CallOps::RJMP(Environ &env, uint32_t instrn) {
+bool CallOps::RJMP(Environ &env, uint32_t instrn) {
     TwelveBit offset;
     ArgsDecode::Addr12(instrn, offset);
-    RJMP(env, offset, true);
+    return RJMP(env, offset, true);
 }
 
-void CallOps::RJMP(Environ &env, TwelveBit tgtOffset, bool dummy) {
+bool CallOps::RJMP(Environ &env, TwelveBit tgtOffset, bool dummy) {
     uint16_t offset1 = tgtOffset - (1 << 11);
     env.PC = env.PC + offset1;
+    return true;
 }
 
-void CallOps::JMP(Environ &env, uint64_t instrn) {
+bool CallOps::JMP(Environ &env, uint64_t instrn) {
     TwentyTwoBit jmpAddr;
     ArgsDecode::Addr22(instrn, jmpAddr);
-    JMP(env, jmpAddr, false);
+    return JMP(env, jmpAddr, false);
 }
 
-void CallOps::JMP(Environ &env, TwentyTwoBit jmpAddr, bool dummy) {
+bool CallOps::JMP(Environ &env, TwentyTwoBit jmpAddr, bool dummy) {
     env.PC = jmpAddr;
+    return true;
 }
 
-void CallOps::IJMP(Environ &env) {
-    IJMP(env, true);
+bool CallOps::IJMP(Environ &env) {
+    return IJMP(env, true);
 }
 
-void CallOps::IJMP(Environ &env, bool dummy) {
+bool CallOps::IJMP(Environ &env, bool dummy) {
     env.PC = env.read_reg_pair(M::Z);
+    return true;
 }
 
-void CallOps::EIJMP(Environ &env) {
-    EIJMP(env, true);
+bool CallOps::EIJMP(Environ &env) {
+    return EIJMP(env, true);
 }
 
-void CallOps::EIJMP(Environ &env, bool dummy) {
+bool CallOps::EIJMP(Environ &env, bool dummy) {
     env.PC = env.read_reg_pair(M::Z);
     env.PC |= (env.read_mem_byte(M::EIND) & 0x3F) << 24;
+    return true;
 }
 
-void CallOps::PUSH(Environ &env, uint32_t instrn) {
+bool CallOps::PUSH(Environ &env, uint32_t instrn) {
     FiveBit regAddr;
     ArgsDecode::Reg5(instrn, regAddr);
-    PUSH(env, regAddr, true);
+    return PUSH(env, regAddr, true);
 }
 
-void CallOps::PUSH(Environ &env, FiveBit regAddr, bool dummy) {
+bool CallOps::PUSH(Environ &env, FiveBit regAddr, bool dummy) {
     uchar_t value = env.read_reg_byte(regAddr);
     Push1Byte(env, value);
+    return false;
 }
 
-void CallOps::POP(Environ &env, uint32_t instrn) {
+bool CallOps::POP(Environ &env, uint32_t instrn) {
     FiveBit regAddr;
     ArgsDecode::Reg5(instrn, regAddr);
-    POP(env, regAddr, true);
+    return POP(env, regAddr, true);
 }
 
-void CallOps::POP(Environ &env, FiveBit regAddr, bool dummy) {
+bool CallOps::POP(Environ &env, FiveBit regAddr, bool dummy) {
     uchar_t value;
     Pop1Byte(env, value);
     env.write_reg_byte(regAddr, value);
+    return false;
 }
 
-void CallOps::RCALL(Environ &env, uint32_t instrn) {
+bool CallOps::RCALL(Environ &env, uint32_t instrn) {
     TwelveBit offset;
     ArgsDecode::Addr12(instrn, offset);
-    RCALL(env, offset, true);
+    return RCALL(env, offset, true);
 }
 
-void CallOps::RCALL(Environ &env, TwelveBit tgtOffset, bool dummy) {
-    Push3Bytes(env, env.PC);
-    RJMP(env, tgtOffset, dummy);
+bool CallOps::RCALL(Environ &env, TwelveBit tgtOffset, bool dummy) {
+    uchar_t instrnSize = 4 + isLongInstrn(InstrnEnum::RCALL);
+    uint32_t retAddr = env.PC + instrnSize;
+    Push3Bytes(env, retAddr);
+    return RJMP(env, tgtOffset, dummy);
 }
 
-void CallOps::CALL(Environ &env, uint64_t instrn) {
+bool CallOps::CALL(Environ &env, uint64_t instrn) {
     TwentyTwoBit jmpAddr;
     ArgsDecode::Addr22(instrn, jmpAddr);
-    CALL(env, jmpAddr, false);
+    return CALL(env, jmpAddr, false);
 }
 
-void CallOps::CALL(Environ &env, TwentyTwoBit tgtOffset, bool dummy) {
-    Push3Bytes(env, env.PC);
-    JMP(env, tgtOffset, dummy);
+bool CallOps::CALL(Environ &env, TwentyTwoBit tgtOffset, bool dummy) {
+    uchar_t instrnSize = 4 + isLongInstrn(InstrnEnum::CALL);
+    uint32_t retAddr = env.PC + instrnSize;
+    Push3Bytes(env, retAddr);
+    return JMP(env, tgtOffset, dummy);
 }
 
-void CallOps::ICALL(Environ &env) {
-    ICALL(env, true);
+bool CallOps::ICALL(Environ &env) {
+    return ICALL(env, true);
 }
 
-void CallOps::ICALL(Environ &env, bool dummy) {
-    Push3Bytes(env, env.PC);
-    IJMP(env, dummy);
+bool CallOps::ICALL(Environ &env, bool dummy) {
+    uchar_t instrnSize = 4 + isLongInstrn(InstrnEnum::ICALL);
+    uint32_t retAddr = env.PC + instrnSize;
+    Push3Bytes(env, retAddr);
+    return IJMP(env, dummy);
 }
 
-void CallOps::EICALL(Environ &env) {
-    EICALL(env, true);
+bool CallOps::EICALL(Environ &env) {
+    return EICALL(env, true);
 }
 
-void CallOps::EICALL(Environ &env, bool dummy) {
-    Push3Bytes(env, env.PC);
-    EIJMP(env, dummy);
+bool CallOps::EICALL(Environ &env, bool dummy) {
+    uchar_t instrnSize = 4 + isLongInstrn(InstrnEnum::EICALL);
+    uint32_t retAddr = env.PC + instrnSize;
+    Push3Bytes(env, retAddr);
+    return EIJMP(env, dummy);
 }
 
-void CallOps::RET(Environ &env) {
-    RET(env, true);
+bool CallOps::RET(Environ &env) {
+    return RET(env, true);
 }
 
-void CallOps::RET(Environ &env, bool dummy) {
+bool CallOps::RET(Environ &env, bool dummy) {
     TwentyTwoBit pcValue;
     Pop3Bytes(env, pcValue);
     env.PC = pcValue;
+    return true;
 }
 
-void CallOps::RETI(Environ &env) {
-    RETI(env, true);
+bool CallOps::RETI(Environ &env) {
+    return RETI(env, true);
 }
 
-void CallOps::RETI(Environ &env, bool dummy) {
+bool CallOps::RETI(Environ &env, bool dummy) {
     TwentyTwoBit pcValue;
     Pop3Bytes(env, pcValue);
     env.PC = pcValue;
