@@ -110,10 +110,17 @@ public:
         flag = instrn & 0x1;
     }
 
-    /* 1001-0101-111f-1000 */
+    /* XXXX-XXXX-XXXXf-XXXX */
     inline static void FlagOnly(ShortInstrn instrn, OneBit& flag) {
         flag = ( instrn >> 4 ) & 0x1;
     }
+
+    /* XXXX-XAAd-dddd-AAAA */
+    inline static void Reg5IO6(ShortInstrn instrn, FiveBit& regAddr, SixBit& ioPort) {
+        regAddr = (instrn >> 4) & 0x1F;
+        ioPort = (instrn & 0x0F) | ((instrn >> 5) & 0x30);
+    }
+
 };
 
 #endif //ATMEGASIM_EXECCOMMON_H
