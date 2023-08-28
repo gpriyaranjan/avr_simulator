@@ -51,6 +51,8 @@ typedef BitField<7> SevenBit;
 typedef BitField<8> EightBit;
 
 typedef uint16_t TwelveBit;
+typedef uint16_t SixteenBit;
+
 typedef uint32_t TwentyTwoBit;
 typedef uint32_t TwentySixBit;
 

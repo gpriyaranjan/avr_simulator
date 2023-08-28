@@ -95,6 +95,25 @@ public:
         srcFlag = (instrn >> 1) & 0x01;
         offset = ( (instrn >> 3) & 0x07 ) | ( (instrn >> 7) & 0x1F) | ( (instrn >> 6) & 0x40 );
     }
+
+    /* XXXX-XXXr-rrrr-XXXX-kkkk-kkkk-kkkk-kkkk */
+    inline static void Reg5Addr16(
+        LongInstrn instrn, FiveBit& regAddr, SixteenBit& immData) {
+
+        immData = instrn & 0xFFFF;
+        regAddr = (instrn>>16) & 0x1F;
+    }
+
+    /* XXXX-XXXd-dddd-XXXf */
+    inline static void Reg5Flag(ShortInstrn instrn, FiveBit& regAddr, OneBit& flag) {
+        regAddr = (instrn >> 4) & 0x1F;
+        flag = instrn & 0x1;
+    }
+
+    /* 1001-0101-111f-1000 */
+    inline static void FlagOnly(ShortInstrn instrn, OneBit& flag) {
+        flag = ( instrn >> 4 ) & 0x1;
+    }
 };
 
 #endif //ATMEGASIM_EXECCOMMON_H

@@ -35,6 +35,9 @@ public:
     uchar_t read_reg_byte(FiveBit regAddr);
     void write_reg_byte(FiveBit regAddr, uchar_t value);
 
+    uint16_t read_mem_pair(CPUAddr addr);
+    void write_mem_pair(CPUAddr addr, uint16_t value);
+
     uint16_t read_reg_pair(FiveBit regAddr);
     void write_reg_pair(FiveBit regAddr, uint16_t value);
 };
@@ -61,6 +64,10 @@ inline uint16_t Environ::read_reg_pair(FiveBit regAddr) {
     return make_word(read_reg_byte(regAddr + 1), read_reg_byte(regAddr) );
 }
 
+inline uint16_t Environ::read_mem_pair(CPUAddr memAddr) {
+    return make_word(read_mem_byte(memAddr + 1), read_reg_byte(memAddr) );
+}
+
 inline void Environ::write_reg_byte(FiveBit regAddr, uchar_t value) {
     if (regAddr >= NUM_REGISTERS)
         throw IllegalRegister(regAddr, PC);
@@ -70,6 +77,11 @@ inline void Environ::write_reg_byte(FiveBit regAddr, uchar_t value) {
 void Environ::write_reg_pair(FiveBit regAddr, uint16_t value) {
     write_reg_byte(regAddr, lo_byte(value));
     write_reg_byte(regAddr, hi_byte(value));
+}
+
+inline void Environ::write_mem_pair(CPUAddr memAddr, uint16_t value) {
+    write_mem_byte(memAddr, lo_byte(value));
+    write_mem_byte(memAddr, hi_byte(value));
 }
 
 #endif //ATMEGASIM_ENVIRONMENT_H

@@ -1,3 +1,4 @@
+#include "types.h"
 #include "decoder.h"
 #include "xfer_ops.h"
 
@@ -93,6 +94,136 @@ bool XferOps::LDD(
 
     uchar_t value = env.read_mem_byte(memAddr);
     env.write_reg_byte(tgtAddr, value);
+
+    return false;
+}
+
+bool XferOps::STS(Environ &env, LongInstrn instrn) {
+    FiveBit regAddr; SixteenBit immData;
+    ArgsDecode::Reg5Addr16(instrn, regAddr, immData);
+    return STS(env, regAddr, immData);
+}
+
+bool XferOps::STS(Environ &env, FiveBit srcAddr, SixteenBit memAddr) {
+    uchar_t value = env.read_reg_byte(srcAddr);
+    env.write_mem_byte(memAddr, value);
+    return false;
+}
+
+bool XferOps::ST(Environ &env, ShortInstrn instrn) {
+    FiveBit srcAddr;
+    TwoBit flag;
+    TwoBit mode;
+
+    ArgsDecode::Reg5FlagMode(instrn, srcAddr, flag, mode);
+    return ST(env, srcAddr, flag, mode);
+}
+
+bool XferOps::ST(Environ &env, FiveBit srcAddr, TwoBit flag, TwoBit mode) {
+
+    uchar_t tgtRegAddr;
+    switch(flag) {
+        case 0x00: tgtRegAddr = M::Z; break;
+        case 0x01: tgtRegAddr = M::Y; break;
+        case 0x02: tgtRegAddr = M::X; break;
+        default: throw InvalidEnum(0x00, env.PC);
+    }
+    bool postIncr = (mode == 0x01);
+    bool preDecr  = (mode == 0x02);
+
+    SixteenBit tgtMemAddr = env.read_reg_pair(tgtRegAddr);
+    if (preDecr) tgtMemAddr--;
+
+    uchar_t value = env.read_reg_byte(srcAddr);
+    env.write_mem_byte(tgtMemAddr, value);
+
+    if (postIncr) tgtMemAddr++;
+    env.write_reg_pair(tgtRegAddr, value);
+    return false;
+}
+
+bool XferOps::STD(Environ &env, ShortInstrn instrn) {
+    FiveBit srcAddr;
+    OneBit flag;
+    SixBit offset;
+
+    ArgsDecode::Reg5FlagOffset(instrn, srcAddr, flag, offset);
+    return LDD(env, srcAddr, flag, offset);
+}
+
+bool XferOps::STD(
+    Environ &env, FiveBit srcRegAddr, OneBit flag, SixBit offset) {
+
+    uchar_t srcAddr = flag ? M::Y : M::Z;
+
+    uint16_t memAddr = env.read_reg_pair(srcAddr);
+    memAddr = memAddr + offset;
+
+    uchar_t value = env.read_reg_byte(srcRegAddr);
+    env.write_mem_byte(memAddr, value);
+
+    return false;
+}
+
+bool XferOps::LPM(Environ &env, ShortInstrn instrn) {
+    FiveBit regAddr; OneBit postIncr;
+    ArgsDecode::Reg5Flag(instrn, regAddr, postIncr);
+    return LPM(env, regAddr, postIncr);
+}
+
+bool XferOps::LPM(Environ &env, FiveBit regAddr, OneBit postIncr) {
+    uint16_t memAddr = env.read_reg_pair(M::Z);
+
+    uchar_t value = env.read_mem_byte(memAddr);
+    env.write_reg_byte(regAddr, value);
+
+    if (postIncr) {
+        memAddr++;
+        env.write_reg_pair(M::Z, memAddr);
+    }
+    return false;
+}
+
+bool XferOps::ELPM(Environ &env, ShortInstrn instrn) {
+    FiveBit regAddr; OneBit postIncr;
+    ArgsDecode::Reg5Flag(instrn, regAddr, postIncr);
+    return ELPM(env, regAddr, postIncr);
+}
+
+bool XferOps::ELPM(Environ &env, FiveBit regAddr, OneBit postIncr) {
+    uint16_t memOffAddr = env.read_reg_pair(M::Z);
+    uchar_t memSegAddr = env.read_reg_byte(M::RAMPZ);
+    CPUAddr memAddr = (memSegAddr >> 16) | memOffAddr;
+
+    uchar_t value = env.read_mem_byte(memAddr);
+    env.write_reg_byte(regAddr, value);
+
+    if (postIncr) {
+        memAddr++;
+        env.write_reg_pair(M::Z, memAddr);
+    }
+    return false;
+}
+
+bool XferOps::SPM(Environ &env, ShortInstrn instrn) {
+    OneBit flag;
+    ArgsDecode::FlagOnly(instrn, flag);
+    return SPM(env, flag);
+}
+
+bool XferOps::SPM(Environ &env, OneBit postIncr) {
+    uint16_t memOffAddr = env.read_reg_pair(M::Z);
+    uchar_t memSegAddr = env.read_reg_byte(M::RAMPZ);
+    CPUAddr memAddr = (memSegAddr >> 16) | memOffAddr;
+
+    SixteenBit value = env.read_reg_pair(M::R0);
+    env.write_mem_pair(memAddr, value);
+
+    if (postIncr) {
+        memAddr++;
+        env.write_reg_pair(M::Z, memAddr & 0xFFFF);
+        env.write_reg_byte(M::RAMPZ, (memAddr>>16)&0xFF);
+    }
 
     return false;
 }
