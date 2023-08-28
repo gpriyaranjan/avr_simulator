@@ -6,13 +6,15 @@
 #include "sreg_ops.h"
 #include "branch_ops.h"
 #include "call_ops.h"
+#include "xfer_ops.h"
 
 class AllOps : public
         AluOps,
         LogOps,
         SRegOps,
         BranchOps,
-        CallOps
+        CallOps,
+        XferOps
         {
 };
 

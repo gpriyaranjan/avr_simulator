@@ -49,7 +49,7 @@ template <typename K, typename V, int N, typename F = KeyHash<K,N>>
 class HashMap {
 public:
     HashMap() {
-        // construct zero initialized hash table of size
+        // construct zero initialized hash table of BitSize
         table = new HashNode<K, V, N> *[N]();
     }
 

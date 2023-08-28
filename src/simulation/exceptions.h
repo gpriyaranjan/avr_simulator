@@ -19,4 +19,13 @@ public:
         : addr(addr_), pc(pc_) {}
 };
 
+
+class InvalidEnum : public std::exception {
+public:
+    uchar_t enumVal;
+    CPUAddr pc;
+    InvalidEnum(uchar_t enumVal_, CPUAddr pc_)
+        : enumVal(enumVal_), pc(pc_) {}
+};
+
 #endif //ATMEGASIM_SRC_EXCEPTIONS_H

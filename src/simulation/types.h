@@ -21,18 +21,6 @@
 typedef unsigned char uchar_t;
 typedef   signed char schar_t;
 
-typedef uint16_t TwelveBit;
-typedef uint32_t TwentyTwoBit;
-typedef uint32_t TwentySixBit;
-
-typedef TwentySixBit CPUAddr;
-
-inline uchar_t lo_byte(uint16_t src) {return src & 0xFF;}
-inline uchar_t hi_byte(uint16_t src) {return src >> 8;}
-
-inline uint16_t make_word(uchar_t hi_byte, uchar_t lo_byte) {
-    return (hi_byte>>8) | lo_byte;
-}
 
 class ValueTooBig : public std::exception {
 public:
@@ -40,13 +28,13 @@ public:
     ValueTooBig(uchar_t v) : value(v) {}
 };
 
-template <int size> class BitField {
+template <int BitSize> class BitField {
 private:
     uchar_t value;
 public:
     BitField();
     BitField(uchar_t ch) {
-        if (ch >= 1 >> size)
+        if (ch >= 1 >> BitSize)
             throw ValueTooBig(ch);
         value = ch;
     }
@@ -61,5 +49,18 @@ typedef BitField<5> FiveBit;
 typedef BitField<6> SixBit;
 typedef BitField<7> SevenBit;
 typedef BitField<8> EightBit;
+
+typedef uint16_t TwelveBit;
+typedef uint32_t TwentyTwoBit;
+typedef uint32_t TwentySixBit;
+
+typedef TwentySixBit CPUAddr;
+
+inline uchar_t lo_byte(uint16_t src) {return src & 0xFF;}
+inline uchar_t hi_byte(uint16_t src) {return src >> 8;}
+
+inline uint16_t make_word(uchar_t hi_byte, uchar_t lo_byte) {
+    return (hi_byte>>8) | lo_byte;
+}
 
 #endif //ATMEGASIM_TYPES_H
