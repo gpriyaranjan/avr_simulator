@@ -9,51 +9,51 @@ class ArgsDecode {
 public:
 
     /* XXXX	XXrd dddd rrrr */
-    inline static void TwoReg5(uint16_t instrn, FiveBit& tgtReg, FiveBit& srcReg) {
+    inline static void TwoReg5(ShortInstrn instrn, FiveBit& tgtReg, FiveBit& srcReg) {
         tgtReg = (instrn >> 4) & 0x1F;
         srcReg = ( (instrn & 0x0200) >> 5 ) | (instrn & 0xF);
     }
 
     /* XXXX	XXXX KKdd KKKK */
-    inline static void Reg2Imm6(uint16_t instrn, TwoBit& tgtReg, SixBit& immItem) {
+    inline static void Reg2Imm6(ShortInstrn instrn, TwoBit& tgtReg, SixBit& immItem) {
         tgtReg = (instrn & 0x30) >> 4;
         immItem = ((instrn & 0xC0)>>4) | (instrn & 0xF);
     }
 
     /* XXXX KKKK dddd KKKK */
-    inline static void Reg4Imm8(uint16_t instrn, FourBit& tgtReg, EightBit& immItem) {
+    inline static void Reg4Imm8(ShortInstrn instrn, FourBit& tgtReg, EightBit& immItem) {
         tgtReg = (instrn & 0xF0) >> 4;
         immItem = ((instrn & 0xF00)>>4) | (instrn & 0xF);
     }
 
     /* XXXX	XXXd dddd XXXX */
-    inline static void Reg5(uint16_t instrn, FiveBit& tgtReg) {
+    inline static void Reg5(ShortInstrn instrn, FiveBit& tgtReg) {
         tgtReg = (instrn >> 4) & 0x1F;
     }
 
     /* XXXX	XXXX dddd XXXX */
-    inline static void Reg4(uint16_t instrn, FourBit& tgtReg) {
+    inline static void Reg4(ShortInstrn instrn, FourBit& tgtReg) {
         tgtReg = (instrn >> 4) & 0x0F;
     }
 
     /* XXXX XXXX Xsss XXXX */
-    inline static void SBit3(uint16_t instrn, ThreeBit& tgtBit) {
+    inline static void SBit3(ShortInstrn instrn, ThreeBit& tgtBit) {
         tgtBit = (instrn >> 4) & 0x7;
     }
 
     /* XXXX	XXXd dddd Xbbb */
-    inline static void Reg5SBit3(uint16_t instrn, FiveBit& tgtReg, ThreeBit& regNum) {
+    inline static void Reg5SBit3(ShortInstrn instrn, FiveBit& tgtReg, ThreeBit& regNum) {
         regNum = instrn & 0x7;
         tgtReg = (instrn >> 4) & 0x1F;
     }
 
     /* 1100	kkkk kkkk kkkk */
-    inline static void Addr12(uint16_t instrn, TwelveBit& offset) {
+    inline static void Addr12(ShortInstrn instrn, TwelveBit& offset) {
         offset = offset & 0x0FFF;
     }
 
     /* 1001	010k kkkk 110k kkkk	kkkk kkkk kkkk */
-    inline static void Addr22(uint32_t instrn, TwentyTwoBit& tgtAddr) {
+    inline static void Addr22(LongInstrn instrn, TwentyTwoBit& tgtAddr) {
         uint32_t additionalBits;
         tgtAddr = instrn & 0x1FFFF;
         additionalBits = (instrn & 0x1F00000) >> 3;
@@ -61,26 +61,26 @@ public:
     }
 
     /* XXXX	XXXX AAAA Abbb */
-    inline static void IO5Bit3(uint16_t instrn, FiveBit& tgtReg, ThreeBit& bitNum) {
+    inline static void IO5Bit3(ShortInstrn instrn, FiveBit& tgtReg, ThreeBit& bitNum) {
         bitNum = instrn & 0x7;
         tgtReg = (instrn >> 3) & 0x1F;
     }
 
     /* 1111-00kk-kkkk-ksss */
-    inline static void Addr7Bit3(uint16_t instrn, SevenBit& addr, ThreeBit& regBits) {
+    inline static void Addr7Bit3(ShortInstrn instrn, SevenBit& addr, ThreeBit& regBits) {
         addr = (instrn >> 3) & 0x7F;
         regBits = instrn & 0x07;
     }
 
     /* XXXX-XXXX-dddd-rrrr */
-    inline static void TwoReg4(uint16_t instrn, FourBit& tgtNum, FourBit& srcNum) {
+    inline static void TwoReg4(ShortInstrn instrn, FourBit& tgtNum, FourBit& srcNum) {
         srcNum = instrn & 0x0F;
         tgtNum = (instrn>>4) & 0x0F;
     }
 
     /* 1000-000d-dddd-ffmm */
     inline static void Reg5FlagMode(
-        uint16_t instrn, FiveBit& regAddr, TwoBit& srcFlag, TwoBit& dispMode) {
+        ShortInstrn instrn, FiveBit& regAddr, TwoBit& srcFlag, TwoBit& dispMode) {
 
         regAddr = (instrn >> 4) & 0x0F;
         srcFlag = (instrn >> 2) & 0x03;
@@ -89,7 +89,7 @@ public:
 
     /* 10q0-qq0d-dddd-fqqq*/
     inline static void Reg5FlagOffset(
-        uint16_t instrn, FiveBit& regAddr, OneBit& srcFlag, SixBit& offset) {
+        ShortInstrn instrn, FiveBit& regAddr, OneBit& srcFlag, SixBit& offset) {
 
         regAddr = (instrn >> 4) & 0x0F;
         srcFlag = (instrn >> 1) & 0x01;

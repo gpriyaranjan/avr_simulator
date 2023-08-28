@@ -1,7 +1,7 @@
 #include "decoder.h"
 #include "xfer_ops.h"
 
-bool XferOps::MOV(Environ &env, uint16_t instrn) {
+bool XferOps::MOV(Environ &env, ShortInstrn instrn) {
     FiveBit tgtAddr, srcAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
     return MOV(env, tgtAddr, srcAddr);
@@ -13,7 +13,7 @@ bool XferOps::MOV(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool XferOps::MOVW(Environ &env, uint16_t instrn) {
+bool XferOps::MOVW(Environ &env, ShortInstrn instrn) {
     FourBit tgtNum, srcNum;
     ArgsDecode::TwoReg4(instrn, tgtNum, srcNum);
     FiveBit tgtAddr = tgtNum << 1;
@@ -27,7 +27,7 @@ bool XferOps::MOVW(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool XferOps::LDI(Environ &env, uint16_t instrn) {
+bool XferOps::LDI(Environ &env, ShortInstrn instrn) {
     FourBit regNum; EightBit immData;
     ArgsDecode::Reg4Imm8(instrn, regNum, immData);
     FiveBit regAddr = regNum + 0x100;
@@ -39,7 +39,7 @@ bool XferOps::LDI(Environ &env, FiveBit tgtAddr, EightBit immData) {
     return false;
 }
 
-bool XferOps::LD(Environ &env, uint16_t instrn) {
+bool XferOps::LD(Environ &env, ShortInstrn instrn) {
     FiveBit tgtAddr;
     TwoBit flag;
     TwoBit mode;
@@ -74,7 +74,7 @@ bool XferOps::LD(
     return false;
 }
 
-bool XferOps::LDD(Environ &env, uint16_t instrn) {
+bool XferOps::LDD(Environ &env, ShortInstrn instrn) {
     FiveBit tgtAddr;
     OneBit flag;
     SixBit offset;
@@ -97,7 +97,7 @@ bool XferOps::LDD(
     return false;
 }
 
-bool XferOps::XCH(Environ &env, uint16_t instrn) {
+bool XferOps::XCH(Environ &env, ShortInstrn instrn) {
     FiveBit regAddr;
     ArgsDecode::Reg5(instrn, regAddr);
     return XCH(env, regAddr);
@@ -112,7 +112,7 @@ bool XferOps::XCH(Environ &env, FiveBit regAddr) {
     return false;
 }
 
-bool XferOps::LAS(Environ &env, uint16_t instrn) {
+bool XferOps::LAS(Environ &env, ShortInstrn instrn) {
     FiveBit regAddr;
     ArgsDecode::Reg5(instrn, regAddr);
     return LAS(env, regAddr);
@@ -128,7 +128,7 @@ bool XferOps::LAS(Environ &env, FiveBit regAddr) {
     return false;
 }
 
-bool XferOps::LAC(Environ &env, uint16_t instrn) {
+bool XferOps::LAC(Environ &env, ShortInstrn instrn) {
     FiveBit regAddr;
     ArgsDecode::Reg5(instrn, regAddr);
     return LAC(env, regAddr);
@@ -144,7 +144,7 @@ bool XferOps::LAC(Environ &env, FiveBit regAddr) {
     return false;
 }
 
-bool XferOps::LAT(Environ &env, uint16_t instrn) {
+bool XferOps::LAT(Environ &env, ShortInstrn instrn) {
     FiveBit regAddr;
     ArgsDecode::Reg5(instrn, regAddr);
     return LAC(env, regAddr);

@@ -3,7 +3,7 @@
 #include "branch_ops.h"
 #include "call_ops.h"
 
-bool CallOps::RJMP(Environ &env, uint16_t instrn) {
+bool CallOps::RJMP(Environ &env, ShortInstrn instrn) {
     TwelveBit offset;
     ArgsDecode::Addr12(instrn, offset);
     return RJMP(env, offset, true);
@@ -15,7 +15,7 @@ bool CallOps::RJMP(Environ &env, TwelveBit tgtOffset, bool dummy) {
     return true;
 }
 
-bool CallOps::JMP(Environ &env, uint32_t instrn) {
+bool CallOps::JMP(Environ &env, LongInstrn instrn) {
     TwentyTwoBit jmpAddr;
     ArgsDecode::Addr22(instrn, jmpAddr);
     return JMP(env, jmpAddr, false);
@@ -45,7 +45,7 @@ bool CallOps::EIJMP(Environ &env, bool dummy) {
     return true;
 }
 
-bool CallOps::PUSH(Environ &env, uint16_t instrn) {
+bool CallOps::PUSH(Environ &env, ShortInstrn instrn) {
     FiveBit regAddr;
     ArgsDecode::Reg5(instrn, regAddr);
     return PUSH(env, regAddr, true);
@@ -57,7 +57,7 @@ bool CallOps::PUSH(Environ &env, FiveBit regAddr, bool dummy) {
     return false;
 }
 
-bool CallOps::POP(Environ &env, uint16_t instrn) {
+bool CallOps::POP(Environ &env, ShortInstrn instrn) {
     FiveBit regAddr;
     ArgsDecode::Reg5(instrn, regAddr);
     return POP(env, regAddr, true);
@@ -70,7 +70,7 @@ bool CallOps::POP(Environ &env, FiveBit regAddr, bool dummy) {
     return false;
 }
 
-bool CallOps::RCALL(Environ &env, uint16_t instrn) {
+bool CallOps::RCALL(Environ &env, ShortInstrn instrn) {
     TwelveBit offset;
     ArgsDecode::Addr12(instrn, offset);
     return RCALL(env, offset, true);
@@ -83,7 +83,7 @@ bool CallOps::RCALL(Environ &env, TwelveBit tgtOffset, bool dummy) {
     return RJMP(env, tgtOffset, dummy);
 }
 
-bool CallOps::CALL(Environ &env, uint32_t instrn) {
+bool CallOps::CALL(Environ &env, LongInstrn instrn) {
     TwentyTwoBit jmpAddr;
     ArgsDecode::Addr22(instrn, jmpAddr);
     return CALL(env, jmpAddr, false);

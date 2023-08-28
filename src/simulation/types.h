@@ -56,6 +56,9 @@ typedef uint32_t TwentySixBit;
 
 typedef TwentySixBit CPUAddr;
 
+typedef uint16_t ShortInstrn;
+typedef uint32_t LongInstrn;
+
 inline uchar_t lo_byte(uint16_t src) {return src & 0xFF;}
 inline uchar_t hi_byte(uint16_t src) {return src >> 8;}
 
