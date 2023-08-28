@@ -1,197 +1,84 @@
 #include "decoder.h"
 #include "sreg_ops.h"
-
-bool SRegOps::WriteBit(Environ &env, ThreeBit regNum, bool value) {
-
-    auto regBit = (SMasks)(1 << regNum);
-
-    switch(regBit) {
-        case CMask:
-            env.sReg.setC(true);
-            break;
-        case ZMask:
-            env.sReg.setZ(true);
-            break;
-        case NMask:
-            env.sReg.setN(true);
-            break;
-        case VMask:
-            env.sReg.setV(true);
-            break;
-        case SMask:
-            env.sReg.setS(true);
-            break;
-        case HMask:
-            env.sReg.setH(true);
-            break;
-        case TMask:
-            env.sReg.setT(true);
-            break;
-        case IMask:
-            env.sReg.setI(true);
-            break;
-        default:
-            break;
-    }
-    return false;
-}
+#include "sreg_ops_mc.h"
 
 bool SRegOps::BSET(Environ &env, ShortInstrn instrn) {
     ThreeBit regNum;
     ArgsDecode::SBit3(instrn, regNum);
-    return BSET(env, regNum, true);
-}
-
-bool SRegOps::BSET(Environ &env, ThreeBit regNum, bool dummy) {
-    return WriteBit(env, regNum, true);
+    return SRegOpsMc::BSET(env, regNum, true);
 }
 
 bool SRegOps::BCLR(Environ &env, ShortInstrn instrn) {
     ThreeBit regNum;
     ArgsDecode::SBit3(instrn, regNum);
-    return BCLR(env, regNum, true);
-}
-
-bool SRegOps::BCLR(Environ &env, ThreeBit regNum, bool dummy) {
-    return WriteBit(env, regNum, false);
+    return SRegOpsMc::BCLR(env, regNum, true);
 }
 
 bool SRegOps::SEC(Environ &env, ShortInstrn instrn) {
-    return SEC(env);
-}
-
-bool SRegOps::SEC(Environ &env) {
-    return BSET(env, CBit);
+    return SRegOpsMc::SEC(env);
 }
 
 bool SRegOps::CLC(Environ &env, ShortInstrn instrn) {
-    return CLC(env);
-}
-
-bool SRegOps::CLC(Environ &env) {
-    return BCLR(env, CBit);
+    return SRegOpsMc::CLC(env);
 }
 
 bool SRegOps::SEZ(Environ &env, ShortInstrn instrn) {
-    return SEZ(env);
-}
-
-bool SRegOps::SEZ(Environ &env) {
-    return BSET(env, ZBit);
+    return SRegOpsMc::SEZ(env);
 }
 
 bool SRegOps::CLZ(Environ &env, ShortInstrn instrn) {
-    return CLZ(env);
-}
-
-bool SRegOps::CLZ(Environ &env) {
-    return BCLR(env, ZBit);
+    return SRegOpsMc::CLZ(env);
 }
 
 bool SRegOps::SEN(Environ &env, ShortInstrn instrn) {
-    return SEN(env);
-}
-
-bool SRegOps::SEN(Environ &env) {
-    return BSET(env, NBit);
+    return SRegOpsMc::SEN(env);
 }
 
 bool SRegOps::CLN(Environ &env, ShortInstrn instrn) {
-    return CLN(env);
-}
-
-bool SRegOps::CLN(Environ &env) {
-    return BCLR(env, NBit);
+    return SRegOpsMc::CLN(env);
 }
 
 bool SRegOps::SEV(Environ &env, ShortInstrn instrn) {
-    return SEV(env);
-}
-
-bool SRegOps::SEV(Environ &env) {
-    return BSET(env, VBit);
+    return SRegOpsMc::SEV(env);
 }
 
 bool SRegOps::CLV(Environ &env, ShortInstrn instrn) {
-    return CLV(env);
-}
-
-bool SRegOps::CLV(Environ &env) {
-    return BCLR(env, VBit);
+    return SRegOpsMc::CLV(env);
 }
 
 bool SRegOps::SES(Environ &env, ShortInstrn instrn) {
-    return SES(env);
-}
-
-bool SRegOps::SES(Environ &env) {
-    return BSET(env, SBit);
+    return SRegOpsMc::SES(env);
 }
 
 bool SRegOps::CLS(Environ &env, ShortInstrn instrn) {
-    return CLS(env);
-}
-
-bool SRegOps::CLS(Environ &env) {
-    return BCLR(env, SBit);
+    return SRegOpsMc::CLS(env);
 }
 
 bool SRegOps::SEH(Environ &env, ShortInstrn instrn) {
-    return SEH(env);
-}
-
-bool SRegOps::SEH(Environ &env) {
-    return BSET(env, HBit);
+    return SRegOpsMc::SEH(env);
 }
 
 bool SRegOps::CLH(Environ &env, ShortInstrn instrn) {
-    return CLH(env);
-}
-
-bool SRegOps::CLH(Environ &env) {
-    return BCLR(env, HBit);
+    return SRegOpsMc::CLH(env);
 }
 
 bool SRegOps::SET(Environ &env, ShortInstrn instrn) {
-    return SET(env);
-}
-
-bool SRegOps::SET(Environ &env) {
-    return BSET(env, SBit);
+    return SRegOpsMc::SET(env);
 }
 
 bool SRegOps::CLT(Environ &env, ShortInstrn instrn) {
-    return CLT(env);
-}
-
-bool SRegOps::CLT(Environ &env) {
-    return BCLR(env, TBit);
+    return SRegOpsMc::CLT(env);
 }
 
 bool SRegOps::BST(Environ &env, ShortInstrn instrn) {
     FiveBit tgtReg; ThreeBit bitNum;
     ArgsDecode::Reg5SBit3(instrn, tgtReg, bitNum);
-    return BST(env, tgtReg, bitNum);
-}
-
-bool SRegOps::BST(Environ &env, FiveBit tgtAddr, ThreeBit regNum) {
-    uchar_t tgtValue = env.read_reg_byte(tgtAddr);
-    bool tBit = is_bi(tgtValue, regNum);
-    env.sReg.setT(tBit);
-    return false;
+    return SRegOpsMc::BST(env, tgtReg, bitNum);
 }
 
 bool SRegOps::BLD(Environ &env, ShortInstrn instrn) {
     FiveBit tgtReg; ThreeBit bitNum;
     ArgsDecode::Reg5SBit3(instrn, tgtReg, bitNum);
-    return BLD(env, tgtReg, bitNum);
-}
-
-bool SRegOps::BLD(Environ &env, FiveBit tgtAddr, ThreeBit regNum) {
-    uchar_t tgtValue = env.read_reg_byte(tgtAddr);
-    uchar_t tBitMask = env.sReg.T() << regNum;
-    uchar_t result = tgtValue | tBitMask;
-    env.write_reg_byte(tgtAddr, result);
-    return false;
+    return SRegOpsMc::BLD(env, tgtReg, bitNum);
 }
 

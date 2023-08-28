@@ -12,6 +12,11 @@ set(SOURCE_FILES
         simulation/call_ops.cpp
         simulation/xfer_ops.cpp
         simulation/io_ops.cpp
+
+        simulation/alu_ops_mc.cpp
+        simulation/branch_ops_mc.cpp
+        simulation/call_ops_mc.cpp
+        simulation/io_ops_mc.cpp
 )
 
 set(HEADER_FILES
@@ -34,6 +39,17 @@ set(HEADER_FILES
         simulation/exceptions.h
         simulation/xfer_ops.h
         simulation/io_ops.h
+
+        simulation/alu_ops_mc.h
+        simulation/branch_ops_mc.h
+        simulation/call_ops_mc.h
+        simulation/io_ops_mc.h
+        simulation/log_ops_mc.cpp
+        simulation/log_ops_mc.h
+        simulation/sreg_ops_mc.cpp
+        simulation/sreg_ops_mc.h
+        simulation/xfer_ops_mc.cpp
+        simulation/xfer_ops_mc.h
 )
 
 add_library(
