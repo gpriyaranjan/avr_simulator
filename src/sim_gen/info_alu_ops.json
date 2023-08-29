@@ -1,0 +1,110 @@
+{
+    "ADD": {
+        "T": "Add without Carry",
+        "P": "0000-11rd-dddd-rrrr"
+    },
+
+    "ADC": {
+        "T": "Add with Carry",
+        "P": "0001-11rd-dddd-rrrr"
+    },
+
+    "ADIW": {
+        "T": "Add Immediate to Word",
+        "P": "1001-0110-KKdd-KKKK"
+    },
+
+    "SUB": {
+        "T": "Subtract without Carry",
+        "P": "0001-10rd-dddd-rrrr"
+    },
+
+    "SBC": {
+        "T": "Subtract with Carry",
+        "P": "0001-10rd-dddd-rrrr"
+    },
+
+    "SUBI": {
+        "T": "Subtract Immediate without Carry",
+        "P": "0101-KKKK-dddd-KKKK"
+    },
+
+    "SBCI": {
+        "T": "Subtract Immediate with Carry",
+        "P": "0100-KKKK-dddd-KKKK"
+    },
+
+    "SBIW" : {
+        "T" : "Subtract Immediate to Word",
+        "P": "1001-0111-KKdd-KKKK"
+    },
+
+    "NEG" : {
+        "T" : "Negate the Number",
+        "P" : "1001-010d-dddd-0001"
+    },
+    
+    
+    "INC": {
+        "T" : "Increment byte",
+        "P" : "1001-010d-dddd-0011"
+    },
+    
+    "DEC": {
+        "T" : "Decrement byte",
+        "P" : "1001-010d-dddd-0010"
+    },
+    
+    "ASR": {
+        "T" : "Arithmetic Shift Right",
+        "P" : "1001-010d-dddd-0101"
+    },
+
+    "MUL": {
+        "T" :"Multiply Unsigned",
+        "P" : "1001-11rd-dddd-rrrr"
+    },
+
+    "MULS": {
+        "T" :"Multiply Signed",
+        "P" : "0000-0010-dddd-rrrr"
+    },
+
+    "MULSU": { "T" :"Multiply Signed Unsigned",
+        "P" : "0000-0011-0ddd-0rrr"
+    },
+
+    "FMUL": { "T" :"Fractional Multiply Unsigned",
+        "P" : "0000-0011-0ddd-1rrr"
+    },
+
+    "FMULS": {
+        "T" :"Fractional Multiply Signed",
+        "P" : "0000-0011-1ddd-0rrr"
+    },
+
+    "FMULSU": {
+        "T" :"Fractional Multiply Signed Unsigned",
+        "P" : "0000-0011-1ddd-1rrr"
+    },
+
+    "TST": {
+        "T" :"Test for zero or minus",
+        "P" : "0010-00dd-dddd-dddd"
+    },
+
+    "CP": {
+        "T" :"Compare if Equal",
+        "P" : "0001-01rd-dddd-rrrr"
+    },
+
+    "CPC": {
+        "T" :"Compare with Carry",
+        "P" : "0000-01rd-dddd-rrrr"
+    },
+
+    "CPI": {
+        "T" :"Compare with Immediate",
+        "P" : "0011-KKKK-dddd-KKKK"
+    }
+}
