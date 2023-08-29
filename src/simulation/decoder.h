@@ -16,8 +16,8 @@ public:
 
     /* XXXX	XXXX KKdd KKKK */
     inline static void Reg2Imm6(ShortInstrn instrn, TwoBit& tgtReg, SixBit& immItem) {
-        tgtReg = (instrn & 0x30) >> 4;
-        immItem = ((instrn & 0xC0)>>4) | (instrn & 0xF);
+        tgtReg = (instrn >> 4) & 0x03;
+        immItem = ((instrn >> 2) & 0x30) | (instrn & 0xF);
     }
 
     /* XXXX KKKK dddd KKKK */
