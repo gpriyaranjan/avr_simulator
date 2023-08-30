@@ -1,7 +1,7 @@
 import json
-from typing import List, Dict
+from typing import List, Dict, IO
 
-from src.sim_gen2.pattern_utils import Pattern
+from pattern_utils import Pattern
 
 
 def read_json_file(module_file:str):
@@ -30,24 +30,27 @@ class FuncSpec(object):
 
 class AnyFile(object):
 
-    @classmethod
-    def gen_newline(cls):
-        print()
+    out_fp: IO
+
+    def fprint(self, str_):
+        print(str_, file=self.out_fp)
+
+    def gen_newline(self):
+        self.fprint("")
 
     pass
 
 class HeaderFile(AnyFile):
 
-    @classmethod
-    def gen_file_header(cls, module_name: str):
+    def gen_file_header(self, module_name: str):
         macro_name: str = "%s_H" % module_name.upper()
-        print("#include %s" % macro_name)
-        print("#define %s" % macro_name)
+        self.fprint("#include %s" % macro_name)
+        self.fprint("#define %s" % macro_name)
 
-    @classmethod
-    def gen_file_trailer(cls, module_name: str):
+    def gen_file_trailer(self, module_name: str):
         macro_name: str = "%s_H" % module_name.upper()
-        print("#endif // %s" % macro_name)
+        line:str = "#endif // %s" % (macro_name)
+        self.fprint(line)
 
 def camel_case(word: str)->str:
     def caps_first_letter(word:str)->str:

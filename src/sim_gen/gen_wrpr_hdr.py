@@ -8,32 +8,34 @@ from gen_common import (
 
 class WrapperHdrFile(HeaderFile):
 
-    @classmethod
-    def gen_func_from_spec(cls, func_name: str, func_spec: FuncSpec):
+
+    def gen_func_from_spec(self, func_name: str, func_spec: FuncSpec):
         instrn_defn: str = (
             "LongInstrn" if func_spec.is_long_instrn() else "ShortInstrn")
-        print("\tvoid %s(Environment& env, ShortInstrn instrn);" % func_name)
+        self.fprint("\tvoid %s(Environment& env, ShortInstrn instrn);" % func_name)
 
-    @classmethod
-    def gen_struct(cls, module_name: str, spec_json: Dict[str,Dict]):
-        print("class %s {" % camel_case(module_name))
+
+    def gen_struct(self, module_name: str, spec_json: Dict[str,Dict]):
+        self.fprint("class %s {\n" % camel_case(module_name))
         for (func_name, func_spec) in spec_json.items():
-            cls.gen_func_from_spec(func_name, FuncSpec(func_spec))
-            cls.gen_newline()
-        print("};")
+            self.gen_func_from_spec(func_name, FuncSpec(func_spec))
+            self.gen_newline()
+        self.fprint("};")
 
-    @classmethod
-    def gen_file_body(cls, module_name: str, spec_json: Dict[str,Dict]):
-        cls.gen_file_header(module_name)
-        cls.gen_newline()
-        cls.gen_struct(module_name, spec_json)
-        cls.gen_newline()
-        cls.gen_file_trailer(module_name)
 
-    @classmethod
-    def gen_file(cls, module_name: str, module_file: str):
+    def gen_file_body(self, module_name: str, spec_json: Dict[str,Dict]):
+        self.gen_file_header(module_name)
+        self.gen_newline()
+        self.gen_struct(module_name, spec_json)
+        self.gen_newline()
+        self.gen_file_trailer(module_name)
+
+
+    def gen_file(self, module_name: str, module_file: str, out_file: str):
+        self.out_fp = open(out_file, "w+")
         spec_json: Dict[str,Dict[str,str]] = read_json_file(module_file)
-        cls.gen_file_body(module_name, spec_json)
+        self.gen_file_body(module_name, spec_json)
+        self.out_fp.close()
 
 if __name__ == "__main__":
-    WrapperHdrFile.gen_file("alu_ops", "info_alu_ops.json")
+    WrapperHdrFile().gen_file("alu_ops", "specs/alu_ops.json", "out/alu_ops.h")

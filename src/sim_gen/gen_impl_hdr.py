@@ -12,8 +12,7 @@ from pattern_utils import Pattern, BitsInfo
 
 class ImplHdrFile(HeaderFile, WrapperCommon):
 
-    @classmethod
-    def gen_func_args(cls, func_spec: FuncSpec)->List[Tuple[str,str]]:
+    def gen_func_args(self, func_spec: FuncSpec)->List[Tuple[str,str]]:
 
         bit_counts: BitsInfo = Pattern.get_bit_counts(func_spec.P)
         res: List[Tuple[str,str]] = []
@@ -23,38 +22,41 @@ class ImplHdrFile(HeaderFile, WrapperCommon):
             res.append((arg_type, arg_name),)
         return res
 
-    @classmethod
-    def gen_func(cls, func_name: str, func_spec: FuncSpec):
+
+    def gen_func(self, func_name: str, func_spec: FuncSpec):
         def juxtapose(x:Tuple[str, str])->str:
             return x[0] + " " + x[1]
 
-        func_args: List[Tuple[str,str]] = cls.gen_func_args(func_spec)
+        func_args: List[Tuple[str,str]] = self.gen_func_args(func_spec)
         args: List[Tuple[str,str]] = [("Environ&", "env")] + func_args
         args_list: List[str] = list(map(lambda x: x[0] + " " + x[1], args))
         args_str: str = ", ".join(args_list)
-        print("\tvoid %s(%s);" % (func_name, args_str))
+        self.fprint("\tvoid %s(%s);" % (func_name, args_str))
 
-    @classmethod
-    def gen_struct(cls, module_name: str, spec_json: Dict[str,Dict]):
+
+    def gen_struct(self, module_name: str, spec_json: Dict[str,Dict]):
         class_name: str = "%sImpl" % camel_case(module_name)
-        print("class %s {" % class_name)
+        self.fprint("class %s {\n" % class_name)
         for (func_name, func_spec) in spec_json.items():
-            cls.gen_func(func_name, FuncSpec(func_spec))
-            cls.gen_newline()
-        print("};")
+            self.gen_func(func_name, FuncSpec(func_spec))
+            self.gen_newline()
+        self.fprint("};")
 
-    @classmethod
-    def gen_file_body(cls, module_name: str, spec_json: Dict[str,Dict]):
-        cls.gen_file_header(module_name)
-        cls.gen_newline()
-        cls.gen_struct(module_name, spec_json)
-        cls.gen_newline()
-        cls.gen_file_trailer(module_name)
 
-    @classmethod
-    def gen_file(cls, module_name: str, module_file: str):
+    def gen_file_body(self, module_name: str, spec_json: Dict[str,Dict]):
+        self.gen_file_header(module_name)
+        self.gen_newline()
+        self.gen_struct(module_name, spec_json)
+        self.gen_newline()
+        self.gen_file_trailer(module_name)
+
+
+    def gen_file(self, module_name: str, module_file: str, hdr_file: str):
+        self.out_fp = open(hdr_file, "w")
         spec_json: Dict[str,Dict[str,str]] = read_json_file(module_file)
-        cls.gen_file_body(module_name, spec_json)
+        self.gen_file_body(module_name, spec_json)
+        self.out_fp.close()
 
 if __name__ == "__main__":
-    ImplHdrFile.gen_file("alu_ops", "info_alu_ops.json")
+    ImplHdrFile().gen_file(
+        "alu_ops", "specs/alu_ops.json", "out/alu_ops_impl.h")
