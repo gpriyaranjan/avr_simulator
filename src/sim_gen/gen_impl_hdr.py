@@ -1,3 +1,4 @@
+import logging
 from typing import Dict, List, Tuple
 
 from gen_common import (
@@ -61,11 +62,14 @@ class ImplHdrFile(HeaderFile, WrapperCommon):
         self.gen_file_trailer("%s_IMPL" % module_name)
 
 
-    def gen_file(self, module_name: str, module_file: str, hdr_file: str):
-        self.out_fp = open(hdr_file, "w")
+    def gen_file(self, module_name: str, module_file: str, out_file: str):
+        logging.info("Generating ImpHdr logs for %s from %s and writing to %s"
+                     % (module_name, module_file, out_file))
+        self.out_fp = open(out_file, "w")
         spec_json: Dict[str,Dict[str,str]] = read_json_file(module_file)
         self.gen_file_body(module_name, spec_json)
         self.out_fp.close()
+        logging.info("Generated ImplHdr file")
 
 if __name__ == "__main__":
     ImplHdrFile().gen_file(

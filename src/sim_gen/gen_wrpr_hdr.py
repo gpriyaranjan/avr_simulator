@@ -1,3 +1,4 @@
+import logging
 from typing import Dict
 
 from gen_common import (
@@ -41,10 +42,13 @@ class WrapperHdrFile(HeaderFile):
 
 
     def gen_file(self, module_name: str, module_file: str, out_file: str):
+        logging.info("Generating WrapHdr logs for %s from %s and writing to %s"
+                     % (module_name, module_file, out_file))
         self.out_fp = open(out_file, "w+")
         spec_json: Dict[str,Dict[str,str]] = read_json_file(module_file)
         self.gen_file_body(module_name, spec_json)
         self.out_fp.close()
+        logging.info("Generated WrapHdr file")
 
 if __name__ == "__main__":
     WrapperHdrFile().gen_file("alu_ops", "specs/alu_ops.json", "out/alu_ops.h")

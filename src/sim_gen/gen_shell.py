@@ -1,4 +1,5 @@
 import argparse
+import logging
 import os
 from enum import Enum
 from glob import glob
@@ -98,6 +99,7 @@ def exec(args: Args):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     args: Args = parseargs()
     args.adjust()
     exec(args)

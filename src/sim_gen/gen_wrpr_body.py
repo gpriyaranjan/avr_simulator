@@ -1,3 +1,4 @@
+import logging
 from typing import Dict, List
 
 from gen_common import (
@@ -59,10 +60,13 @@ class WrapperBodyFile(AnyFile):
         self.gen_funcs(module_name, spec_json)
 
     def gen_file(self, module_name: str, module_file: str, hdr_file: str):
+        logging.info("Generating WrapCpp logs for %s from %s and writing to %s"
+                     % (module_name, module_file, hdr_file))
         self.out_fp = open(hdr_file, "w")
         spec_json: Dict[str,Dict[str,str]] = read_json_file(module_file)
         self.gen_file_body(module_name, spec_json)
         self.out_fp.close()
+        logging.info("Generated WrapCpp file")
 
 if __name__ == "__main__":
     WrapperBodyFile().gen_file("alu_ops", "specs/alu_ops.json", "out/alu_ops.cpp")
