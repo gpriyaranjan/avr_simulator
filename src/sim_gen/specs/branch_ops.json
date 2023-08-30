@@ -1,0 +1,113 @@
+{
+  "CPSE": {
+    "T": "Skip if Equal",
+    "P": "0001-00rd-dddd-rrrr"
+  },
+  "SBRC": {
+    "T": "Skip if Bit Register Cleared",
+    "P": "1111-110r-rrrr-0bbb"
+  },
+  "SBRS": {
+    "T": "Skip if Bit Register Set",
+    "P": "1111-111r-rrrr-0bbb"
+  },
+
+  "SBIC": {
+    "T": "Skip if I/O Register Set",
+    "P": "1001-1011-AAAA-Abbb"
+  },
+  "SBIS": {
+    "T": "Skip if I/O Register Clear",
+    "P": "1001-1001-AAAA-Abbb"
+  },
+
+  "BRBS": {
+    "T": "Branch if Status Flag Set",
+    "P": "1111-00kk-kkkk-ksss"
+  },
+  "BRBC": {
+    "T": "Branch if Status Flag Cleared",
+    "P": "1111-01kk-kkkk-ksss"
+  },
+
+  "BREQ": {
+    "T": "Branch if Equal",
+    "P": "1111-00kk-kkkk-k001"
+  },
+  "BRNE": {
+    "T": "Branch if Not Equal",
+    "P": "1111-00kk-kkkk-k001"
+  },
+
+  "BRCS": {
+    "T": "Branch if Carry Set",
+    "P": "1111-00kk-kkkk-k000"
+  },
+  "BRCC": {
+    "T": "Branch if Carry Clear",
+    "P": "1111-01kk-kkkk-k000"
+  },
+
+  "BRSH": {
+    "T": "Branch if Same or Higher",
+    "P": "1111-01kk-kkkk-k000"
+  },
+  "BRLO": {
+    "T": "Branch if Lower",
+    "P": "1111-00kk-kkkk-k000"
+  },
+
+  "BRMI": {
+    "T": "Branch if minus",
+    "P": "1111-00kk-kkkk-k010"
+  },
+  "BRPL": {
+    "T": "Branch if positive",
+    "P": "1111-01kk-kkkk-k010"
+  },
+
+  "BRGE": {
+    "T": "Branch if GE signed",
+    "P": "1111-01kk-kkkk-k100"
+  },
+  "BRLT": {
+    "T" : "Branch if LT signed",
+    "P" : "1111-00kk-kkkk-k100"
+  },
+
+  "BRVS": {
+    "T": "Branch if overflow",
+    "P": "1111-00kk-kkkk-k011"
+  },
+  "BRVC": {
+    "T": "Branch if overflow clear",
+    "P": "1111-01kk-kkkk-k011"
+  },
+
+  "BRHS": {
+    "T": "Branch if half carry set",
+    "P": "1111-00kk-kkkk-k101"
+  },
+  "BRHC": {
+    "T": "Branch if half carry clear, ",
+    "P": "1111-01kk-kkkk-k101"
+  },
+
+  "BRTS": {
+    "T": "Branch if T flag set",
+    "P": "1111-00kk-kkkk-k110"
+  },
+  "BRTC": {
+    "T": "Branch if T flag clear",
+    "P": "1111-01kk-kkkk-k110"
+  },
+
+  "BRIE": {
+    "T": "Branch if interrupt flag enabled",
+    "P": "1111-00kk-kkkk-k111"
+  },
+  "BRID": {
+    "T": "Branch if interrupt flag disabled",
+    "P": "1111-01kk-kkkk-k111"
+  }
+}

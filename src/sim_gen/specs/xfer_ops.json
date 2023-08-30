@@ -1,0 +1,80 @@
+{
+  "MOV" : {
+    "T" : "Move",
+    "P" :	"0010-11rd-dddd-rrrr"
+  },
+  "MOVW" : {
+    "T" : "Move Word",
+    "P" : "0000-0001-dddd-rrrr"
+  },
+
+  "LDI" : {
+    "T" : "Load Immediate",
+    "P" : "1110-KKKK-dddd-KKKK"
+  },
+
+  "LDS" : {
+    "T" : "Load Direct from Data Space",
+    "P" : "1001-000d-dddd-0000-kkkk-kkkk-kkkk-kkkk"
+  },
+
+  "LD" : {
+    "T" : "Load indirect (different modes)",
+    "P" : "1000-000d-dddd-ffmm"
+  },
+
+  "LDD" : {
+    "T" : "Load indirect with displacement",
+    "P" : "10q0-qq0d-dddd-0qqq"
+  },
+
+  "STS" : {
+    "T" : "Store Direct to Data Space",
+    "P" : "1001-001r-rrrr-0000-kkkk-kkkk-kkkk-kkkk"
+  },
+
+  "ST" : {
+    "T" : "Store Indirect",
+    "P" : "1000-000d-dddd-ffmm"
+  },
+
+  "STD" : {
+    "T" : "Store Indirect with Displacement",
+    "P" : "10q0-qq0d-dddd-fqqq"
+  },
+
+  "LPM" : {
+    "T" : "Load Program Memory",
+    "P" : "1001-000d-dddd-010f"
+  },
+
+  "ELPM" : {
+    "T" : "Extended Load Program Memory",
+    "P" : "1001-000d-dddd-011f"
+  },
+
+  "SPM" : {
+    "T" : "Store Program Memory",
+    "P" : "1001-0101-1110-1000"
+  },
+
+  "XCH" : {
+    "T" : "Atomic exchange with memory",
+    "P" : "1001-001r-rrrr-0100"
+  },
+
+  "LAS" : {
+    "T" : "Load and Set",
+    "P" : "1001-001r-rrrr-0101"
+  },
+
+  "LAC" : {
+    "T" : "Load and Clear",
+    "P" : "1001-001r-rrrr-1010"
+  },
+
+  "LAT" : {
+    "T" : "Load and Toggle",
+    "P" : "1001-001r-rrrr-1011"
+  }
+}

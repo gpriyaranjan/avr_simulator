@@ -1,0 +1,82 @@
+{
+  "BSET": {
+    "T": "Flag Set",
+    "P": "1001-0100-0sss-1000"
+  },
+  "BCLR": {
+    "T" : "Flag Clear",
+    "P" : "1001-0100-1sss-1000"
+  },
+
+  "SEC": {
+    "T": "Set Carry",
+    "P": "1001-0100-0000-1000"
+  },
+  "CLC" : {
+    "T": "Clear Carry",
+    "P": "1001-0100-1000-1000"
+  },
+
+  "SEN" : {
+    "T" : "Set Negative",
+    "P" : "1001-0100-0010-1000"
+  },
+  "CLN" : {
+    "T" : "Clear Negative",
+    "P" : "1001-0100-1010-1000"
+  },
+
+  "SEZ" : {
+    "T" : "Set Zero",
+    "P" : "1001-0100-0001-1000"
+  },
+  "CLZ" : {
+    "T" : "Clear Zero",
+    "P" : "1001-0100-1001-1000"
+  },
+
+  "SEV" : {
+    "T" : "Set Overflow",
+    "P" : "1001-0100-0011-1000"
+  },
+  "CLV" : {
+    "T" : "Clear Overflow",
+    "P" : "1001-0100-1011-1000"
+  },
+
+  "SES" : {
+    "T" : "Set Signed Flag",
+    "P" : "1001-0100-0100-1000"
+  },
+  "CLS" : {
+    "T": "Clear Signed Flag",
+    "P" : "1001-0100-1100-1000"
+  },
+
+  "SEH" : {
+    "T": "Set Half Carry Flag",
+    "P": "1001-0100-0101-1000"
+  },
+  "CLH" : {
+    "T": "Clear Half Carry Flag",
+    "P": "1001-0100-1101-1000"
+  },
+
+  "SET" : {
+    "T": "Set T Flag",
+    "P": "1001-0100-0110-1000"
+  },
+  "CLT" : {
+    "T": "Clear T Flag",
+    "P": "1001-0100-1110-1000"
+  },
+
+  "BST" : {
+    "T": "Bit Store to T flag",
+    "P": "1111-101d-dddd-0bbb"
+  },
+  "BLD" : {
+    "T" : "Bit Load from T flag",
+    "P" : "1111-100d-dddd-0bbb"
+  }
+}

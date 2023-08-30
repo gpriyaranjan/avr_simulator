@@ -1,0 +1,32 @@
+{
+  "IN" : {
+    "T" : "Read byte from Port",
+    "P" : "1011-0AAd-dddd-AAAA"
+  },
+
+  "OUT" : {
+    "T" : "Write byte to Port",
+    "P" : "1011-1AAr-rrrr-AAAA"
+  },
+
+  "SBI" : {
+    "T" : "Set bit in I/O Register",
+    "P" : "1001-1010-AAAA-Abbb"
+  },
+
+  "CBI" : {
+    "T" : "Clear bit in I/O Register",
+    "P" : "1001-1000-AAAA-Abbb"
+  },
+
+  "SEI" : {
+    "T" : "Enable Global Interrupts",
+    "P" : "1001-0100-0111-1000"
+  },
+
+  "CLI" : {
+    "T" : "Disable Global Interrupts",
+    "P" : "1001-0100-1111-1000"
+  }
+
+}

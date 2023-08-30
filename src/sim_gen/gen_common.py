@@ -68,7 +68,9 @@ class WrapperCommon:
         "A" : "portAddr",
         "q" : "displacement",
         "s" : "statusRegNum",
-        "b" : "bitNum"
+        "b" : "bitNum",
+        "f" : "flag",
+        "m" : "mode"
     }
 
     ArgTypes : Dict[int, str] = {
@@ -80,7 +82,10 @@ class WrapperCommon:
         6 : "SixBit",
         7 : "SevenBit",
         8 : "EightBit",
-        # 10 : "TenBits"
+        # 10 : "TenBits",
+        12 : "TwelveBit",
+        16 : "SixteenBit",
+        22 : "TwentyTwoBit"
     }
 
     @classmethod
@@ -88,6 +93,10 @@ class WrapperCommon:
         if fld_width == 10 and fld_type == "d":
             arg_type: str = "FiveBit"
         else:
-            arg_type: str = WrapperCommon.ArgTypes[fld_width]
+            try:
+                arg_type: str = WrapperCommon.ArgTypes[fld_width]
+            except Exception as ex:
+                print("Fld width is %d" % fld_width)
+                raise ex
         arg_name: str = WrapperCommon.ArgNames[fld_type]
         return (arg_type, arg_name)
