@@ -1,0 +1,64 @@
+{
+  "AND": {
+    "T": "Logical AND",
+    "P": "0010-00rd-dddd-rrrr"
+  },
+  "ANDI": {
+    "T": "Logical AND Immediate",
+    "P": "0111-KKKK-dddd-KKKK"
+  },
+
+  "OR": {
+    "T": "Logical OR",
+    "P": "0010-10rd-dddd-rrrr"
+  },
+  "ORI": {
+    "T": "Logical OR Immediate",
+    "P": "0110-KKKK-dddd-KKKK"
+  },
+
+  "EOR": {
+    "T": "Exclusive OR",
+    "P": "0010-01rd-dddd-rrrr"
+  },
+  "COM": {
+    "T": "Ones Complement",
+    "P": "1001-010d-dddd-0000"
+  },
+
+  "SBR": {
+    "T": "Set bit in Register",
+    "P": "0110-KKKK-dddd-KKKK"
+  },
+  "CBR": {
+    "T": "Clear bit in Register",
+    "P": "0111-KKKK-dddd-KKKK"
+  },
+
+  "SER": {
+    "T": "Set Register",
+    "P": "1110-1111-dddd-1111"
+  },
+  "CLR": {
+    "T": "Clear Register",
+    "P": "0010-01dd-dddd-dddd"
+  },
+
+  "LSL": {
+    "T": "Logical Shift Left",
+    "P": "0000-11dd-dddd-dddd"
+  },
+  "LSR": {
+    "T": "Logical Shift Right",
+    "P": "1001-010d-dddd-0110"
+  },
+
+  "ROL": {
+    "T": "Rotate Left through Carry",
+    "P": "0001-11dd-dddd-dddd"
+  },
+  "ROR": {
+    "T": "Rotate right through Carry",
+    "P": "1001-010d-dddd-0111"
+  }
+}

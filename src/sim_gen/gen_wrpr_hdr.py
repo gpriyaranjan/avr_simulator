@@ -8,11 +8,16 @@ from gen_common import (
 
 class WrapperHdrFile(HeaderFile):
 
+    def gen_includes(self):
+        self.fprint('#include "types.h"')
+
+    def gen_forward_classes(self):
+        self.fprint("class Environ;")
 
     def gen_func_from_spec(self, func_name: str, func_spec: FuncSpec):
         instrn_defn: str = (
             "LongInstrn" if func_spec.is_long_instrn() else "ShortInstrn")
-        self.fprint("\tvoid %s(Environment& env, ShortInstrn instrn);" % func_name)
+        self.fprint("\tvoid %s(Environ& env, ShortInstrn instrn);" % func_name)
 
 
     def gen_struct(self, module_name: str, spec_json: Dict[str,Dict]):
@@ -25,6 +30,10 @@ class WrapperHdrFile(HeaderFile):
 
     def gen_file_body(self, module_name: str, spec_json: Dict[str,Dict]):
         self.gen_file_header(module_name)
+        self.gen_newline()
+        self.gen_includes()
+        self.gen_newline()
+        self.gen_forward_classes()
         self.gen_newline()
         self.gen_struct(module_name, spec_json)
         self.gen_newline()

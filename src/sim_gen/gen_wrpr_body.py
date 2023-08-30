@@ -14,6 +14,7 @@ class WrapperBodyFile(AnyFile):
 
     def gen_includes(self, module_name: str):
         self.fprint('#include "%s.h"' % module_name)
+        self.fprint('#include "%s_impl.h"' % module_name)
 
     def gen_forward_classes(self):
         self.fprint('class Environ;')

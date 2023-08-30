@@ -12,6 +12,12 @@ from pattern_utils import Pattern, BitsInfo
 
 class ImplHdrFile(HeaderFile, WrapperCommon):
 
+    def gen_includes(self):
+        self.fprint('#include "types.h"')
+
+    def gen_forward_classes(self):
+        self.fprint("class Environ;")
+
     def gen_func_args(self, func_spec: FuncSpec)->List[Tuple[str,str]]:
 
         bit_counts: BitsInfo = Pattern.get_bit_counts(func_spec.P)
@@ -44,11 +50,15 @@ class ImplHdrFile(HeaderFile, WrapperCommon):
 
 
     def gen_file_body(self, module_name: str, spec_json: Dict[str,Dict]):
-        self.gen_file_header(module_name)
+        self.gen_file_header("%s_IMPL" % module_name)
+        self.gen_newline()
+        self.gen_includes()
+        self.gen_newline()
+        self.gen_forward_classes()
         self.gen_newline()
         self.gen_struct(module_name, spec_json)
         self.gen_newline()
-        self.gen_file_trailer(module_name)
+        self.gen_file_trailer("%s_IMPL" % module_name)
 
 
     def gen_file(self, module_name: str, module_file: str, hdr_file: str):

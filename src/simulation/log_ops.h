@@ -31,5 +31,4 @@ public:
 
 };
 
-
 #endif //ATMEGASIM_SRC_LOG_OPS_H
