@@ -1,15 +1,11 @@
-//
-// Created by MAC BOOK on 28/08/23.
-//
-
 #ifndef ATMEGASIM_SRC_BRANCH_OPS_MC_H
 #define ATMEGASIM_SRC_BRANCH_OPS_MC_H
 
 
-#include "environment.h"
-#include "instructions.h"
+#include "../environment.h"
+#include "../instructions.h"
 
-class BranchOpsMc {
+class BranchOpsImpl {
 
 private:
     static bool SkipNextInstrn(Environ& env, bool skip, InstrnEnum nextInstrn);

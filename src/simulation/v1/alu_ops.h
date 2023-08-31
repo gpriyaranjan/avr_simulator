@@ -2,8 +2,8 @@
 #define ATMEGASIM_ALUOPS_H
 
 #include <cstdint>
-#include "types.h"
-#include "environment.h"
+#include "../types.h"
+#include "../environment.h"
 
 class AluOps {
 public:

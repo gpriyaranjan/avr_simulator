@@ -2,8 +2,8 @@
 #define ATMEGASIM_SRC_CALL_OPS_H
 
 #include <cstdint>
-#include "types.h"
-#include "environment.h"
+#include "../types.h"
+#include "../environment.h"
 
 class CallOps {
 public:

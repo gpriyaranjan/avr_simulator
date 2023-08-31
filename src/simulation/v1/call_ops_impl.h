@@ -2,11 +2,11 @@
 #define ATMEGASIM_SRC_CALL_OPS_MC_H
 
 
-#include "environment.h"
-#include "types.h"
+#include "../environment.h"
+#include "../types.h"
 #include <cstdint>
 
-class CallOpsMc {
+class CallOpsImpl {
 
 public:
     static bool RJMP(Environ &env, TwelveBit tgtOffset);

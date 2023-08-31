@@ -3,51 +3,67 @@ project(ATMegaSim_sim)
 
 set(CMAKE_CXX_STANDARD 23)
 
-set(SOURCE_FILES
-        alu_ops.cpp
-        environment.cpp
-        log_ops.cpp
-        sreg_ops.cpp
-        branch_ops.cpp
-        call_ops.cpp
-        xfer_ops.cpp
-        io_ops.cpp
+set(GEN_CPP_FILES
+    v1/alu_ops.cpp
+    v1/logic_ops.cpp
+    v1/sreg_ops.cpp
+    v1/branch_ops.cpp
+    v1/call_ops.cpp
+    v1/xfer_ops.cpp
+    v1/io_ops.cpp
+)
 
-        alu_ops_mc.cpp
-        branch_ops_mc.cpp
-        call_ops_mc.cpp
-        io_ops_mc.cpp
+set(PRJ_CPP_FILES
+    alu_ops_impl.cpp
+    branch_ops_impl.cpp
+    call_ops_impl.cpp
+    io_ops_impl.cpp
+    log_ops_impl.cpp
+    sreg_ops_impl.cpp
+    xfer_ops_impl.cpp
+)
+
+set(GEN_HDR_FILES
+    v1/alu_ops.h
+    v1/branch_ops.h
+    v1/call_ops.h
+    v1/io_ops.h
+    v1/logic_ops.h
+    v1/sreg_ops.h
+    v1/xfer_ops.h
+)
+
+set(GEN_HDR_IMPL_FILES
+    v1/alu_ops_impl.h
+    v1/branch_ops_impl.h
+    v1/call_ops_impl.h
+    v1/io_ops_impl.h
+    v1/logic_ops_impl.h
+    v1/sreg_ops_impl.h
+    v1/xfer_ops_impl.h
+)
+
+set(PRJ_HDR_FILES
+    environment.h
+    decoder.h
+    types.h
+    all_ops.h
+    status_reg.h
+    regs_mems.h
+    instructions.h
+    exceptions.h
+)
+
+set(SOURCE_FILES
+    ${GEN_CPP_FILES}
+    ${PRJ_CPP_FILES}
 )
 
 set(HEADER_FILES
-        alu_ops.h
-        environment.h
-        decoder.h
-        types.h
-        log_ops.h
-        sreg_ops.h
-        all_ops.h
-        branch_ops.h
-        status_reg.h
-        regs_mems.h
-        call_ops.h
-        instructions.h
-        exceptions.h
-        xfer_ops.h
-        io_ops.h
-
-        alu_ops_mc.h
-        branch_ops_mc.h
-        call_ops_mc.h
-        io_ops_mc.h
-        log_ops_mc.cpp
-        log_ops_mc.h
-        sreg_ops_mc.cpp
-        sreg_ops_mc.h
-        xfer_ops_mc.cpp
-        xfer_ops_mc.h
+    ${GEN_HDR_FILES}
+    ${GEN_HDR_IMPL_FILES}
+    ${PRJ_CPP_FILES}
 )
-
 add_library(
         ATMegaSim_lib STATIC
         ${SOURCE_FILES}

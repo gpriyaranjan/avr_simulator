@@ -2,29 +2,29 @@
 // Created by MAC BOOK on 28/08/23.
 //
 
-#include "xfer_ops.h"
+#include "v1/xfer_ops.h"
 #include "decoder.h"
 #include "types.h"
-#include "xfer_ops_mc.h"
+#include "v1/xfer_ops_impl.h"
 
-bool XferOpsMc::MOV(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool XferOpsImpl::MOV(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t srcVal = env.read_reg_byte(srcAddr);
     env.write_reg_byte(tgtAddr, srcVal);
     return false;
 }
 
-bool XferOpsMc::MOVW(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool XferOpsImpl::MOVW(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t srcWord = env.read_reg_pair(srcAddr);
     env.write_reg_pair(tgtAddr, srcWord);
     return false;
 }
 
-bool XferOpsMc::LDI(Environ &env, FiveBit tgtAddr, EightBit immData) {
+bool XferOpsImpl::LDI(Environ &env, FiveBit tgtAddr, EightBit immData) {
     env.write_reg_byte(tgtAddr, immData);
     return false;
 }
 
-bool XferOpsMc::LD(
+bool XferOpsImpl::LD(
     Environ &env, FiveBit tgtAddr, TwoBit flag, TwoBit mode) {
 
     uchar_t srcAddr;
@@ -50,7 +50,7 @@ bool XferOpsMc::LD(
     return false;
 }
 
-bool XferOpsMc::LDD(
+bool XferOpsImpl::LDD(
     Environ &env, FiveBit tgtAddr, OneBit flag, SixBit offset) {
 
     uchar_t srcAddr = flag ? M::Y : M::Z;
@@ -64,13 +64,13 @@ bool XferOpsMc::LDD(
     return false;
 }
 
-bool XferOpsMc::STS(Environ &env, FiveBit srcAddr, SixteenBit memAddr) {
+bool XferOpsImpl::STS(Environ &env, FiveBit srcAddr, SixteenBit memAddr) {
     uchar_t value = env.read_reg_byte(srcAddr);
     env.write_mem_byte(memAddr, value);
     return false;
 }
 
-bool XferOpsMc::ST(Environ &env, FiveBit srcAddr, TwoBit flag, TwoBit mode) {
+bool XferOpsImpl::ST(Environ &env, FiveBit srcAddr, TwoBit flag, TwoBit mode) {
 
     uchar_t tgtRegAddr;
     switch(flag) {
@@ -93,7 +93,7 @@ bool XferOpsMc::ST(Environ &env, FiveBit srcAddr, TwoBit flag, TwoBit mode) {
     return false;
 }
 
-bool XferOpsMc::STD(
+bool XferOpsImpl::STD(
     Environ &env, FiveBit srcRegAddr, OneBit flag, SixBit offset) {
 
     uchar_t srcAddr = flag ? M::Y : M::Z;
@@ -107,7 +107,7 @@ bool XferOpsMc::STD(
     return false;
 }
 
-bool XferOpsMc::LPM(Environ &env, FiveBit regAddr, OneBit postIncr) {
+bool XferOpsImpl::LPM(Environ &env, FiveBit regAddr, OneBit postIncr) {
     uint16_t memAddr = env.read_reg_pair(M::Z);
 
     uchar_t value = env.read_mem_byte(memAddr);
@@ -120,7 +120,7 @@ bool XferOpsMc::LPM(Environ &env, FiveBit regAddr, OneBit postIncr) {
     return false;
 }
 
-bool XferOpsMc::ELPM(Environ &env, FiveBit regAddr, OneBit postIncr) {
+bool XferOpsImpl::ELPM(Environ &env, FiveBit regAddr, OneBit postIncr) {
     uint16_t memOffAddr = env.read_reg_pair(M::Z);
     uchar_t memSegAddr = env.read_reg_byte(M::RAMPZ);
     CPUAddr memAddr = (memSegAddr >> 16) | memOffAddr;
@@ -135,7 +135,7 @@ bool XferOpsMc::ELPM(Environ &env, FiveBit regAddr, OneBit postIncr) {
     return false;
 }
 
-bool XferOpsMc::SPM(Environ &env, OneBit postIncr) {
+bool XferOpsImpl::SPM(Environ &env, OneBit postIncr) {
     uint16_t memOffAddr = env.read_reg_pair(M::Z);
     uchar_t memSegAddr = env.read_reg_byte(M::RAMPZ);
     CPUAddr memAddr = (memSegAddr >> 16) | memOffAddr;
@@ -152,7 +152,7 @@ bool XferOpsMc::SPM(Environ &env, OneBit postIncr) {
     return false;
 }
 
-bool XferOpsMc::XCH(Environ &env, FiveBit regAddr) {
+bool XferOpsImpl::XCH(Environ &env, FiveBit regAddr) {
     uint16_t memAddr = env.read_reg_pair(M::X);
     uchar_t memValue = env.read_mem_byte(memAddr);
     uchar_t regValue = env.read_reg_byte(regAddr);
@@ -161,7 +161,7 @@ bool XferOpsMc::XCH(Environ &env, FiveBit regAddr) {
     return false;
 }
 
-bool XferOpsMc::LAS(Environ &env, FiveBit regAddr) {
+bool XferOpsImpl::LAS(Environ &env, FiveBit regAddr) {
     uint16_t memAddr = env.read_reg_pair(M::X);
     uchar_t memValue = env.read_mem_byte(memAddr);
     uchar_t regValue = env.read_reg_byte(regAddr);
@@ -171,7 +171,7 @@ bool XferOpsMc::LAS(Environ &env, FiveBit regAddr) {
     return false;
 }
 
-bool XferOpsMc::LAC(Environ &env, FiveBit regAddr) {
+bool XferOpsImpl::LAC(Environ &env, FiveBit regAddr) {
     uint16_t memAddr = env.read_reg_pair(M::X);
     uchar_t memValue = env.read_mem_byte(memAddr);
     uchar_t regValue = env.read_reg_byte(regAddr);
@@ -181,7 +181,7 @@ bool XferOpsMc::LAC(Environ &env, FiveBit regAddr) {
     return false;
 }
 
-bool XferOpsMc::LAT(Environ &env, FiveBit regAddr) {
+bool XferOpsImpl::LAT(Environ &env, FiveBit regAddr) {
     uint16_t memAddr = env.read_reg_pair(M::X);
     uchar_t memValue = env.read_mem_byte(memAddr);
     uchar_t regValue = env.read_reg_byte(regAddr);

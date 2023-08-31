@@ -2,11 +2,11 @@
 #define ATMEGASIM_SRC_ALU_OPS_MC_H
 
 
-#include "environment.h"
-#include "types.h"
+#include "../environment.h"
+#include "../types.h"
 #include <cstdint>
 
-class AluOpsMc {
+class AluOpsImpl {
 
 public:
     static bool ADD(Environ &env, FiveBit tgtAddr, FiveBit srcAddr);

@@ -1,11 +1,11 @@
-#include "log_ops.h"
-#include "alu_ops.h"
+#include "v1/logic_ops.h"
+#include "v1/alu_ops.h"
 #include "decoder.h"
 #include "types.h"
-#include "alu_ops_mc.h"
-#include "io_ops_mc.h"
+#include "v1/alu_ops_impl.h"
+#include "v1/io_ops_impl.h"
 
-bool AluOpsMc::ADD(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool AluOpsImpl::ADD(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
 
@@ -16,7 +16,7 @@ bool AluOpsMc::ADD(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool AluOpsMc::ADC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool AluOpsImpl::ADC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
 
@@ -27,7 +27,7 @@ bool AluOpsMc::ADC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool AluOpsMc::ADIW(Environ& env, FiveBit tgtAddr, SixBit immData) {
+bool AluOpsImpl::ADIW(Environ& env, FiveBit tgtAddr, SixBit immData) {
 
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result1 = (immData + tgtVal) & 0xFF;
@@ -49,7 +49,7 @@ bool AluOpsMc::ADIW(Environ& env, FiveBit tgtAddr, SixBit immData) {
     return false;
 }
 
-bool AluOpsMc::SUB(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool AluOpsImpl::SUB(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
 
@@ -60,7 +60,7 @@ bool AluOpsMc::SUB(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool AluOpsMc::SBC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool AluOpsImpl::SBC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
 
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
@@ -72,7 +72,7 @@ bool AluOpsMc::SBC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool AluOpsMc::SUBI(Environ& env, FiveBit tgtAddr, EightBit immData) {
+bool AluOpsImpl::SUBI(Environ& env, FiveBit tgtAddr, EightBit immData) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = (~immData + tgtVal + 1) % 0x100;
 
@@ -81,7 +81,7 @@ bool AluOpsMc::SUBI(Environ& env, FiveBit tgtAddr, EightBit immData) {
     return false;
 }
 
-bool AluOpsMc::SBCI(Environ& env, FiveBit tgtAddr, EightBit immData) {
+bool AluOpsImpl::SBCI(Environ& env, FiveBit tgtAddr, EightBit immData) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = (~immData + tgtVal) & 0xFF;
 
@@ -90,7 +90,7 @@ bool AluOpsMc::SBCI(Environ& env, FiveBit tgtAddr, EightBit immData) {
     return false;
 }
 
-bool AluOpsMc::SBIW(Environ& env, FiveBit tgtAddr, SixBit immData) {
+bool AluOpsImpl::SBIW(Environ& env, FiveBit tgtAddr, SixBit immData) {
     uchar_t tgtVal1 = env.read_reg_byte(tgtAddr);
     uchar_t result1 = (~immData + tgtVal1 + 1) & 0xFF;
 
@@ -110,7 +110,7 @@ bool AluOpsMc::SBIW(Environ& env, FiveBit tgtAddr, SixBit immData) {
     return false;
 }
 
-bool AluOpsMc::NEG(Environ& env, FiveBit tgtAddr) {
+bool AluOpsImpl::NEG(Environ& env, FiveBit tgtAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = (~tgtVal + 1) & 0xFF;
 
@@ -126,7 +126,7 @@ bool AluOpsMc::NEG(Environ& env, FiveBit tgtAddr) {
     return false;
 }
 
-bool AluOpsMc::INC(Environ& env, FiveBit tgtAddr) {
+bool AluOpsImpl::INC(Environ& env, FiveBit tgtAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = (tgtVal + 1) & 0xFF;
 
@@ -140,7 +140,7 @@ bool AluOpsMc::INC(Environ& env, FiveBit tgtAddr) {
     return false;
 }
 
-bool AluOpsMc::DEC(Environ& env, FiveBit tgtAddr) {
+bool AluOpsImpl::DEC(Environ& env, FiveBit tgtAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = (tgtVal - 1) & 0xFF;
 
@@ -154,7 +154,7 @@ bool AluOpsMc::DEC(Environ& env, FiveBit tgtAddr) {
     return false;
 }
 
-bool AluOpsMc::ASR(Environ& env, FiveBit tgtAddr) {
+bool AluOpsImpl::ASR(Environ& env, FiveBit tgtAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = (tgtVal & 0x80) | (tgtVal >> 1);
 
@@ -169,7 +169,7 @@ bool AluOpsMc::ASR(Environ& env, FiveBit tgtAddr) {
     return false;
 }
 
-bool AluOpsMc::MUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool AluOpsImpl::MUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
 
@@ -180,7 +180,7 @@ bool AluOpsMc::MUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool AluOpsMc::MULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool AluOpsImpl::MULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     auto tgtVal = (schar_t) env.read_reg_byte(tgtAddr);
     auto srcVal = (schar_t) env.read_reg_byte(srcAddr);
 
@@ -195,7 +195,7 @@ bool AluOpsMc::MULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool AluOpsMc::MULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool AluOpsImpl::MULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     auto tgtVal = (schar_t) env.read_reg_byte(tgtAddr);
     auto srcVal = (uchar_t) env.read_reg_byte(srcAddr);
     auto result = (short)(tgtVal * srcVal);
@@ -209,7 +209,7 @@ bool AluOpsMc::MULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool AluOpsMc::FMUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool AluOpsImpl::FMUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
     unsigned short result = tgtVal * srcVal;
@@ -220,7 +220,7 @@ bool AluOpsMc::FMUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool AluOpsMc::FMULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool AluOpsImpl::FMULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     auto tgtVal = (schar_t) env.read_reg_byte(tgtAddr);
     auto srcVal = (schar_t) env.read_reg_byte(srcAddr);
     auto result = (unsigned short)(tgtVal * srcVal);
@@ -235,7 +235,7 @@ bool AluOpsMc::FMULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool AluOpsMc::FMULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool AluOpsImpl::FMULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     auto tgtVal = (schar_t) env.read_reg_byte(tgtAddr);
     auto srcVal = (uchar_t) env.read_reg_byte(srcAddr);
     auto result = (uint16_t)(tgtVal * srcVal);
@@ -250,12 +250,12 @@ bool AluOpsMc::FMULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool AluOpsMc::TST(Environ &env, FiveBit tgtAddr) {
-    IoOpsMc::AND(env, tgtAddr, tgtAddr);
+bool AluOpsImpl::TST(Environ &env, FiveBit tgtAddr) {
+    IoOpsImpl::AND(env, tgtAddr, tgtAddr);
     return false;
 }
 
-bool AluOpsMc::CP(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool AluOpsImpl::CP(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
     uchar_t result = (tgtVal + ~srcVal + 1) & 0xFF;
@@ -263,7 +263,7 @@ bool AluOpsMc::CP(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool AluOpsMc::CPC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool AluOpsImpl::CPC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
     uchar_t carry = env.sReg.C();
@@ -272,7 +272,7 @@ bool AluOpsMc::CPC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool AluOpsMc::CPI(Environ &env, FiveBit tgtAddr, EightBit immData) {
+bool AluOpsImpl::CPI(Environ &env, FiveBit tgtAddr, EightBit immData) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = (tgtVal + ~immData + 1) & 0xFF;
     SubTwoFlags::statusFlags(tgtVal, immData, result, env.sReg);

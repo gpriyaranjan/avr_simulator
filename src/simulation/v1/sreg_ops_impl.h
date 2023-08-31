@@ -2,11 +2,11 @@
 #define ATMEGASIM_SRC_SREG_OPS_MC_H
 
 
-#include "environment.h"
-#include "types.h"
+#include "../environment.h"
+#include "../types.h"
 #include <cstdint>
 
-class SRegOpsMc {
+class SRegOpsImpl {
 
 public:
     static bool WriteBit(Environ& env, ThreeBit regNum, bool value);

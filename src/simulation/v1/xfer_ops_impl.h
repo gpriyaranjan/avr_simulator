@@ -2,9 +2,9 @@
 #define ATMEGASIM_SRC_XFER_OPS_MC_H
 
 
-#include "environment.h"
+#include "../environment.h"
 
-class XferOpsMc {
+class XferOpsImpl {
 
 public:
 

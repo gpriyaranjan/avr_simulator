@@ -1,21 +1,21 @@
-#include "types.h"
-#include "decoder.h"
+#include "../types.h"
+#include "../decoder.h"
 #include "alu_ops.h"
-#include "log_ops.h"
-#include "alu_ops_mc.h"
+#include "logic_ops.h"
+#include "alu_ops_impl.h"
 
 using namespace M;
 
 bool AluOps::ADD(Environ& env, ShortInstrn instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    return AluOpsMc::ADD(env, tgtAddr, srcAddr);
+    return AluOpsImpl::ADD(env, tgtAddr, srcAddr);
 }
 
 bool AluOps::ADC(Environ& env, ShortInstrn instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    return AluOpsMc::ADC(env, tgtAddr, srcAddr);
+    return AluOpsImpl::ADC(env, tgtAddr, srcAddr);
 }
 
 bool AluOps::ADIW(Environ& env, ShortInstrn instrn) {
@@ -23,19 +23,19 @@ bool AluOps::ADIW(Environ& env, ShortInstrn instrn) {
     SixBit immData;
     ArgsDecode::Reg2Imm6(instrn, tgtId, immData);
     FiveBit tgtAddr = 24 + 2 * tgtId;
-    return AluOpsMc::ADIW(env, tgtAddr, immData);
+    return AluOpsImpl::ADIW(env, tgtAddr, immData);
 }
 
 bool AluOps::SUB(Environ& env, ShortInstrn instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    return AluOpsMc::SUB(env, tgtAddr, srcAddr);
+    return AluOpsImpl::SUB(env, tgtAddr, srcAddr);
 }
 
 bool AluOps::SBC(Environ& env, ShortInstrn instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    return AluOpsMc::SBC(env, tgtAddr, srcAddr);
+    return AluOpsImpl::SBC(env, tgtAddr, srcAddr);
 }
 
 bool AluOps::SUBI(Environ& env, ShortInstrn instrn) {
@@ -43,7 +43,7 @@ bool AluOps::SUBI(Environ& env, ShortInstrn instrn) {
     EightBit immData;
     ArgsDecode::Reg4Imm8(instrn, tgtId, immData);
     FiveBit tgtAddr = tgtId + 0x10;
-    return AluOpsMc::SUBI(env, tgtAddr, immData);
+    return AluOpsImpl::SUBI(env, tgtAddr, immData);
 }
 
 bool AluOps::SBCI(Environ& env, ShortInstrn instrn) {
@@ -51,7 +51,7 @@ bool AluOps::SBCI(Environ& env, ShortInstrn instrn) {
     EightBit immData;
     ArgsDecode::Reg4Imm8(instrn, tgtId, immData);
     FiveBit tgtAddr = tgtId + 0x10;
-    return AluOpsMc::SBCI(env, tgtAddr, immData);
+    return AluOpsImpl::SBCI(env, tgtAddr, immData);
 }
 
 bool AluOps::SBIW(Environ& env, ShortInstrn instrn) {
@@ -59,94 +59,94 @@ bool AluOps::SBIW(Environ& env, ShortInstrn instrn) {
     SixBit immData;
     ArgsDecode::Reg2Imm6(instrn, tgtId, immData);
     FiveBit tgtAddr = 24 + 2 * tgtId;
-    return AluOpsMc::SBIW(env, tgtAddr, immData);
+    return AluOpsImpl::SBIW(env, tgtAddr, immData);
 }
 
 bool AluOps::NEG(Environ& env, ShortInstrn instrn) {
     FiveBit tgtAddr;
     ArgsDecode::Reg5(instrn, tgtAddr);
-    return AluOpsMc::NEG(env, tgtAddr);
+    return AluOpsImpl::NEG(env, tgtAddr);
 }
 
 bool AluOps::INC(Environ& env, ShortInstrn instrn) {
     FiveBit tgtAddr;
     ArgsDecode::Reg5(instrn, tgtAddr);
-    return AluOpsMc::INC(env, tgtAddr);
+    return AluOpsImpl::INC(env, tgtAddr);
 }
 
 bool AluOps::DEC(Environ& env, ShortInstrn instrn) {
     FiveBit tgtAddr;
     ArgsDecode::Reg5(instrn, tgtAddr);
-    return AluOpsMc::DEC(env, tgtAddr);
+    return AluOpsImpl::DEC(env, tgtAddr);
 }
 
 bool AluOps::ASR(Environ& env, ShortInstrn instrn) {
     FiveBit tgtAddr;
     ArgsDecode::Reg5(instrn, tgtAddr);
-    return AluOpsMc::ASR(env, tgtAddr);
+    return AluOpsImpl::ASR(env, tgtAddr);
 }
 
 bool AluOps::MUL(Environ& env, ShortInstrn instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    return AluOpsMc::MUL(env, tgtAddr, srcAddr);
+    return AluOpsImpl::MUL(env, tgtAddr, srcAddr);
 }
 
 bool AluOps::MULS(Environ& env, ShortInstrn instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    return AluOpsMc::MULS(env, tgtAddr, srcAddr);
+    return AluOpsImpl::MULS(env, tgtAddr, srcAddr);
 }
 
 
 bool AluOps::MULSU(Environ& env, ShortInstrn instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    return AluOpsMc::MULSU(env, tgtAddr, srcAddr);
+    return AluOpsImpl::MULSU(env, tgtAddr, srcAddr);
 }
 
 bool AluOps::FMUL(Environ& env, ShortInstrn instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    return AluOpsMc::FMUL(env, tgtAddr, srcAddr);
+    return AluOpsImpl::FMUL(env, tgtAddr, srcAddr);
 }
 
 bool AluOps::FMULS(Environ& env, ShortInstrn instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    return AluOpsMc::FMULS(env, tgtAddr, srcAddr);
+    return AluOpsImpl::FMULS(env, tgtAddr, srcAddr);
 }
 
 
 bool AluOps::FMULSU(Environ& env, ShortInstrn instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    return AluOpsMc::FMULSU(env, tgtAddr, srcAddr);
+    return AluOpsImpl::FMULSU(env, tgtAddr, srcAddr);
 }
 
 bool AluOps::TST(Environ &env, ShortInstrn instrn) {
     FiveBit srcAddr, tgtAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    return AluOpsMc::TST(env, tgtAddr);
+    return AluOpsImpl::TST(env, tgtAddr);
 }
 
 bool AluOps::CP(Environ &env, ShortInstrn instrn) {
     FiveBit tgtAddr, srcAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    return AluOpsMc::CP(env, tgtAddr, srcAddr);
+    return AluOpsImpl::CP(env, tgtAddr, srcAddr);
 }
 
 bool AluOps::CPC(Environ &env, ShortInstrn instrn) {
     FiveBit tgtAddr, srcAddr;
     ArgsDecode::TwoReg5(instrn, tgtAddr, srcAddr);
-    return AluOpsMc::CPC(env, tgtAddr, srcAddr);
+    return AluOpsImpl::CPC(env, tgtAddr, srcAddr);
 }
 
 bool AluOps::CPI(Environ &env, ShortInstrn instrn) {
     FourBit tgtId; EightBit immData;
     ArgsDecode::Reg4Imm8(instrn, tgtId, immData);
     FiveBit tgtAddr = tgtId + 0x100;
-    return AluOpsMc::CPI(env, tgtAddr, immData);
+    return AluOpsImpl::CPI(env, tgtAddr, immData);
 }
 
 

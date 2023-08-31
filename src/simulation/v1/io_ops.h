@@ -1,8 +1,8 @@
 #ifndef ATMEGASIM_SRC_IO_OPS_H
 #define ATMEGASIM_SRC_IO_OPS_H
 
-#include "types.h"
-#include "environment.h"
+#include "../types.h"
+#include "../environment.h"
 
 class IoOps {
 

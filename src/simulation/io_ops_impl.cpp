@@ -1,14 +1,10 @@
-//
-// Created by MAC BOOK on 28/08/23.
-//
-
-#include "alu_ops_mc.h"
-#include "alu_ops.h"
+#include "v1/alu_ops_impl.h"
+#include "v1/alu_ops.h"
 #include "decoder.h"
-#include "log_ops.h"
-#include "io_ops_mc.h"
+#include "v1/logic_ops.h"
+#include "v1/io_ops_impl.h"
 
-bool IoOpsMc::AND(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool IoOpsImpl::AND(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
 
@@ -24,7 +20,7 @@ bool IoOpsMc::AND(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool IoOpsMc::ANDI(Environ &env, FiveBit tgtAddr, uchar_t immData) {
+bool IoOpsImpl::ANDI(Environ &env, FiveBit tgtAddr, uchar_t immData) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
 
     uchar_t result = tgtVal & immData;
@@ -39,7 +35,7 @@ bool IoOpsMc::ANDI(Environ &env, FiveBit tgtAddr, uchar_t immData) {
     return false;
 }
 
-bool IoOpsMc::OR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool IoOpsImpl::OR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
 
@@ -55,7 +51,7 @@ bool IoOpsMc::OR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool IoOpsMc::ORI(Environ &env, FiveBit tgtAddr, EightBit immData) {
+bool IoOpsImpl::ORI(Environ &env, FiveBit tgtAddr, EightBit immData) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
 
     uchar_t result = tgtVal | immData;
@@ -70,7 +66,7 @@ bool IoOpsMc::ORI(Environ &env, FiveBit tgtAddr, EightBit immData) {
     return false;
 }
 
-bool IoOpsMc::EOR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+bool IoOpsImpl::EOR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
 
@@ -86,7 +82,7 @@ bool IoOpsMc::EOR(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     return false;
 }
 
-bool IoOpsMc::COM(Environ &env, FiveBit tgtAddr) {
+bool IoOpsImpl::COM(Environ &env, FiveBit tgtAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = ~tgtVal;
 
@@ -101,30 +97,30 @@ bool IoOpsMc::COM(Environ &env, FiveBit tgtAddr) {
     return false;
 }
 
-bool IoOpsMc::SBR(Environ &env, FiveBit tgtAddr, EightBit immData) {
+bool IoOpsImpl::SBR(Environ &env, FiveBit tgtAddr, EightBit immData) {
     return ORI(env, tgtAddr, immData);
 }
 
-bool IoOpsMc::CBR(Environ &env, FiveBit tgtAddr, EightBit immData) {
+bool IoOpsImpl::CBR(Environ &env, FiveBit tgtAddr, EightBit immData) {
     return ANDI(env, tgtAddr, immData);
 }
 
-bool IoOpsMc::SER(Environ &env, FiveBit tgtAddr) {
+bool IoOpsImpl::SER(Environ &env, FiveBit tgtAddr) {
     // uchar_t tgtVal = env.mem[tgtAddr];
     uchar_t result = 0xFF;
     env.write_reg_byte(tgtAddr, result);
     return false;
 }
 
-bool IoOpsMc::CLR(Environ &env, FiveBit tgtAddr) {
+bool IoOpsImpl::CLR(Environ &env, FiveBit tgtAddr) {
     return EOR(env, tgtAddr, tgtAddr);
 }
 
-bool IoOpsMc::LSL(Environ &env, FiveBit tgtAddr) {
-    return AluOpsMc::ADD(env, tgtAddr, tgtAddr);
+bool IoOpsImpl::LSL(Environ &env, FiveBit tgtAddr) {
+    return AluOpsImpl::ADD(env, tgtAddr, tgtAddr);
 }
 
-bool IoOpsMc::LSR(Environ &env, FiveBit tgtAddr) {
+bool IoOpsImpl::LSR(Environ &env, FiveBit tgtAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = tgtVal >> 1;
 
@@ -139,11 +135,11 @@ bool IoOpsMc::LSR(Environ &env, FiveBit tgtAddr) {
     return false;
 }
 
-bool IoOpsMc::ROL(Environ &env, FiveBit tgtAddr) {
-    return AluOpsMc::ADC(env, tgtAddr, tgtAddr);
+bool IoOpsImpl::ROL(Environ &env, FiveBit tgtAddr) {
+    return AluOpsImpl::ADC(env, tgtAddr, tgtAddr);
 }
 
-bool IoOpsMc::ROR(Environ &env, FiveBit tgtAddr) {
+bool IoOpsImpl::ROR(Environ &env, FiveBit tgtAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     bool carry = env.sReg.C();
     uchar_t result = (tgtVal >> 1) | (carry ? 0x80 : 0x00);

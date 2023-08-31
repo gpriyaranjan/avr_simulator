@@ -6,11 +6,11 @@
 #define ATMEGASIM_SRC_IO_OPS_MC_H
 
 
-#include "environment.h"
-#include "types.h"
+#include "../environment.h"
+#include "../types.h"
 #include <cstdint>
 
-class IoOpsMc {
+class IoOpsImpl {
 
 public:
 

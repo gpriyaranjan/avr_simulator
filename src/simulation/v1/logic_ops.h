@@ -2,10 +2,10 @@
 #define ATMEGASIM_SRC_LOG_OPS_H
 
 #include <cstdint>
-#include "types.h"
-#include "environment.h"
+#include "../types.h"
+#include "../environment.h"
 
-class LogOps {
+class LogicOps {
 public:
 
     static bool AND(Environ& env, ShortInstrn instrn);

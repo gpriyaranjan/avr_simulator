@@ -1,16 +1,16 @@
 #ifndef ATMEGASIM_SRC_ALL_OPS_H
 #define ATMEGASIM_SRC_ALL_OPS_H
 
-#include "alu_ops.h"
-#include "log_ops.h"
-#include "sreg_ops.h"
-#include "branch_ops.h"
-#include "call_ops.h"
-#include "xfer_ops.h"
+#include "v1/alu_ops.h"
+#include "v1/logic_ops.h"
+#include "v1/sreg_ops.h"
+#include "v1/branch_ops.h"
+#include "v1/call_ops.h"
+#include "v1/xfer_ops.h"
 
 class AllOps : public
         AluOps,
-        LogOps,
+        LogicOps,
         SRegOps,
         BranchOps,
         CallOps,
