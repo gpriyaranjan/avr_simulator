@@ -1,5 +1,5 @@
 #include "../types.h"
-#include "../decoder.h"
+#include "../infra/decoder.h"
 #include "../environment.h"
 #include "branch_ops.h"
 #include "call_ops.h"

@@ -6,7 +6,6 @@
 #include "../types.h"
 #include "../environment.h"
 #include "../gen1/sreg_ops.h"
-#include "../decoder.h"
 #include "../gen1/sreg_ops_impl.h"
 
 class SRegOpsImplP {

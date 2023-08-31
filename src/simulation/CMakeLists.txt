@@ -47,7 +47,6 @@ set(GEN_HDR_IMPL_FILES
 
 set(PRJ_HDR_FILES
     environment.h
-    decoder.h
     types.h
     all_ops.h
     status_reg.h

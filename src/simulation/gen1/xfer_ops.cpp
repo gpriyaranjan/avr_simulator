@@ -1,5 +1,5 @@
 #include "../types.h"
-#include "../decoder.h"
+#include "../infra/decoder.h"
 #include "xfer_ops.h"
 #include "xfer_ops_impl.h"
 

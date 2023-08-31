@@ -1,4 +1,4 @@
-#include "../decoder.h"
+#include "../infra/decoder.h"
 #include "sreg_ops.h"
 #include "sreg_ops_impl.h"
 

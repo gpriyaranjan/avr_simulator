@@ -4,7 +4,6 @@
 #include "../gen1/branch_ops.h"
 #include "../environment.h"
 #include "../instructions.h"
-#include "../decoder.h"
 #include "../gen1/call_ops_impl.h"
 
 class CallOpsImplP {

@@ -1,5 +1,5 @@
 #include "io_ops.h"
-#include "../decoder.h"
+#include "../infra/decoder.h"
 #include "sreg_ops.h"
 
 bool IoOps::IN(Environ &env, ShortInstrn instrn) {

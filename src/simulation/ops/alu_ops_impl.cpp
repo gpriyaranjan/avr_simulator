@@ -1,6 +1,5 @@
 #include "../gen1/logic_ops.h"
 #include "../gen1/alu_ops.h"
-#include "../decoder.h"
 #include "../types.h"
 #include "../gen1/alu_ops_impl.h"
 #include "../gen1/io_ops_impl.h"

@@ -1,6 +1,5 @@
 #include <iostream>
 #include "simulation/environment.h"
-#include "simulation/decoder.h"
 
 Environ env;
 

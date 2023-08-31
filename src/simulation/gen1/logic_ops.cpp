@@ -1,5 +1,5 @@
 #include "logic_ops.h"
-#include "../decoder.h"
+#include "../infra/decoder.h"
 #include "alu_ops.h"
 #include "logic_ops_impl.h"
 

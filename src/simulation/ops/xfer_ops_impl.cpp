@@ -3,7 +3,6 @@
 //
 
 #include "../gen1/xfer_ops.h"
-#include "../decoder.h"
 #include "../types.h"
 #include "../gen1/xfer_ops_impl.h"
 

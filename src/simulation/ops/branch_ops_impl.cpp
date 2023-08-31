@@ -5,7 +5,6 @@
 #include "../gen1/call_ops.h"
 #include "../gen1/branch_ops.h"
 #include "../environment.h"
-#include "../decoder.h"
 #include "../types.h"
 #include "../gen1/branch_ops_impl.h"
 

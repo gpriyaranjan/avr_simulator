@@ -1,5 +1,4 @@
 #include "../types.h"
-#include "../decoder.h"
 #include "alu_ops.h"
 #include "logic_ops.h"
 #include "alu_ops_impl.h"
