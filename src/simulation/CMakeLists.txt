@@ -3,14 +3,16 @@ project(ATMegaSim_sim)
 
 set(CMAKE_CXX_STANDARD 23)
 
+set(GEN_DIR "gen1")
+
 set(GEN_CPP_FILES
-    gen1/alu_ops.cpp
-    gen1/logic_ops.cpp
-    gen1/sreg_ops.cpp
-    gen1/branch_ops.cpp
-    gen1/call_ops.cpp
-    gen1/xfer_ops.cpp
-    gen1/io_ops.cpp
+    ${GEN_DIR}/alu_ops.cpp
+    ${GEN_DIR}/logic_ops.cpp
+    ${GEN_DIR}/sreg_ops.cpp
+    ${GEN_DIR}/branch_ops.cpp
+    ${GEN_DIR}/call_ops.cpp
+    ${GEN_DIR}/xfer_ops.cpp
+    ${GEN_DIR}/io_ops.cpp
 )
 
 set(PRJ_CPP_FILES
@@ -24,23 +26,23 @@ set(PRJ_CPP_FILES
 )
 
 set(GEN_HDR_FILES
-    gen1/alu_ops.h
-    gen1/branch_ops.h
-    gen1/call_ops.h
-    gen1/io_ops.h
-    gen1/logic_ops.h
-    gen1/sreg_ops.h
-    gen1/xfer_ops.h
+    ${GEN_DIR}/alu_ops.h
+    ${GEN_DIR}/branch_ops.h
+    ${GEN_DIR}/call_ops.h
+    ${GEN_DIR}/io_ops.h
+    ${GEN_DIR}/logic_ops.h
+    ${GEN_DIR}/sreg_ops.h
+    ${GEN_DIR}/xfer_ops.h
 )
 
 set(GEN_HDR_IMPL_FILES
-    gen1/alu_ops_impl.h
-    gen1/branch_ops_impl.h
-    gen1/call_ops_impl.h
-    gen1/io_ops_impl.h
-    gen1/logic_ops_impl.h
-    gen1/sreg_ops_impl.h
-    gen1/xfer_ops_impl.h
+    ${GEN_DIR}/alu_ops_impl.h
+    ${GEN_DIR}/branch_ops_impl.h
+    ${GEN_DIR}/call_ops_impl.h
+    ${GEN_DIR}/io_ops_impl.h
+    ${GEN_DIR}/logic_ops_impl.h
+    ${GEN_DIR}/sreg_ops_impl.h
+    ${GEN_DIR}/xfer_ops_impl.h
 )
 
 set(PRJ_HDR_FILES

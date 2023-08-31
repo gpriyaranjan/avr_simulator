@@ -8,7 +8,6 @@
 #include "../decoder.h"
 #include "../types.h"
 #include "../gen1/branch_ops_impl.h"
-#include "BranchOpsImplP.h"
 
 class BranchOpsImplP {
 public:
