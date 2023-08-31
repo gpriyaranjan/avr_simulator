@@ -1,28 +1,19 @@
 #ifndef ATMEGASIM_SRC_IO_OPS_H
 #define ATMEGASIM_SRC_IO_OPS_H
 
-#include "../types.h"
-#include "../environment.h"
+#include "../infra/types.h"
+#include "../infra/environment.h"
 
 class IoOps {
 
-    static bool IN(Environ& env, ShortInstrn instrn);
-    static bool IN(Environ& env, FiveBit tgtAddr, SixBit srcIoAddr);
+    static void IN(Environ& env, ShortInstrn instrn);
+    static void OUT(Environ& env, ShortInstrn instrn);
 
-    static bool OUT(Environ& env, ShortInstrn instrn);
-    static bool OUT(Environ& env, FiveBit srcAddr, SixBit tgtIoAddr);
+    static void SBI(Environ& env, ShortInstrn instrn);
+    static void CBI(Environ& env, ShortInstrn instrn);
 
-    static bool SBI(Environ& env, ShortInstrn instrn);
-    static bool SBI(Environ& env, FiveBit tgtIoPort, ThreeBit bitNum);
-
-    static bool CBI(Environ& env, ShortInstrn instrn);
-    static bool CBI(Environ& env, FiveBit tgtIoPort, ThreeBit bitNum);
-
-    static bool SEI(Environ& env, ShortInstrn instrn);
-    static bool SEI(Environ& env);
-
-    static bool CLI(Environ& env, ShortInstrn instrn);
-    static bool CLI(Environ& env);
+    static void SEI(Environ& env, ShortInstrn instrn);
+    static void CLI(Environ& env, ShortInstrn instrn);
 
 };
 

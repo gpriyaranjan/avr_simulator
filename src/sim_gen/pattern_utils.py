@@ -30,7 +30,7 @@ class BitsInfo(object):
     q:BitInfo
     s:BitInfo
 
-    CHARS = ["d", "r", "k", "K", "A", "q", "s"]
+    CHARS = ["d", "r", "k", "K", "A", "q", "s", "b", "m", "f"]
 
     def __init__(self):
         self.__dict__ = OrderedDict()
@@ -47,6 +47,11 @@ class BitsInfo(object):
 
     def get(self, ch):
         return self.__dict__.get(ch, BitInfo(ch))
+
+    def get_items(self)->Tuple[str,BitInfo]:
+        return [
+            (x, self.__dict__[x]) for x in self.CHARS
+            if x in self.__dict__.keys()]
 
 class BitRangeExpr(object):
 

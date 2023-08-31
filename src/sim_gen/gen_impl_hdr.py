@@ -14,7 +14,7 @@ from pattern_utils import Pattern, BitsInfo
 class ImplHdrFile(HeaderFile, WrapperCommon):
 
     def gen_includes(self):
-        self.fprint('#include "../types.h"')
+        self.fprint('#include "../infra/types.h"')
 
     def gen_forward_classes(self):
         self.fprint("class Environ;")
@@ -23,7 +23,7 @@ class ImplHdrFile(HeaderFile, WrapperCommon):
 
         bit_counts: BitsInfo = Pattern.get_bit_counts(func_spec.P)
         res: List[Tuple[str,str]] = []
-        for ch, bit_info in bit_counts.__dict__.items():
+        for ch, bit_info in bit_counts.get_items():
             bc: int = bit_info.count
             arg_type, arg_name = WrapperCommon.gen(ch, bc)
             res.append((arg_type, arg_name),)

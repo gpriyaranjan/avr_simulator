@@ -10,7 +10,7 @@ from gen_common import (
 class WrapperHdrFile(HeaderFile):
 
     def gen_includes(self):
-        self.fprint('#include "../types.h"')
+        self.fprint('#include "../infra/types.h"')
 
     def gen_forward_classes(self):
         self.fprint("class Environ;")

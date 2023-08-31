@@ -1,98 +1,92 @@
-//
-// Created by MAC BOOK on 28/08/23.
-//
-
 #include <cstdint>
-#include "../types.h"
-#include "../environment.h"
-#include "../gen1/sreg_ops.h"
-#include "../gen1/sreg_ops_impl.h"
+#include "../infra/types.h"
+#include "../infra/environment.h"
+#include "../gen2/sreg_ops.h"
+#include "../gen2/sreg_ops_impl.h"
 
-class SRegOpsImplP {
+class SregOpsImplP {
 public:
-    static bool WriteBit(Environ& env, ThreeBit regNum, bool value);
+    static void WriteBit(Environ& env, ThreeBit regNum);
 };
 
-bool SRegOpsImpl::BSET(Environ &env, ThreeBit regNum, bool dummy) {
-    return SRegOpsImplP::WriteBit(env, regNum, true);
+void SregOpsImpl::BSET(Environ &env, ThreeBit regNum) {
+    SregOpsImplP::WriteBit(env, regNum);
 }
 
-bool SRegOpsImpl::BCLR(Environ &env, ThreeBit regNum, bool dummy) {
-    return SRegOpsImplP::WriteBit(env, regNum, false);
+void SregOpsImpl::BCLR(Environ &env, ThreeBit regNum) {
+    SregOpsImplP::WriteBit(env, regNum);
 }
 
-bool SRegOpsImpl::SEC(Environ &env) {
-    return SRegOps::BSET(env, CBit);
+void SregOpsImpl::SEC(Environ &env) {
+    SregOpsImpl::BSET(env, CBit);
 }
 
-bool SRegOpsImpl::CLC(Environ &env) {
-    return SRegOps::BCLR(env, CBit);
+void SregOpsImpl::CLC(Environ &env) {
+    SregOpsImpl::BCLR(env, CBit);
 }
 
-bool SRegOpsImpl::SEZ(Environ &env) {
-    return SRegOps::BSET(env, ZBit);
+void SregOpsImpl::SEZ(Environ &env) {
+    SregOpsImpl::BSET(env, ZBit);
 }
 
-bool SRegOpsImpl::CLZ(Environ &env) {
-    return SRegOps::BCLR(env, ZBit);
+void SregOpsImpl::CLZ(Environ &env) {
+    SregOpsImpl::BCLR(env, ZBit);
 }
 
-bool SRegOpsImpl::SEN(Environ &env) {
-    return SRegOps::BSET(env, NBit);
+void SregOpsImpl::SEN(Environ &env) {
+    SregOpsImpl::BSET(env, NBit);
 }
 
-bool SRegOpsImpl::CLN(Environ &env) {
-    return SRegOps::BCLR(env, NBit);
+void SregOpsImpl::CLN(Environ &env) {
+    SregOpsImpl::BCLR(env, NBit);
 }
 
-bool SRegOpsImpl::SEV(Environ &env) {
-    return SRegOps::BSET(env, VBit);
+void SregOpsImpl::SEV(Environ &env) {
+    SregOpsImpl::BSET(env, VBit);
 }
 
-bool SRegOpsImpl::CLV(Environ &env) {
-    return SRegOps::BCLR(env, VBit);
+void SregOpsImpl::CLV(Environ &env) {
+    SregOpsImpl::BCLR(env, VBit);
 }
 
-bool SRegOpsImpl::SES(Environ &env) {
-    return SRegOps::BSET(env, SBit);
+void SregOpsImpl::SES(Environ &env) {
+    SregOpsImpl::BSET(env, SBit);
 }
 
-bool SRegOpsImpl::CLS(Environ &env) {
-    return SRegOps::BCLR(env, SBit);
+void SregOpsImpl::CLS(Environ &env) {
+    SregOpsImpl::BCLR(env, SBit);
 }
 
-bool SRegOpsImpl::SEH(Environ &env) {
-    return SRegOps::BSET(env, HBit);
+void SregOpsImpl::SEH(Environ &env) {
+    SregOpsImpl::BSET(env, HBit);
 }
 
-bool SRegOpsImpl::CLH(Environ &env) {
-    return SRegOps::BCLR(env, HBit);
+void SregOpsImpl::CLH(Environ &env) {
+    SregOpsImpl::BCLR(env, HBit);
 }
 
-bool SRegOpsImpl::SET(Environ &env) {
-    return SRegOps::BSET(env, SBit);
+void SregOpsImpl::SET(Environ &env) {
+    SregOpsImpl::BSET(env, SBit);
 }
 
-bool SRegOpsImpl::CLT(Environ &env) {
-    return SRegOps::BCLR(env, TBit);
+void SregOpsImpl::CLT(Environ &env) {
+    SregOpsImpl::BCLR(env, TBit);
 }
 
-bool SRegOpsImpl::BST(Environ &env, FiveBit tgtAddr, ThreeBit regNum) {
+void SregOpsImpl::BST(Environ &env, FiveBit tgtAddr, ThreeBit regNum) {
     uchar_t tgtValue = env.read_reg_byte(tgtAddr);
     bool tBit = is_bi(tgtValue, regNum);
     env.sReg.setT(tBit);
-    return false;
 }
 
-bool SRegOpsImpl::BLD(Environ &env, FiveBit tgtAddr, ThreeBit regNum) {
+void SregOpsImpl::BLD(Environ &env, FiveBit tgtAddr, ThreeBit regNum) {
     uchar_t tgtValue = env.read_reg_byte(tgtAddr);
     uchar_t tBitMask = env.sReg.T() << regNum;
     uchar_t result = tgtValue | tBitMask;
     env.write_reg_byte(tgtAddr, result);
-    return false;
 }
 
-bool SRegOpsImplP::WriteBit(Environ &env, ThreeBit regNum, bool value) {
+void SregOpsImplP::WriteBit(Environ &env, ThreeBit regNum) {
 
     auto regBit = (SMasks)(1 << regNum);
 
@@ -124,5 +118,4 @@ bool SRegOpsImplP::WriteBit(Environ &env, ThreeBit regNum, bool value) {
         default:
             break;
     }
-    return false;
 }

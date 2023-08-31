@@ -1,8 +1,11 @@
-#include "../gen1/logic_ops.h"
-#include "../gen1/alu_ops.h"
-#include "../types.h"
-#include "../gen1/alu_ops_impl.h"
-#include "../gen1/io_ops_impl.h"
+#include "../gen2/alu_ops.h"
+
+#include "../infra/types.h"
+#include "../infra/status_reg.h"
+#include "../infra/environment.h"
+
+#include "../gen2/alu_ops_impl.h"
+#include "../gen2/logic_ops_impl.h"
 
 class AddTwoFlags {
 public:
@@ -28,7 +31,7 @@ public:
     static void statusFlags(uchar_t target, uchar_t source, uchar_t result, SReg &status);
 };
 
-bool AluOpsImpl::ADD(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+void AluOpsImpl::ADD(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
 
@@ -36,10 +39,9 @@ bool AluOpsImpl::ADD(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
 
     AddTwoFlags::statusFlags(tgtVal, srcVal, result, env.sReg);
     env.write_reg_byte(tgtAddr, result);
-    return false;
 }
 
-bool AluOpsImpl::ADC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+void AluOpsImpl::ADC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
 
@@ -47,11 +49,11 @@ bool AluOpsImpl::ADC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
 
     AddTwoFlags::statusFlags(tgtVal, srcVal, result, env.sReg);
     env.write_reg_byte(tgtAddr, result);
-    return false;
 }
 
-bool AluOpsImpl::ADIW(Environ& env, FiveBit tgtAddr, SixBit immData) {
+void AluOpsImpl::ADIW(Environ& env, TwoBit tgtId, SixBit immData) {
 
+    FiveBit tgtAddr = (tgtId << 1) | 0x18;
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result1 = (immData + tgtVal) & 0xFF;
 
@@ -68,11 +70,9 @@ bool AluOpsImpl::ADIW(Environ& env, FiveBit tgtAddr, SixBit immData) {
 
     env.write_reg_byte(tgtAddr, result1);
     env.write_reg_byte(tgtAddr + 1, result2);
-
-    return false;
 }
 
-bool AluOpsImpl::SUB(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+void AluOpsImpl::SUB(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
 
@@ -80,10 +80,9 @@ bool AluOpsImpl::SUB(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
 
     SubTwoFlags::statusFlags(tgtVal, srcVal, result, env.sReg);
     env.write_reg_byte(tgtAddr, result);
-    return false;
 }
 
-bool AluOpsImpl::SBC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+void AluOpsImpl::SBC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
 
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
@@ -92,28 +91,31 @@ bool AluOpsImpl::SBC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
 
     SubTwoFlags::statusFlags(tgtVal, srcVal, result, env.sReg);
     env.write_reg_byte(tgtAddr, result);
-    return false;
 }
 
-bool AluOpsImpl::SUBI(Environ& env, FiveBit tgtAddr, EightBit immData) {
+void AluOpsImpl::SUBI(Environ& env, FourBit tgtId, EightBit immData) {
+    FiveBit tgtAddr = tgtId | 0x10;
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = (~immData + tgtVal + 1) % 0x100;
 
     SubTwoFlags::statusFlags(tgtVal, immData, result, env.sReg);
     env.write_reg_byte(tgtAddr, result);
-    return false;
 }
 
-bool AluOpsImpl::SBCI(Environ& env, FiveBit tgtAddr, EightBit immData) {
+void AluOpsImpl::SBCI(Environ& env, FourBit tgtId, EightBit immData) {
+
+    FiveBit tgtAddr = tgtId | 0x10;
+
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = (~immData + tgtVal) & 0xFF;
 
     AddTwoFlags::statusFlags(tgtVal, immData, result, env.sReg);
     env.write_reg_byte(tgtAddr, result);
-    return false;
 }
 
-bool AluOpsImpl::SBIW(Environ& env, FiveBit tgtAddr, SixBit immData) {
+void AluOpsImpl::SBIW(Environ& env, TwoBit tgtRegId, SixBit immData) {
+
+    FiveBit tgtAddr = (tgtRegId << 1) | 0x18;
     uchar_t tgtVal1 = env.read_reg_byte(tgtAddr);
     uchar_t result1 = (~immData + tgtVal1 + 1) & 0xFF;
 
@@ -130,10 +132,9 @@ bool AluOpsImpl::SBIW(Environ& env, FiveBit tgtAddr, SixBit immData) {
 
     env.write_reg_byte(tgtAddr, result1);
     env.write_reg_byte(tgtAddr + 1, result2);
-    return false;
 }
 
-bool AluOpsImpl::NEG(Environ& env, FiveBit tgtAddr) {
+void AluOpsImpl::NEG(Environ& env, FiveBit tgtAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = (~tgtVal + 1) & 0xFF;
 
@@ -146,10 +147,9 @@ bool AluOpsImpl::NEG(Environ& env, FiveBit tgtAddr) {
         .setS();
 
     env.write_reg_byte(tgtAddr, result);
-    return false;
 }
 
-bool AluOpsImpl::INC(Environ& env, FiveBit tgtAddr) {
+void AluOpsImpl::INC(Environ& env, FiveBit tgtAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = (tgtVal + 1) & 0xFF;
 
@@ -160,10 +160,9 @@ bool AluOpsImpl::INC(Environ& env, FiveBit tgtAddr) {
         .setS();
 
     env.write_reg_byte(tgtAddr, result);
-    return false;
 }
 
-bool AluOpsImpl::DEC(Environ& env, FiveBit tgtAddr) {
+void AluOpsImpl::DEC(Environ& env, FiveBit tgtAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = (tgtVal - 1) & 0xFF;
 
@@ -174,10 +173,9 @@ bool AluOpsImpl::DEC(Environ& env, FiveBit tgtAddr) {
             .setS();
 
     env.write_reg_byte(tgtAddr, result);
-    return false;
 }
 
-bool AluOpsImpl::ASR(Environ& env, FiveBit tgtAddr) {
+void AluOpsImpl::ASR(Environ& env, FiveBit tgtAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = (tgtVal & 0x80) | (tgtVal >> 1);
 
@@ -189,10 +187,9 @@ bool AluOpsImpl::ASR(Environ& env, FiveBit tgtAddr) {
             .setS();
 
     env.write_reg_byte(tgtAddr, result);
-    return false;
 }
 
-bool AluOpsImpl::MUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
+void AluOpsImpl::MUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
 
@@ -200,10 +197,12 @@ bool AluOpsImpl::MUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
 
     env.write_reg_byte(M::R0, lo_byte(result));
     env.write_reg_byte(M::R1, hi_byte(result));
-    return false;
 }
 
-bool AluOpsImpl::MULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
+void AluOpsImpl::MULS(Environ& env, FourBit tgtRegId, FourBit srcRegId) {
+    FiveBit tgtAddr = tgtRegId | 0x10;
+    FiveBit srcAddr = srcRegId | 0x10;
+
     auto tgtVal = (schar_t) env.read_reg_byte(tgtAddr);
     auto srcVal = (schar_t) env.read_reg_byte(srcAddr);
 
@@ -215,10 +214,12 @@ bool AluOpsImpl::MULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
 
     env.write_reg_byte(M::R0, lo_byte(result));
     env.write_reg_byte(M::R1, hi_byte(result));
-    return false;
 }
 
-bool AluOpsImpl::MULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
+void AluOpsImpl::MULSU(Environ& env, ThreeBit tgtRegId, ThreeBit srcRegId) {
+    FiveBit tgtAddr = tgtRegId | 0x10;
+    FiveBit srcAddr = srcRegId | 0x10;
+
     auto tgtVal = (schar_t) env.read_reg_byte(tgtAddr);
     auto srcVal = (uchar_t) env.read_reg_byte(srcAddr);
     auto result = (short)(tgtVal * srcVal);
@@ -229,10 +230,12 @@ bool AluOpsImpl::MULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
 
     env.write_reg_byte(M::R0, hi_byte(result));
     env.write_reg_byte(M::R1, lo_byte(result));
-    return false;
 }
 
-bool AluOpsImpl::FMUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
+void AluOpsImpl::FMUL(Environ& env, ThreeBit tgtRegId, ThreeBit srcRegId) {
+    FiveBit tgtAddr = tgtRegId | 0x10;
+    FiveBit srcAddr = srcRegId | 0x10;
+
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
     unsigned short result = tgtVal * srcVal;
@@ -240,10 +243,12 @@ bool AluOpsImpl::FMUL(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
 
     env.write_reg_byte(M::R0, lo_byte(result));
     env.write_reg_byte(M::R1, hi_byte(result));
-    return false;
 }
 
-bool AluOpsImpl::FMULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
+void AluOpsImpl::FMULS(Environ& env, ThreeBit tgtRegId, ThreeBit srcRegId) {
+    FiveBit tgtAddr = tgtRegId | 0x10;
+    FiveBit srcAddr = srcRegId | 0x10;
+
     auto tgtVal = (schar_t) env.read_reg_byte(tgtAddr);
     auto srcVal = (schar_t) env.read_reg_byte(srcAddr);
     auto result = (unsigned short)(tgtVal * srcVal);
@@ -255,10 +260,12 @@ bool AluOpsImpl::FMULS(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
 
     env.write_reg_byte(M::R0, lo_byte(result));
     env.write_reg_byte(M::R1, hi_byte(result));
-    return false;
 }
 
-bool AluOpsImpl::FMULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
+void AluOpsImpl::FMULSU(Environ& env, ThreeBit tgtRegId, ThreeBit srcRegId) {
+    FiveBit tgtAddr = tgtRegId | 0x10;
+    FiveBit srcAddr = srcRegId | 0x10;
+
     auto tgtVal = (schar_t) env.read_reg_byte(tgtAddr);
     auto srcVal = (uchar_t) env.read_reg_byte(srcAddr);
     auto result = (uint16_t)(tgtVal * srcVal);
@@ -268,38 +275,34 @@ bool AluOpsImpl::FMULSU(Environ& env, FiveBit tgtAddr, FiveBit srcAddr) {
             .setC( (result & 0x8000) == 0x8000)
             .setZ( result == 0x0000);
 
-    env.write_reg_byte(M::R0, lo_byte(result));
+    env.write_reg_pair(M::R0, result);
     env.write_reg_byte(M::R1, hi_byte(result));
-    return false;
 }
 
-bool AluOpsImpl::TST(Environ &env, FiveBit tgtAddr) {
-    IoOpsImpl::AND(env, tgtAddr, tgtAddr);
-    return false;
+void AluOpsImpl::TST(Environ &env, FiveBit tgtAddr) {
+    LogicOpsImpl::AND(env, tgtAddr, tgtAddr);
 }
 
-bool AluOpsImpl::CP(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+void AluOpsImpl::CP(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
     uchar_t result = (tgtVal + ~srcVal + 1) & 0xFF;
     SubTwoFlags::statusFlags(tgtVal, srcVal, result, env.sReg);
-    return false;
 }
 
-bool AluOpsImpl::CPC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+void AluOpsImpl::CPC(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t srcVal = env.read_reg_byte(srcAddr);
     uchar_t carry = env.sReg.C();
     uchar_t result = (tgtVal + ~srcVal + carry) & 0xFF;
     SubTwoFlags::statusFlags(tgtVal, srcVal, result, env.sReg);
-    return false;
 }
 
-bool AluOpsImpl::CPI(Environ &env, FiveBit tgtAddr, EightBit immData) {
+void AluOpsImpl::CPI(Environ &env, FourBit tgtRegId, EightBit immData) {
+    FiveBit tgtAddr = tgtRegId | 0x10;
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
     uchar_t result = (tgtVal + ~immData + 1) & 0xFF;
     SubTwoFlags::statusFlags(tgtVal, immData, result, env.sReg);
-    return false;
 }
 
 bool AddTwoFlags::CF(uchar_t target, uchar_t source, uchar_t result) {

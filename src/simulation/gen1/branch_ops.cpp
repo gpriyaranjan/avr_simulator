@@ -1,6 +1,6 @@
-#include "../types.h"
+#include "../infra/types.h"
 #include "../infra/decoder.h"
-#include "../environment.h"
+#include "../infra/environment.h"
 #include "branch_ops.h"
 #include "call_ops.h"
 #include "branch_ops_impl.h"

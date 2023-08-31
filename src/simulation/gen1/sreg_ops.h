@@ -2,8 +2,8 @@
 #define ATMEGASIM_SRC_SREG_OPS_H
 
 #include <cstdint>
-#include "../types.h"
-#include "../environment.h"
+#include "../infra/types.h"
+#include "../infra/environment.h"
 
 class SRegOps {
 public:

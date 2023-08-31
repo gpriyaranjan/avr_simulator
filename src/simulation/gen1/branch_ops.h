@@ -1,8 +1,8 @@
 #ifndef ATMEGASIM_SRC_BRANCH_OPS_H
 #define ATMEGASIM_SRC_BRANCH_OPS_H
 
-#include "../instructions.h"
-#include "../environment.h"
+#include "../ops/instrn_enum.h"
+#include "../infra/environment.h"
 
 class BranchOps {
 public:

@@ -1,149 +1,121 @@
-//
-// Created by MAC BOOK on 28/08/23.
-//
+#include "../gen2/call_ops.h"
+#include "../gen2/branch_ops.h"
+#include "../infra/environment.h"
+#include "../ops/instrn_enum.h"
+#include "../infra/types.h"
+#include "../gen2/branch_ops_impl.h"
 
-#include "../gen1/call_ops.h"
-#include "../gen1/branch_ops.h"
-#include "../environment.h"
-#include "../types.h"
-#include "../gen1/branch_ops_impl.h"
-
-class BranchOpsImplP {
-public:
-    static bool Branchif(Environ& env, bool toSkip, SevenBit offset);
-    static bool SkipNextInstrn(Environ& env, bool skip, InstrnEnum nextInstrn);
-};
-
-bool BranchOpsImplP::SkipNextInstrn(Environ& env, bool skip, InstrnEnum nextInstrn) {
-    uchar_t bytesToSkip = 0;
-    if (skip)
-        bytesToSkip = isLongInstrn(nextInstrn) ? 8 : 4;
-    env.PC = env.PC + 4 + bytesToSkip;
-    return true;
-}
-
-bool BranchOpsImplP::Branchif(Environ& env, bool toSkip, SevenBit offset) {
-    if (toSkip) {
-        env.PC = env.PC + offset;
-        return true;
-    } else {
-        env.PC = env.PC + 2;
-        return true;
-    }
-}
-
-bool BranchOpsImpl::CPSE(Environ &env, FiveBit reg1Addr, FiveBit reg2Addr, InstrnEnum nextInstrn) {
+void BranchOpsImpl::CPSE(Environ &env, FiveBit reg1Addr, FiveBit reg2Addr) {
     uchar_t value1 = env.read_reg_byte(reg1Addr);
     uchar_t value2 = env.read_reg_byte(reg2Addr);
     bool toSkip = value1 == value2;
-    return BranchOpsImplP::SkipNextInstrn(env, toSkip, nextInstrn);
+    env.CU.setSkipNext(toSkip);
 }
 
-bool BranchOpsImpl::SBRC(Environ &env, FiveBit regAddr, ThreeBit bitNum, InstrnEnum nextInstrn) {
+void BranchOpsImpl::SBRC(Environ &env, FiveBit regAddr, ThreeBit bitNum) {
     uchar_t regVal = env.read_reg_byte(regAddr);
     auto toSkip = (bool) (is_nbi(regVal,bitNum));
-    return BranchOpsImplP::SkipNextInstrn(env, toSkip, nextInstrn);
+    env.CU.setSkipNext(toSkip);
 }
 
-bool BranchOpsImpl::SBRS(Environ &env, FiveBit regAddr, ThreeBit bitNum, InstrnEnum nextInstrn) {
+void BranchOpsImpl::SBRS(Environ &env, FiveBit regAddr, ThreeBit bitNum) {
     uchar_t regVal = env.read_reg_byte(regAddr);
     auto toSkip = (bool) (is_bi(regVal,bitNum));
-    return BranchOpsImplP::SkipNextInstrn(env, toSkip, nextInstrn);
+    env.CU.setSkipNext(toSkip);
 }
 
-bool BranchOpsImpl::SBIC(Environ &env, FiveBit portAddr, ThreeBit bitNum, InstrnEnum nextInstrn) {
+void BranchOpsImpl::SBIC(Environ &env, FiveBit portAddr, ThreeBit bitNum) {
     uchar_t regVal = env.read_reg_byte(portAddr);
     auto toSkip = (bool) (is_nbi(regVal,bitNum));
-    return BranchOpsImplP::SkipNextInstrn(env, toSkip, nextInstrn);
+    env.CU.setSkipNext(toSkip);
 }
 
-bool BranchOpsImpl::SBIS(Environ &env, FiveBit portAddr, ThreeBit bitNum, InstrnEnum nextInstrn) {
+void BranchOpsImpl::SBIS(Environ &env, FiveBit portAddr, ThreeBit bitNum) {
     uchar_t regVal = env.read_reg_byte(portAddr);
     auto toSkip = (bool) (is_bi(regVal,bitNum));
-    return BranchOpsImplP::SkipNextInstrn(env, toSkip, nextInstrn);
+    env.CU.setSkipNext(toSkip);
 }
 
-bool BranchOpsImpl::BRBS(Environ &env, SevenBit offset, ThreeBit regBit) {
+void BranchOpsImpl::BRBS(Environ &env, SevenBit offset, ThreeBit regBit) {
     uchar_t status = env.sReg.getFlags();
-    bool isSet = is_bi(status, regBit);
-    return BranchOpsImplP::Branchif(env, isSet, offset);
+    bool toJump = is_bi(status, regBit);
+   env.CU.setRJump(offset, toJump);
 }
 
-bool BranchOpsImpl::BRBC(Environ &env, SevenBit offset, ThreeBit regBit) {
+void BranchOpsImpl::BRBC(Environ &env, SevenBit offset, ThreeBit regBit) {
     uchar_t status = env.sReg.getFlags();
-    bool isSet = is_nbi(status, regBit);
-    return BranchOpsImplP::Branchif(env, isSet, offset);
+    bool toJump = is_nbi(status, regBit);
+    env.CU.setRJump(offset, toJump);
 }
 
-bool BranchOpsImpl::BREQ(Environ &env, SevenBit offset) {
-    return BRBS(env, offset, ZBit);
+void BranchOpsImpl::BREQ(Environ &env, SevenBit offset) {
+    BRBS(env, offset, ZBit);
 }
 
-bool BranchOpsImpl::BRNE(Environ &env, SevenBit offset) {
-    return BRBS(env, offset, ZBit);
+void BranchOpsImpl::BRNE(Environ &env, SevenBit offset) {
+    BRBC(env, offset, ZBit);
 }
 
-bool BranchOpsImpl::BRCS(Environ &env, SevenBit offset) {
-    return BRBS(env, offset, CBit);
+void BranchOpsImpl::BRCS(Environ &env, SevenBit offset) {
+    BRBS(env, offset, CBit);
 }
 
-bool BranchOpsImpl::BRCC(Environ &env, SevenBit offset) {
-    return BRBC(env, offset, CBit);
+void BranchOpsImpl::BRCC(Environ &env, SevenBit offset) {
+    BRBC(env, offset, CBit);
 }
 
-bool BranchOpsImpl::BRLO(Environ &env, SevenBit offset) {
-    return BRBS(env, offset, CBit);
+void BranchOpsImpl::BRLO(Environ &env, SevenBit offset) {
+    BRBS(env, offset, CBit);
 }
 
-bool BranchOpsImpl::BRSH(Environ &env, SevenBit offset) {
-    return BRBC(env, offset, CBit);
+void BranchOpsImpl::BRSH(Environ &env, SevenBit offset) {
+    BRBC(env, offset, CBit);
 }
 
-bool BranchOpsImpl::BRMI(Environ &env, SevenBit offset) {
-    return BRBS(env, offset, NBit);
+void BranchOpsImpl::BRMI(Environ &env, SevenBit offset) {
+    BRBS(env, offset, NBit);
 }
 
-bool BranchOpsImpl::BRPL(Environ &env, SevenBit offset) {
-    return BRBC(env, offset, NBit);
+void BranchOpsImpl::BRPL(Environ &env, SevenBit offset) {
+    BRBC(env, offset, NBit);
 }
 
-bool BranchOpsImpl::BRVS(Environ &env, SevenBit offset) {
-    return BRBS(env, offset, VBit);
+void BranchOpsImpl::BRVS(Environ &env, SevenBit offset) {
+    BRBS(env, offset, VBit);
 }
 
-bool BranchOpsImpl::BRVC(Environ &env, SevenBit offset) {
-    return BRBC(env, offset, VBit);
+void BranchOpsImpl::BRVC(Environ &env, SevenBit offset) {
+    BRBC(env, offset, VBit);
 }
 
-bool BranchOpsImpl::BRLT(Environ &env, SevenBit offset) {
-    return BRBS(env, offset, SBit);
+void BranchOpsImpl::BRLT(Environ &env, SevenBit offset) {
+    BRBS(env, offset, SBit);
 }
 
-bool BranchOpsImpl::BRGE(Environ &env, SevenBit offset) {
-    return BRBC(env, offset, SBit);
+void BranchOpsImpl::BRGE(Environ &env, SevenBit offset) {
+    BRBC(env, offset, SBit);
 }
 
-bool BranchOpsImpl::BRHS(Environ &env, SevenBit offset) {
-    return BRBS(env, offset, HBit);
+void BranchOpsImpl::BRHS(Environ &env, SevenBit offset) {
+    BRBS(env, offset, HBit);
 }
 
-bool BranchOpsImpl::BRHC(Environ &env, SevenBit offset) {
-    return BRBC(env, offset, HBit);
+void BranchOpsImpl::BRHC(Environ &env, SevenBit offset) {
+    BRBC(env, offset, HBit);
 }
 
-bool BranchOpsImpl::BRTS(Environ &env, SevenBit offset) {
-    return BRBS(env, offset, TBit);
+void BranchOpsImpl::BRTS(Environ &env, SevenBit offset) {
+    BRBS(env, offset, TBit);
 }
 
-bool BranchOpsImpl::BRTC(Environ &env, SevenBit offset) {
-    return BRBC(env, offset, TBit);
+void BranchOpsImpl::BRTC(Environ &env, SevenBit offset) {
+    BRBC(env, offset, TBit);
 }
 
-bool BranchOpsImpl::BRIE(Environ &env, SevenBit offset) {
-    return BRBS(env, offset, IBit);
+void BranchOpsImpl::BRIE(Environ &env, SevenBit offset) {
+    BRBS(env, offset, IBit);
 }
 
-bool BranchOpsImpl::BRID(Environ &env, SevenBit offset) {
-    return BRBC(env, offset, IBit);
+void BranchOpsImpl::BRID(Environ &env, SevenBit offset) {
+    BRBC(env, offset, IBit);
 }
-

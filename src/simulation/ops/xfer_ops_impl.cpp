@@ -1,29 +1,27 @@
-//
-// Created by MAC BOOK on 28/08/23.
-//
+#include "../gen2/xfer_ops.h"
+#include "../infra/types.h"
+#include "../infra/environment.h"
+#include "../gen2/xfer_ops_impl.h"
 
-#include "../gen1/xfer_ops.h"
-#include "../types.h"
-#include "../gen1/xfer_ops_impl.h"
-
-bool XferOpsImpl::MOV(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+void XferOpsImpl::MOV(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t srcVal = env.read_reg_byte(srcAddr);
     env.write_reg_byte(tgtAddr, srcVal);
-    return false;
 }
 
-bool XferOpsImpl::MOVW(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
+void XferOpsImpl::MOVW(Environ &env, FourBit tgtRegId, FourBit srcRegId) {
+    FiveBit tgtAddr = tgtRegId << 1;
+    FiveBit srcAddr = srcRegId << 1;
+
     uchar_t srcWord = env.read_reg_pair(srcAddr);
     env.write_reg_pair(tgtAddr, srcWord);
-    return false;
 }
 
-bool XferOpsImpl::LDI(Environ &env, FiveBit tgtAddr, EightBit immData) {
+void XferOpsImpl::LDI(Environ &env, FourBit tgtRegId, EightBit immData) {
+    FiveBit tgtAddr = tgtRegId | 0x10;
     env.write_reg_byte(tgtAddr, immData);
-    return false;
 }
 
-bool XferOpsImpl::LD(
+void XferOpsImpl::LD(
     Environ &env, FiveBit tgtAddr, TwoBit flag, TwoBit mode) {
 
     uchar_t srcAddr;
@@ -31,7 +29,7 @@ bool XferOpsImpl::LD(
         case 0x00: srcAddr = M::Z; break;
         case 0x01: srcAddr = M::Y; break;
         case 0x02: srcAddr = M::X; break;
-        default: throw InvalidEnum(0x00, env.PC);
+        default: throw InvalidEnum(0x00, env.CU.getPC());
     }
     bool postIncr = (mode == 0x01);
     bool preDecr  = (mode == 0x02);
@@ -46,11 +44,10 @@ bool XferOpsImpl::LD(
     if (postIncr) memAddr++;
     if (preDecr || postIncr)
         env.write_reg_pair(srcAddr, memAddr);
-    return false;
 }
 
-bool XferOpsImpl::LDD(
-    Environ &env, FiveBit tgtAddr, OneBit flag, SixBit offset) {
+void XferOpsImpl::LDD(
+    Environ &env, FiveBit tgtAddr, SixBit offset, OneBit flag) {
 
     uchar_t srcAddr = flag ? M::Y : M::Z;
 
@@ -59,17 +56,14 @@ bool XferOpsImpl::LDD(
 
     uchar_t value = env.read_mem_byte(memAddr);
     env.write_reg_byte(tgtAddr, value);
-
-    return false;
 }
 
-bool XferOpsImpl::STS(Environ &env, FiveBit srcAddr, SixteenBit memAddr) {
+void XferOpsImpl::STS(Environ &env, FiveBit srcAddr, SixteenBit memAddr) {
     uchar_t value = env.read_reg_byte(srcAddr);
     env.write_mem_byte(memAddr, value);
-    return false;
 }
 
-bool XferOpsImpl::ST(Environ &env, FiveBit srcAddr, TwoBit flag, TwoBit mode) {
+void XferOpsImpl::ST(Environ &env, FiveBit srcAddr, TwoBit flag, TwoBit mode) {
 
     uchar_t tgtRegAddr;
     switch(flag) {
@@ -89,11 +83,10 @@ bool XferOpsImpl::ST(Environ &env, FiveBit srcAddr, TwoBit flag, TwoBit mode) {
 
     if (postIncr) tgtMemAddr++;
     env.write_reg_pair(tgtRegAddr, value);
-    return false;
 }
 
-bool XferOpsImpl::STD(
-    Environ &env, FiveBit srcRegAddr, OneBit flag, SixBit offset) {
+void XferOpsImpl::STD(
+    Environ &env, FiveBit srcRegAddr, SixBit offset, OneBit flag) {
 
     uchar_t srcAddr = flag ? M::Y : M::Z;
 
@@ -102,11 +95,9 @@ bool XferOpsImpl::STD(
 
     uchar_t value = env.read_reg_byte(srcRegAddr);
     env.write_mem_byte(memAddr, value);
-
-    return false;
 }
 
-bool XferOpsImpl::LPM(Environ &env, FiveBit regAddr, OneBit postIncr) {
+void XferOpsImpl::LPM(Environ &env, FiveBit regAddr, OneBit postIncr) {
     uint16_t memAddr = env.read_reg_pair(M::Z);
 
     uchar_t value = env.read_mem_byte(memAddr);
@@ -116,10 +107,9 @@ bool XferOpsImpl::LPM(Environ &env, FiveBit regAddr, OneBit postIncr) {
         memAddr++;
         env.write_reg_pair(M::Z, memAddr);
     }
-    return false;
 }
 
-bool XferOpsImpl::ELPM(Environ &env, FiveBit regAddr, OneBit postIncr) {
+void XferOpsImpl::ELPM(Environ &env, FiveBit regAddr, OneBit postIncr) {
     uint16_t memOffAddr = env.read_reg_pair(M::Z);
     uchar_t memSegAddr = env.read_reg_byte(M::RAMPZ);
     CPUAddr memAddr = (memSegAddr >> 16) | memOffAddr;
@@ -131,10 +121,9 @@ bool XferOpsImpl::ELPM(Environ &env, FiveBit regAddr, OneBit postIncr) {
         memAddr++;
         env.write_reg_pair(M::Z, memAddr);
     }
-    return false;
 }
 
-bool XferOpsImpl::SPM(Environ &env, OneBit postIncr) {
+void XferOpsImpl::SPM(Environ &env, OneBit postIncr) {
     uint16_t memOffAddr = env.read_reg_pair(M::Z);
     uchar_t memSegAddr = env.read_reg_byte(M::RAMPZ);
     CPUAddr memAddr = (memSegAddr >> 16) | memOffAddr;
@@ -147,45 +136,39 @@ bool XferOpsImpl::SPM(Environ &env, OneBit postIncr) {
         env.write_reg_pair(M::Z, memAddr & 0xFFFF);
         env.write_reg_byte(M::RAMPZ, (memAddr>>16)&0xFF);
     }
-
-    return false;
 }
 
-bool XferOpsImpl::XCH(Environ &env, FiveBit regAddr) {
+void XferOpsImpl::XCH(Environ &env, FiveBit regAddr) {
     uint16_t memAddr = env.read_reg_pair(M::X);
     uchar_t memValue = env.read_mem_byte(memAddr);
     uchar_t regValue = env.read_reg_byte(regAddr);
     env.write_mem_byte(memAddr, regValue);
     env.write_reg_byte(regAddr, memValue);
-    return false;
 }
 
-bool XferOpsImpl::LAS(Environ &env, FiveBit regAddr) {
+void XferOpsImpl::LAS(Environ &env, FiveBit regAddr) {
     uint16_t memAddr = env.read_reg_pair(M::X);
     uchar_t memValue = env.read_mem_byte(memAddr);
     uchar_t regValue = env.read_reg_byte(regAddr);
     memValue |= regValue;
     env.write_mem_byte(memAddr, regValue);
     env.write_reg_byte(regAddr, memValue);
-    return false;
 }
 
-bool XferOpsImpl::LAC(Environ &env, FiveBit regAddr) {
+void XferOpsImpl::LAC(Environ &env, FiveBit regAddr) {
     uint16_t memAddr = env.read_reg_pair(M::X);
     uchar_t memValue = env.read_mem_byte(memAddr);
     uchar_t regValue = env.read_reg_byte(regAddr);
     memValue = ~regValue & memValue;
     env.write_mem_byte(memAddr, regValue);
     env.write_reg_byte(regAddr, memValue);
-    return false;
 }
 
-bool XferOpsImpl::LAT(Environ &env, FiveBit regAddr) {
+void XferOpsImpl::LAT(Environ &env, FiveBit regAddr) {
     uint16_t memAddr = env.read_reg_pair(M::X);
     uchar_t memValue = env.read_mem_byte(memAddr);
     uchar_t regValue = env.read_reg_byte(regAddr);
     memValue = regValue ^ memValue;
     env.write_mem_byte(memAddr, regValue);
     env.write_reg_byte(regAddr, memValue);
-    return false;
 }

@@ -32,7 +32,7 @@ class WrapperBodyFile(AnyFile):
         impl_class_name: str = "%sImpl" % wrapper_name
         bitsInfo : BitsInfo = Pattern.get_bit_counts(func_spec.P)
         arg_names: List[str] = []
-        for ch, bitInfo in bitsInfo.__dict__.items():
+        for ch, bitInfo in bitsInfo.get_items():
             _, arg_name = WrapperCommon.gen(ch, bitInfo.count)
             arg_names.append(arg_name)
         args_str: str = ", ".join(["env"] + arg_names)

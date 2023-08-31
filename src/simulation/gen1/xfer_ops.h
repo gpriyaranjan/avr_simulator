@@ -1,7 +1,7 @@
 #ifndef ATMEGASIM_SRC_XFER_OPS_H
 #define ATMEGASIM_SRC_XFER_OPS_H
 
-#include "../environment.h"
+#include "../infra/environment.h"
 
 class XferOps {
 public:

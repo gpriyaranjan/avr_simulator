@@ -20,7 +20,7 @@ set(PRJ_CPP_FILES
     ops/branch_ops_impl.cpp
     ops/call_ops_impl.cpp
     ops/io_ops_impl.cpp
-    ops/log_ops_impl.cpp
+    ops/logic_ops_impl.cpp
     ops/sreg_ops_impl.cpp
     ops/xfer_ops_impl.cpp
 )
@@ -46,13 +46,15 @@ set(GEN_HDR_IMPL_FILES
 )
 
 set(PRJ_HDR_FILES
-    environment.h
-    types.h
-    all_ops.h
-    status_reg.h
-    regs_mems.h
-    instructions.h
-    exceptions.h
+    infra/environment.h
+    infra/types.h
+    ops/all_ops.h
+    infra/status_reg.h
+    infra/regs_mems.h
+    ops/instrn_enum.h
+    infra/exceptions.h
+    infra/control_unit.h
+    ops/decoder.cpp
 )
 
 set(SOURCE_FILES

@@ -7,6 +7,7 @@
 
 #include "status_reg.h"
 #include "regs_mems.h"
+#include "control_unit.h"
 
 constexpr uint32_t MEMORY_SIZE = 1 << 26;
 constexpr uchar_t NUM_REGISTERS = 1 << 5;
@@ -17,15 +18,13 @@ private:
 
 public:
     SReg sReg;
-    CPUAddr PC;
+    ControlUnit CU;
 
-    Environ() : sReg(mem[M::SREG]) {
-        PC = 0;
+    Environ() : sReg(mem[M::SREG]), CU(*this) {
         bzero(this->mem, sizeof(this->mem));
     }
 
     void init() {
-        PC = 0;
         bzero(this->mem, sizeof(this->mem));
     }
 
@@ -40,6 +39,7 @@ public:
 
     uint16_t read_reg_pair(FiveBit regAddr);
     void write_reg_pair(FiveBit regAddr, uint16_t value);
+
 };
 
 inline uchar_t Environ::read_mem_byte(CPUAddr addr) {
