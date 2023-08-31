@@ -105,7 +105,7 @@ bool XferOps::LAC(Environ &env, ShortInstrn instrn) {
 bool XferOps::LAT(Environ &env, ShortInstrn instrn) {
     FiveBit regAddr;
     ArgsDecode::Reg5(instrn, regAddr);
-    return XferOpsImpl::LAC(env, regAddr);
+    return XferOpsImpl::LAT(env, regAddr);
 }
 
 

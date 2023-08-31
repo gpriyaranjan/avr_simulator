@@ -4,43 +4,43 @@ project(ATMegaSim_sim)
 set(CMAKE_CXX_STANDARD 23)
 
 set(GEN_CPP_FILES
-    v1/alu_ops.cpp
-    v1/logic_ops.cpp
-    v1/sreg_ops.cpp
-    v1/branch_ops.cpp
-    v1/call_ops.cpp
-    v1/xfer_ops.cpp
-    v1/io_ops.cpp
+    gen1/alu_ops.cpp
+    gen1/logic_ops.cpp
+    gen1/sreg_ops.cpp
+    gen1/branch_ops.cpp
+    gen1/call_ops.cpp
+    gen1/xfer_ops.cpp
+    gen1/io_ops.cpp
 )
 
 set(PRJ_CPP_FILES
-    alu_ops_impl.cpp
-    branch_ops_impl.cpp
-    call_ops_impl.cpp
-    io_ops_impl.cpp
-    log_ops_impl.cpp
-    sreg_ops_impl.cpp
-    xfer_ops_impl.cpp
+    ops/alu_ops_impl.cpp
+    ops/branch_ops_impl.cpp
+    ops/call_ops_impl.cpp
+    ops/io_ops_impl.cpp
+    ops/log_ops_impl.cpp
+    ops/sreg_ops_impl.cpp
+    ops/xfer_ops_impl.cpp
 )
 
 set(GEN_HDR_FILES
-    v1/alu_ops.h
-    v1/branch_ops.h
-    v1/call_ops.h
-    v1/io_ops.h
-    v1/logic_ops.h
-    v1/sreg_ops.h
-    v1/xfer_ops.h
+    gen1/alu_ops.h
+    gen1/branch_ops.h
+    gen1/call_ops.h
+    gen1/io_ops.h
+    gen1/logic_ops.h
+    gen1/sreg_ops.h
+    gen1/xfer_ops.h
 )
 
 set(GEN_HDR_IMPL_FILES
-    v1/alu_ops_impl.h
-    v1/branch_ops_impl.h
-    v1/call_ops_impl.h
-    v1/io_ops_impl.h
-    v1/logic_ops_impl.h
-    v1/sreg_ops_impl.h
-    v1/xfer_ops_impl.h
+    gen1/alu_ops_impl.h
+    gen1/branch_ops_impl.h
+    gen1/call_ops_impl.h
+    gen1/io_ops_impl.h
+    gen1/logic_ops_impl.h
+    gen1/sreg_ops_impl.h
+    gen1/xfer_ops_impl.h
 )
 
 set(PRJ_HDR_FILES
@@ -62,8 +62,9 @@ set(SOURCE_FILES
 set(HEADER_FILES
     ${GEN_HDR_FILES}
     ${GEN_HDR_IMPL_FILES}
-    ${PRJ_CPP_FILES}
+    ${PRJ_HDR_FILES}
 )
+
 add_library(
         ATMegaSim_lib STATIC
         ${SOURCE_FILES}

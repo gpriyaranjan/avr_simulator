@@ -9,7 +9,6 @@
 class SRegOpsImpl {
 
 public:
-    static bool WriteBit(Environ& env, ThreeBit regNum, bool value);
 
     static bool BSET(Environ& env, ThreeBit regNum, bool dummy);
     static bool BCLR(Environ& env, ThreeBit regNum, bool dummy);

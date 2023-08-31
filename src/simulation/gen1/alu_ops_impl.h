@@ -39,29 +39,4 @@ public:
     static bool CPI(Environ& env, FiveBit tgtAddr, EightBit immData);
 };
 
-
-class AddTwoFlags {
-public:
-    static bool NF(uchar_t result);
-    static bool ZF(uchar_t result);
-    static bool VF(uchar_t target, uchar_t source, uchar_t result);
-    static bool CF(uchar_t target, uchar_t source, uchar_t result);
-    static bool SF(uchar_t target, uchar_t source, uchar_t result);
-    static bool HF(uchar_t target, uchar_t source, uchar_t result);
-
-    static void statusFlags(uchar_t target, uchar_t source, uchar_t result, SReg &status);
-};
-
-class SubTwoFlags {
-public:
-    static bool NF(uchar_t result);
-    static bool ZF(uchar_t result);
-    static bool VF(uchar_t target, uchar_t source, uchar_t result);
-    static bool CF(uchar_t target, uchar_t source, uchar_t result);
-    static bool SF(uchar_t target, uchar_t source, uchar_t result);
-    static bool HF(uchar_t target, uchar_t source, uchar_t result);
-
-    static void statusFlags(uchar_t target, uchar_t source, uchar_t result, SReg &status);
-};
-
 #endif //ATMEGASIM_SRC_ALU_OPS_MC_H

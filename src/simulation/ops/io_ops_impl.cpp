@@ -1,8 +1,8 @@
-#include "v1/alu_ops_impl.h"
-#include "v1/alu_ops.h"
-#include "decoder.h"
-#include "v1/logic_ops.h"
-#include "v1/io_ops_impl.h"
+#include "../gen1/alu_ops_impl.h"
+#include "../gen1/alu_ops.h"
+#include "../decoder.h"
+#include "../gen1/logic_ops.h"
+#include "../gen1/io_ops_impl.h"
 
 bool IoOpsImpl::AND(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);

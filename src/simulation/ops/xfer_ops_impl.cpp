@@ -2,10 +2,10 @@
 // Created by MAC BOOK on 28/08/23.
 //
 
-#include "v1/xfer_ops.h"
-#include "decoder.h"
-#include "types.h"
-#include "v1/xfer_ops_impl.h"
+#include "../gen1/xfer_ops.h"
+#include "../decoder.h"
+#include "../types.h"
+#include "../gen1/xfer_ops_impl.h"
 
 bool XferOpsImpl::MOV(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t srcVal = env.read_reg_byte(srcAddr);

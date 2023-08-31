@@ -7,10 +7,6 @@
 
 class BranchOpsImpl {
 
-private:
-    static bool SkipNextInstrn(Environ& env, bool skip, InstrnEnum nextInstrn);
-    static bool Branchif(Environ& env, bool toSkip, SevenBit offset);
-
 public:
     static bool CPSE(Environ& env, FiveBit reg1Addr, FiveBit reg2Addr, InstrnEnum nextInstrn);
 

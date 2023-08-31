@@ -25,11 +25,6 @@ public:
     static bool RET(Environ &env);
     static bool RETI(Environ &env);
 
-    static void Push1Byte(Environ& env, uchar_t value);
-    static void Pop1Byte(Environ& env, uchar_t& value);
-
-    static void Push3Bytes(Environ& env, TwentyTwoBit pcValue);
-    static void Pop3Bytes(Environ& env, TwentyTwoBit& pcValue);
 };
 
 

@@ -1,9 +1,33 @@
-#include "v1/logic_ops.h"
-#include "v1/alu_ops.h"
-#include "decoder.h"
-#include "types.h"
-#include "v1/alu_ops_impl.h"
-#include "v1/io_ops_impl.h"
+#include "../gen1/logic_ops.h"
+#include "../gen1/alu_ops.h"
+#include "../decoder.h"
+#include "../types.h"
+#include "../gen1/alu_ops_impl.h"
+#include "../gen1/io_ops_impl.h"
+
+class AddTwoFlags {
+public:
+    static bool NF(uchar_t result);
+    static bool ZF(uchar_t result);
+    static bool VF(uchar_t target, uchar_t source, uchar_t result);
+    static bool CF(uchar_t target, uchar_t source, uchar_t result);
+    static bool SF(uchar_t target, uchar_t source, uchar_t result);
+    static bool HF(uchar_t target, uchar_t source, uchar_t result);
+
+    static void statusFlags(uchar_t target, uchar_t source, uchar_t result, SReg &status);
+};
+
+class SubTwoFlags {
+public:
+    static bool NF(uchar_t result);
+    static bool ZF(uchar_t result);
+    static bool VF(uchar_t target, uchar_t source, uchar_t result);
+    static bool CF(uchar_t target, uchar_t source, uchar_t result);
+    static bool SF(uchar_t target, uchar_t source, uchar_t result);
+    static bool HF(uchar_t target, uchar_t source, uchar_t result);
+
+    static void statusFlags(uchar_t target, uchar_t source, uchar_t result, SReg &status);
+};
 
 bool AluOpsImpl::ADD(Environ &env, FiveBit tgtAddr, FiveBit srcAddr) {
     uchar_t tgtVal = env.read_reg_byte(tgtAddr);
