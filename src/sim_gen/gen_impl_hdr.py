@@ -14,7 +14,7 @@ from pattern_utils import Pattern, BitsInfo
 class ImplHdrFile(HeaderFile, WrapperCommon):
 
     def gen_includes(self):
-        self.fprint('#include "types.h"')
+        self.fprint('#include "../types.h"')
 
     def gen_forward_classes(self):
         self.fprint("class Environ;")
@@ -38,12 +38,15 @@ class ImplHdrFile(HeaderFile, WrapperCommon):
         args: List[Tuple[str,str]] = [("Environ&", "env")] + func_args
         args_list: List[str] = list(map(lambda x: x[0] + " " + x[1], args))
         args_str: str = ", ".join(args_list)
-        self.fprint("\tvoid %s(%s);" % (func_name, args_str))
+        self.fprint("\tstatic void %s(%s);" % (func_name, args_str))
 
 
     def gen_struct(self, module_name: str, spec_json: Dict[str,Dict]):
         class_name: str = "%sImpl" % camel_case(module_name)
-        self.fprint("class %s {\n" % class_name)
+        self.fprint("class %s {" % class_name)
+        self.fprint("public:")
+        self.gen_newline()
+
         for (func_name, func_spec) in spec_json.items():
             self.gen_func(func_name, FuncSpec(func_spec))
             self.gen_newline()

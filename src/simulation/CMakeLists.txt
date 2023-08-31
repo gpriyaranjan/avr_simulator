@@ -3,7 +3,7 @@ project(ATMegaSim_sim)
 
 set(CMAKE_CXX_STANDARD 23)
 
-set(GEN_DIR "gen1")
+set(GEN_DIR "gen2")
 
 set(GEN_CPP_FILES
     ${GEN_DIR}/alu_ops.cpp

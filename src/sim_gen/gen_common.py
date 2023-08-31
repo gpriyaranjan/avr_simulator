@@ -44,7 +44,7 @@ class HeaderFile(AnyFile):
 
     def gen_file_header(self, module_name: str):
         macro_name: str = "%s_H" % module_name.upper()
-        self.fprint("#include %s" % macro_name)
+        self.fprint("#ifndef %s" % macro_name)
         self.fprint("#define %s" % macro_name)
 
     def gen_file_trailer(self, module_name: str):

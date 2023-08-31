@@ -35,8 +35,8 @@ class WrapperBodyFile(AnyFile):
         for ch, bitInfo in bitsInfo.__dict__.items():
             _, arg_name = WrapperCommon.gen(ch, bitInfo.count)
             arg_names.append(arg_name)
-        args_str: str = ", ".join(arg_names)
-        self.fprint("\t%s::%s(env, %s);" % (impl_class_name, func_name, args_str))
+        args_str: str = ", ".join(["env"] + arg_names)
+        self.fprint("\t%s::%s(%s);" % (impl_class_name, func_name, args_str))
 
     def gen_func(self, wrapper_name: str, func_name: str, func_spec: FuncSpec):
         instrn_defn: str = (
