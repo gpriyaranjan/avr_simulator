@@ -43,7 +43,7 @@ class Args(object):
             self.out_dir = os.path.join(SRC_DIR, "out")
         if self.all_specs:
             self.mod_name = '*'
-        if not (self.wrap_cpp and self.wrap_hdr and self.wrap_cpp):
+        if not (self.wrap_cpp or self.wrap_hdr or self.wrap_cpp):
             self.wrap_hdr = self.wrap_cpp = self.impl_hdr = True
 
     def spec_files(self)->List[str]:
@@ -52,7 +52,7 @@ class Args(object):
 
     def out_file(self, mod_name: str, gen_type: str)->str:
         PATTERN = {'w': "%s.h", 'W': "%s.cpp", 'i': "%s_impl.h"}
-        return os.path.join(self.out_dir, PATTERN[gen_type] % mod_name)
+        return os.path.join(SRC_DIR, self.out_dir, PATTERN[gen_type] % mod_name)
 
 
 def parseargs()->Args:
@@ -85,6 +85,13 @@ def parseargs()->Args:
 def exec(args: Args):
 
     spec_files: List[str] = args.spec_files()
+    if not len(spec_files):
+        return
+
+    out_dir: str = os.path.join(SRC_DIR, args.out_dir)
+    if not os.path.exists(out_dir):
+        os.mkdir(out_dir)
+
     spec_file: str
     for spec_file in spec_files:
         mod_name = (args.mod_name if args.mod_name != '*'
