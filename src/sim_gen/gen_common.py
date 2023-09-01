@@ -38,6 +38,12 @@ class AnyFile(object):
     def gen_newline(self):
         self.fprint("")
 
+    def open_writer(self, out_file:str):
+        self.out_fp = open(out_file, "w")
+
+    def close_writer(self):
+        self.out_fp.close()
+
     pass
 
 class HeaderFile(AnyFile):
@@ -51,6 +57,21 @@ class HeaderFile(AnyFile):
         macro_name: str = "%s_H" % module_name.upper()
         line:str = "#endif // %s" % (macro_name)
         self.fprint(line)
+
+    def gen_class_prefix(self, class_name: str):
+        self.fprint("class %s {" % class_name)
+        self.fprint("public:")
+        self.gen_newline()
+
+    def gen_enum_prefix(self, enum_name: str):
+        self.fprint("enum %s {" % enum_name)
+        self.gen_newline()
+
+    def gen_class_suffix(self):
+        self.fprint("};")
+
+    def gen_enum_suffix(self):
+        self.fprint("};")
 
 def camel_case(word: str)->str:
     def caps_first_letter(word:str)->str:

@@ -23,18 +23,14 @@ class WrapperHdrFile(HeaderFile):
 
 
     def gen_struct(self, module_name: str, spec_json: Dict[str,Dict]):
-        self.fprint("class %s {" % camel_case(module_name))
-        self.fprint("public:")
-        self.gen_newline()
+        class_name: str = camel_case(module_name)
+        self.gen_class_prefix(class_name)
 
         for (func_name, func_spec) in spec_json.items():
-            try:
-                self.gen_func_from_spec(func_name, FuncSpec(func_spec))
-                self.gen_newline()
-            except Exception as ex:
-                print(func_name)
-                raise ex
-        self.fprint("};")
+            self.gen_func_from_spec(func_name, FuncSpec(func_spec))
+            self.gen_newline()
+
+        self.gen_class_suffix()
 
 
     def gen_file_body(self, module_name: str, spec_json: Dict[str,Dict]):

@@ -51,7 +51,6 @@ set(PRJ_HDR_FILES
     ops/all_ops.h
     infra/status_reg.h
     infra/regs_mems.h
-    ops/instrn_enum.h
     infra/exceptions.h
     infra/control_unit.h
     ops/decoder.cpp
