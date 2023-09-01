@@ -44,19 +44,19 @@ public:
 
 inline uchar_t Environ::read_mem_byte(CPUAddr addr) {
     if (addr >= MEMORY_SIZE)
-        throw IllegalAddress(addr, PC);
+        throw IllegalAddress(addr, CU.getCurrPC());
     return mem[addr];
 }
 
 inline void Environ::write_mem_byte(CPUAddr addr, uchar_t value) {
     if (addr >= MEMORY_SIZE)
-        throw IllegalAddress(addr, PC);
+        throw IllegalAddress(addr, CU.getCurrPC());
     mem[addr] = value;
 }
 
 inline uchar_t Environ::read_reg_byte(FiveBit regAddr) {
     if (regAddr >= NUM_REGISTERS)
-        throw IllegalAddress(regAddr, PC);
+        throw IllegalAddress(regAddr, CU.getCurrPC());
     return mem[regAddr];
 }
 
@@ -70,7 +70,7 @@ inline uint16_t Environ::read_mem_pair(CPUAddr memAddr) {
 
 inline void Environ::write_reg_byte(FiveBit regAddr, uchar_t value) {
     if (regAddr >= NUM_REGISTERS)
-        throw IllegalRegister(regAddr, PC);
+        throw IllegalRegister(regAddr, CU.getCurrPC());
     mem[regAddr] = value;
 }
 

@@ -1,7 +1,7 @@
 #include "../gen2/call_ops.h"
 #include "../gen2/branch_ops.h"
 #include "../infra/environment.h"
-#include "../ops/instrn_enum.h"
+#include "../gen2/instrn_enum.h"
 #include "../infra/types.h"
 #include "../gen2/branch_ops_impl.h"
 

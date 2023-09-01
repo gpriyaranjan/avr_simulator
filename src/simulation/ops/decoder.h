@@ -2,7 +2,7 @@
 #define ATMEGASIM_SIM_DECODER_H
 
 #include "../infra/types.h"
-#include "instrn_enum.h"
+#include "../gen2/instrn_enum.h"
 
 class Environ;
 
@@ -12,6 +12,7 @@ public:
         const Environ& env, const TwentyTwoBit& pc,
         InstrnEnum& instrn, uchar_t& instrn_size);
 
+    static InstrnEnum decode(ShortInstrn instrn);
 };
 
 

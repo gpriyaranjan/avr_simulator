@@ -3,7 +3,7 @@
 #include "../gen2/call_ops.h"
 #include "../gen2/branch_ops.h"
 #include "../infra/environment.h"
-#include "instrn_enum.h"
+#include "../gen2/instrn_enum.h"
 #include "../gen2/call_ops_impl.h"
 
 class CallOpsImplP {
@@ -50,29 +50,25 @@ void CallOpsImpl::POP(Environ &env, FiveBit regAddr) {
 }
 
 void CallOpsImpl::RCALL(Environ &env, TwelveBit tgtOffset) {
-    uchar_t instrnSize = isLongInstrn(InstrnEnum::RCALL) ? 2 : 3;
-    uint32_t retAddr = env.PC + instrnSize;
+    uint32_t retAddr = env.CU.getNextPC();
     CallOpsImplP::Push3Bytes(env, retAddr);
     RJMP(env, tgtOffset);
 }
 
 void CallOpsImpl::CALL(Environ &env, TwentyTwoBit tgtAddr) {
-    uchar_t instrnSize = isLongInstrn(InstrnEnum::CALL) ? 2 : 3;
-    uint32_t retAddr = env.PC + instrnSize;
+    uint32_t retAddr = env.CU.getNextPC();
     CallOpsImplP::Push3Bytes(env, retAddr);
     JMP(env, tgtAddr);
 }
 
 void CallOpsImpl::ICALL(Environ &env) {
-    uchar_t instrnSize = isLongInstrn(InstrnEnum::ICALL) ? 2 : 3;
-    uint32_t retAddr = env.PC + instrnSize;
+    uint32_t retAddr = env.CU.getNextPC();
     CallOpsImplP::Push3Bytes(env, retAddr);
     IJMP(env);
 }
 
 void CallOpsImpl::EICALL(Environ &env) {
-    uchar_t instrnSize = isLongInstrn(InstrnEnum::EICALL) ? 2 : 3;
-    uint32_t retAddr = env.PC + instrnSize;
+    uint32_t retAddr = env.CU.getNextPC();
     CallOpsImplP::Push3Bytes(env, retAddr);
     EIJMP(env);
 }
@@ -80,13 +76,13 @@ void CallOpsImpl::EICALL(Environ &env) {
 void CallOpsImpl::RET(Environ &env) {
     TwentyTwoBit pcValue;
     CallOpsImplP::Pop3Bytes(env, pcValue);
-    env.PC = pcValue;
+    env.CU.setJump(pcValue);
 }
 
 void CallOpsImpl::RETI(Environ &env) {
     TwentyTwoBit pcValue;
     CallOpsImplP::Pop3Bytes(env, pcValue);
-    env.PC = pcValue;
+    env.CU.setJump(pcValue);
 }
 
 void CallOpsImplP::Push1Byte(Environ& env, uchar_t value) {

@@ -3,7 +3,7 @@
 
 #include "types.h"
 #include "../ops/decoder.h"
-#include "../ops/instrn_enum.h"
+#include "../gen2/instrn_enum.h"
 
 class Environ;
 
@@ -33,10 +33,13 @@ public:
         pcStatus.S = false;
     }
 
-    TwentyTwoBit getPC() {
+    TwentyTwoBit getCurrPC() {
         return PC & 0x3FFF;
     }
 
+    TwentyTwoBit getNextPC() {
+        return PC & 0x3FFF + pcStatus.L;
+    }
     void setSkipNext(bool status=true) {
         pcStatus.S = status;
     }

@@ -29,7 +29,7 @@ void XferOpsImpl::LD(
         case 0x00: srcAddr = M::Z; break;
         case 0x01: srcAddr = M::Y; break;
         case 0x02: srcAddr = M::X; break;
-        default: throw InvalidEnum(0x00, env.CU.getPC());
+        default: throw InvalidEnum(0x00, env.CU.getCurrPC());
     }
     bool postIncr = (mode == 0x01);
     bool preDecr  = (mode == 0x02);
@@ -70,7 +70,7 @@ void XferOpsImpl::ST(Environ &env, FiveBit srcAddr, TwoBit flag, TwoBit mode) {
         case 0x00: tgtRegAddr = M::Z; break;
         case 0x01: tgtRegAddr = M::Y; break;
         case 0x02: tgtRegAddr = M::X; break;
-        default: throw InvalidEnum(0x00, env.PC);
+        default: throw InvalidEnum(0x00, env.CU.getCurrPC());
     }
     bool postIncr = (mode == 0x01);
     bool preDecr  = (mode == 0x02);
