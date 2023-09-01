@@ -11,6 +11,7 @@ def read_json_file(module_file:str):
     obj = json.loads(data)
     return obj
 
+
 class FuncSpec(object):
     T: str
     P: str
@@ -46,7 +47,17 @@ class AnyFile(object):
 
     pass
 
-class HeaderFile(AnyFile):
+
+class CLangFile(AnyFile):
+
+    def write_include_files(self, includes: List[str]):
+        include: str
+        for include in includes:
+            self.fprint('#include "%s"' % include)
+        self.blankline()
+
+
+class HeaderFile(CLangFile):
 
     def write_file_header(self, module_name: str):
         macro_name: str = "%s_H" % module_name.upper()
@@ -77,13 +88,8 @@ class HeaderFile(AnyFile):
         args_str: str = ", ".join(["%s %s" % (type_, name) for (type_, name) in args])
         self.fprint("%s %s(%s);" % (ret_type, func_name, args_str))
 
-class CppFile(AnyFile):
 
-    def write_include_files(self, includes: List[str]):
-        include: str
-        for include in includes:
-            self.fprint('#include "%s"' % include)
-        self.blankline()
+class CppFile(CLangFile):
 
     def write_func_header(self,
             ret_type: str, class_name: str, func_name: str, args: List[Tuple[str,str]]):
@@ -94,22 +100,29 @@ class CppFile(AnyFile):
         self.fprint(func_header)
 
     def write_switch_func(self, switch_expr: str, cases: List[Tuple[str, str]],
-                          brk_flag: bool, def_val: Optional[str]):
+                          ret_flag: bool, def_ret_flag: bool, def_val: Optional[str]):
 
         self.fprint("\tswitch(%s) {" % switch_expr)
         for check_val, ret_val in cases:
-            self.fprint("\t\tcase %s: return %s;" % (check_val, ret_val))
-        if brk_flag:
+            if ret_flag:
+                self.fprint("\t\tcase %s: return %s;" % (check_val, ret_val))
+            else:
+                self.fprint("\t\tcase %s: %s; break;" % (check_val, ret_val))
+
+        if def_ret_flag:
             self.fprint("\t\tdefault: break;")
         else:
             self.fprint("\t\tdefault: return %s;" % def_val)
+
         self.fprint("\t};")
+
 
 def camel_case(word: str)->str:
     def caps_first_letter(word:str)->str:
         return word[0].upper() + word[1:]
     words: List[str] = word.split("_")
     return "".join(map(caps_first_letter, words))
+
 
 class WrapperCommon:
 

@@ -2,8 +2,7 @@
 #define ATMEGASIM_SIM_CONTROL_UNIT_H
 
 #include "types.h"
-#include "../ops/decoder.h"
-#include "../gen2/instrn_enum.h"
+#include "../gen2/instrns.h"
 
 class Environ;
 inline void decode(

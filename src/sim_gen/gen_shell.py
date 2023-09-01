@@ -62,7 +62,7 @@ class Args(object):
         return os.path.join(SRC_DIR, self.out_dir, PATTERN[gen_type] % mod_name)
 
     def out_map_file(self, gen_type: str)->str:
-        PATTERN = {'I': "instrn_enum.h", "D": "instrns.cpp"}
+        PATTERN = {'I': "instrns.h", "D": "instrns.cpp"}
         return os.path.join(SRC_DIR, self.out_dir, PATTERN[gen_type])
 
 def parseargs()->Args:

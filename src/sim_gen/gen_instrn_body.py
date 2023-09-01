@@ -1,8 +1,8 @@
+import os.path
 from pprint import pformat
 from typing import List, Dict, Tuple
 
-from gen_common import CppFile, read_json_file
-
+from gen_common import CppFile, read_json_file, camel_case
 
 INSTRN_SIZE = 16
 
@@ -12,6 +12,7 @@ def extract_prefix(pattern:str)->str:
         if ch not in ['0','1']: break
         prefix = prefix + ch
     return prefix
+
 
 class Pattern(object):
 
@@ -80,20 +81,26 @@ class PrefixTable(object):
     def __repr__(self):
         return pformat(self.by_len)
 
+
 class InstrnDecodeFile(CppFile):
 
     patterns_by_instrn : Dict[str, Pattern]
+    modules_by_instrn: Dict[str, str]
     prefix_table: PrefixTable
 
     def read_all_specs(self, spec_files: List[str]):
         # spec_files: List[str] = glob("specs/*.json")
 
         self.patterns_by_instrn = {}
+        self.modules_by_instrn = {}
+
         spec_file: str
         for spec_file in spec_files:
             spec_json = read_json_file(spec_file)
+            mod_name:str = os.path.splitext(os.path.basename(spec_file))[0]
             for func_name, func_spec in spec_json.items():
                 self.patterns_by_instrn[func_name] = Pattern(func_spec["P"])
+                self.modules_by_instrn[func_name] = mod_name
 
 
     def calc_prefix_table(self):
@@ -112,22 +119,25 @@ class InstrnDecodeFile(CppFile):
             switch_expr: str = "instrn & %s" % prefixes.mask
 
             self.write_switch_func(
-                switch_expr=switch_expr, cases=list(prefixes.instrns.items()),
-                brk_flag = True, def_val = None)
+                switch_expr, list(prefixes.instrns.items()),
+                True, True, def_val = None)
             self.blankline()
 
         def_val: str = "NOP"
         self.fprint("\treturn %s;" % def_val)
 
+
     def gen_func(self, spec_files: List[str]):
         self.read_all_specs(spec_files)
         self.calc_prefix_table()
+
 
     def write_decode_func(self):
         self.write_func_header("InstrnEnum", "", "decode", [("ShortInstrn", "instrn"), ])
         self.write_switches()
         self.fprint("}")
         self.blankline()
+
 
     def write_sizes_func(self):
         def size(pattern: Pattern):
@@ -136,16 +146,29 @@ class InstrnDecodeFile(CppFile):
         cases: List[Tuple[str, str]] = [
             (instrn, size(pattern)) for (instrn, pattern) in self.patterns_by_instrn.items()]
 
-        self.write_func_header("uchar_t", "", "instrn_size2", [("InstrnEnum", "instrn_enum"), ])
-        self.write_switch_func("instrn_enum", cases, False, 0)
+        self.write_func_header("uchar_t", "", "instrn_size", [("InstrnEnum", "instrn_enum"), ])
+        self.write_switch_func("instrn_enum", cases, True, False, 0)
         self.fprint("}")
         self.blankline()
+
+
+    def write_exec_func(self):
+        # To do - Need to split between short instrns and long instrns
+        self.write_func_header("void", "", "exec_instrn", [("LongInstrn", "instrn")])
+        cases: List[Tuple[str,str]] = [
+                (instr_name, "%s::%s(instrn)" %(camel_case(mod_name), instr_name))
+                for (instr_name, mod_name) in self.modules_by_instrn.items()]
+
+        self.write_switch_func("instrn", cases, False, True, "")
+        self.fprint("};")
+
 
     def gen_file(self, spec_files: List[str], out_file: str):
         self.gen_func(spec_files)
 
         self.open_writer(out_file)
-        self.write_include_files(["instrn_enum.h", "../infra/types.h"])
+        self.write_include_files(["instrns.h", "../infra/types.h"])
         self.write_decode_func()
         self.write_sizes_func()
+        # self.write_exec_func()
         self.close_writer()
