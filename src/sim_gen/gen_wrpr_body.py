@@ -1,8 +1,8 @@
 import logging
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from gen_common import (
-    AnyFile,
+    CppFile,
     read_json_file,
     camel_case,
     FuncSpec,
@@ -11,7 +11,7 @@ from gen_common import (
 from pattern_utils import BitsInfo, Pattern, BitInfo, BitRangesExpr
 
 
-class WrapperBodyFile(AnyFile):
+class WrapperBodyFile(CppFile):
 
     def gen_includes(self, module_name: str):
         self.fprint('#include "%s.h"' % module_name)
@@ -39,9 +39,11 @@ class WrapperBodyFile(AnyFile):
         self.fprint("\t%s::%s(%s);" % (impl_class_name, func_name, args_str))
 
     def gen_func(self, wrapper_name: str, func_name: str, func_spec: FuncSpec):
-        instrn_defn: str = (
+        instrn_type: str = (
             "LongInstrn" if func_spec.is_long_instrn() else "ShortInstrn")
-        self.fprint("void %s::%s(Environ& env, %s instrn) {" % (wrapper_name, func_name, instrn_defn))
+
+        args: List[Tuple[str,str]] = [("Environ&", "env"), (instrn_type, "instrn")]
+        self.gen_func_header("void", wrapper_name, func_name, args)
         self.prepare_impl_args(func_spec)
         self.make_impl_call(wrapper_name, func_name, func_spec)
         self.fprint("}")

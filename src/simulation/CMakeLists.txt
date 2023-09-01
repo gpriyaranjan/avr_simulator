@@ -13,6 +13,7 @@ set(GEN_CPP_FILES
     ${GEN_DIR}/call_ops.cpp
     ${GEN_DIR}/xfer_ops.cpp
     ${GEN_DIR}/io_ops.cpp
+    ${GEN_DIR}/decoder.cpp
 )
 
 set(PRJ_CPP_FILES
@@ -53,7 +54,6 @@ set(PRJ_HDR_FILES
     infra/regs_mems.h
     infra/exceptions.h
     infra/control_unit.h
-    ops/decoder.cpp
 )
 
 set(SOURCE_FILES

@@ -3,7 +3,7 @@ from typing import List, Dict
 from gen_common import HeaderFile, read_json_file, camel_case
 
 
-class InstrEnumFile(HeaderFile):
+class InstrnEnumsFile(HeaderFile):
 
     def write_enums_for_spec(self, mod_spec: Dict[str, Dict[str, str]]):
         func_name: str

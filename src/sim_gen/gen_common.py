@@ -1,5 +1,5 @@
 import json
-from typing import List, Dict, IO
+from typing import List, Dict, IO, Tuple, Optional
 
 from pattern_utils import Pattern
 
@@ -72,6 +72,33 @@ class HeaderFile(AnyFile):
 
     def gen_enum_suffix(self):
         self.fprint("};")
+
+class CppFile(AnyFile):
+
+    def gen_include_files(self, includes: List[str]):
+        include: str
+        for include in includes:
+            self.fprint('#include "%s"' % include)
+        self.gen_newline()
+
+    def gen_func_header(self,
+        ret_type: str, class_name: str, func_name: str, args: List[Tuple[str,str]]):
+
+        args_str: str = ", ".join(["%s %s" % (type_, name) for (type_, name) in args])
+        func_header: str = "%s %s::%s(%s) {" % (ret_type, class_name, func_name, args_str)
+        self.fprint(func_header)
+
+    def gen_switch_function(self, switch_expr: str, cases: List[Tuple[str, str]],
+                            brk_flag: bool, def_val: Optional[str]):
+
+        self.fprint("\tswitch(%s) {" % switch_expr)
+        for check_val, ret_val in cases:
+            self.fprint("\t\tcase %s: return %s;" % (check_val, ret_val))
+        if brk_flag:
+            self.fprint("\t\tdefault: break;")
+        else:
+            self.fprint("\t\tdefault: return %s;" % def_val)
+        self.fprint("\t};")
 
 def camel_case(word: str)->str:
     def caps_first_letter(word:str)->str:
