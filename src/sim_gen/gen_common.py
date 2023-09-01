@@ -1,7 +1,7 @@
 import json
 from typing import List, Dict, IO, Tuple, Optional
 
-from pattern_utils import Pattern
+from pattern import Pattern
 
 
 def read_json_file(module_file:str):
@@ -25,7 +25,7 @@ class FuncSpec(object):
 
     def instrn_size(self)->int:
         pattern: str = self.P
-        compact: str = Pattern.remove_spaces(pattern)
+        compact: str = Pattern(pattern).pattern
         return len(compact)
 
 

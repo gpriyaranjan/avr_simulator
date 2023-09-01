@@ -14,6 +14,7 @@ set(GEN_CPP_FILES
     ${GEN_DIR}/xfer_ops.cpp
     ${GEN_DIR}/io_ops.cpp
     ${GEN_DIR}/instrns.cpp
+    ${GEN_DIR}/all_ops.cpp
 )
 
 set(PRJ_CPP_FILES
@@ -27,6 +28,7 @@ set(PRJ_CPP_FILES
 )
 
 set(GEN_HDR_FILES
+    ${GEN_DIR}/instrns.h
     ${GEN_DIR}/alu_ops.h
     ${GEN_DIR}/branch_ops.h
     ${GEN_DIR}/call_ops.h
@@ -34,6 +36,7 @@ set(GEN_HDR_FILES
     ${GEN_DIR}/logic_ops.h
     ${GEN_DIR}/sreg_ops.h
     ${GEN_DIR}/xfer_ops.h
+    ${GEN_DIR}/all_ops.cpp
 )
 
 set(GEN_HDR_IMPL_FILES
@@ -44,7 +47,7 @@ set(GEN_HDR_IMPL_FILES
     ${GEN_DIR}/logic_ops_impl.h
     ${GEN_DIR}/sreg_ops_impl.h
     ${GEN_DIR}/xfer_ops_impl.h
-    ${GEN_DIR}/instrn_enum.h
+
 )
 
 set(PRJ_HDR_FILES

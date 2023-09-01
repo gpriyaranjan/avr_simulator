@@ -8,7 +8,8 @@ from gen_common import (
     FuncSpec,
     WrapperCommon
 )
-from pattern_utils import Pattern, BitsInfo
+from pattern import Pattern
+from src.sim_gen.pattern import ArgBitsInfo
 
 
 class ImplHdrFile(HeaderFile, WrapperCommon):
@@ -21,7 +22,7 @@ class ImplHdrFile(HeaderFile, WrapperCommon):
 
     def gen_func_args(self, func_spec: FuncSpec)->List[Tuple[str,str]]:
 
-        bit_counts: BitsInfo = Pattern.get_bit_counts(func_spec.P)
+        bit_counts: ArgBitsInfo = Pattern(func_spec.P).get_bit_counts()
         res: List[Tuple[str,str]] = []
         for ch, bit_info in bit_counts.get_items():
             bc: int = bit_info.count

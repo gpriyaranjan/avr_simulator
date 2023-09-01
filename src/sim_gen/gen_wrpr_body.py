@@ -8,7 +8,8 @@ from gen_common import (
     FuncSpec,
     WrapperCommon
 )
-from pattern_utils import BitsInfo, Pattern, BitInfo, BitRangesExpr
+from pattern import Pattern
+from src.sim_gen.pattern import ArgBitInfo, ArgBitsInfo, ArgBitRangesExpr
 
 
 class WrapperBodyFile(CppFile):
@@ -21,16 +22,16 @@ class WrapperBodyFile(CppFile):
         self.fprint('class Environ;')
 
     def prepare_impl_args(self, func_spec:FuncSpec):
-        bitsInfo : BitsInfo = Pattern.get_bit_counts(func_spec.P)
+        bitsInfo : ArgBitsInfo = Pattern(func_spec.P).get_bit_counts()
         for ch, bitInfo in bitsInfo.__dict__.items():
             arg_type, arg_name = WrapperCommon.gen(ch, bitInfo.count)
-            arg_init_expr = BitRangesExpr.gen(
+            arg_init_expr = ArgBitRangesExpr.gen(
                 "instrn", func_spec.instrn_size(), bitInfo.pos)
             self.fprint("\t%s %s = %s;" % (arg_type, arg_name, arg_init_expr))
 
     def make_impl_call(self, wrapper_name: str, func_name: str, func_spec: FuncSpec):
         impl_class_name: str = "%sImpl" % wrapper_name
-        bitsInfo : BitsInfo = Pattern.get_bit_counts(func_spec.P)
+        bitsInfo : ArgBitsInfo = Pattern(func_spec.P).get_bit_counts()
         arg_names: List[str] = []
         for ch, bitInfo in bitsInfo.get_items():
             _, arg_name = WrapperCommon.gen(ch, bitInfo.count)
