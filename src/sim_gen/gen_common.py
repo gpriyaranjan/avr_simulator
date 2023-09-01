@@ -35,7 +35,7 @@ class AnyFile(object):
     def fprint(self, str_):
         print(str_, file=self.out_fp)
 
-    def gen_newline(self):
+    def blankline(self):
         self.fprint("")
 
     def open_writer(self, out_file:str):
@@ -48,48 +48,53 @@ class AnyFile(object):
 
 class HeaderFile(AnyFile):
 
-    def gen_file_header(self, module_name: str):
+    def write_file_header(self, module_name: str):
         macro_name: str = "%s_H" % module_name.upper()
         self.fprint("#ifndef %s" % macro_name)
         self.fprint("#define %s" % macro_name)
 
-    def gen_file_trailer(self, module_name: str):
+    def write_file_trailer(self, module_name: str):
         macro_name: str = "%s_H" % module_name.upper()
         line:str = "#endif // %s" % (macro_name)
         self.fprint(line)
 
-    def gen_class_prefix(self, class_name: str):
+    def write_class_prefix(self, class_name: str):
         self.fprint("class %s {" % class_name)
         self.fprint("public:")
-        self.gen_newline()
+        self.blankline()
 
-    def gen_enum_prefix(self, enum_name: str):
+    def write_enum_prefix(self, enum_name: str):
         self.fprint("enum %s {" % enum_name)
-        self.gen_newline()
+        self.blankline()
 
-    def gen_class_suffix(self):
+    def write_class_suffix(self):
         self.fprint("};")
 
-    def gen_enum_suffix(self):
+    def write_enum_suffix(self):
         self.fprint("};")
+
+    def write_func_header(self, ret_type: str, func_name: str, args: List[Tuple[str,str]]):
+        args_str: str = ", ".join(["%s %s" % (type_, name) for (type_, name) in args])
+        self.fprint("%s %s(%s);" % (ret_type, func_name, args_str))
 
 class CppFile(AnyFile):
 
-    def gen_include_files(self, includes: List[str]):
+    def write_include_files(self, includes: List[str]):
         include: str
         for include in includes:
             self.fprint('#include "%s"' % include)
-        self.gen_newline()
+        self.blankline()
 
-    def gen_func_header(self,
-        ret_type: str, class_name: str, func_name: str, args: List[Tuple[str,str]]):
+    def write_func_header(self,
+            ret_type: str, class_name: str, func_name: str, args: List[Tuple[str,str]]):
 
         args_str: str = ", ".join(["%s %s" % (type_, name) for (type_, name) in args])
-        func_header: str = "%s %s::%s(%s) {" % (ret_type, class_name, func_name, args_str)
+        func_desc = "%s::%s"%(class_name, func_name) if len(class_name) else func_name
+        func_header: str = "%s %s(%s) {" % (ret_type, func_desc, args_str)
         self.fprint(func_header)
 
-    def gen_switch_function(self, switch_expr: str, cases: List[Tuple[str, str]],
-                            brk_flag: bool, def_val: Optional[str]):
+    def write_switch_func(self, switch_expr: str, cases: List[Tuple[str, str]],
+                          brk_flag: bool, def_val: Optional[str]):
 
         self.fprint("\tswitch(%s) {" % switch_expr)
         for check_val, ret_val in cases:

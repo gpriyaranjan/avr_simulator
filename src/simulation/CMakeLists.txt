@@ -13,7 +13,7 @@ set(GEN_CPP_FILES
     ${GEN_DIR}/call_ops.cpp
     ${GEN_DIR}/xfer_ops.cpp
     ${GEN_DIR}/io_ops.cpp
-    ${GEN_DIR}/decoder.cpp
+    ${GEN_DIR}/instrns.cpp
 )
 
 set(PRJ_CPP_FILES
@@ -44,6 +44,7 @@ set(GEN_HDR_IMPL_FILES
     ${GEN_DIR}/logic_ops_impl.h
     ${GEN_DIR}/sreg_ops_impl.h
     ${GEN_DIR}/xfer_ops_impl.h
+    ${GEN_DIR}/instrn_enum.h
 )
 
 set(PRJ_HDR_FILES

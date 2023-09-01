@@ -43,7 +43,7 @@ class WrapperBodyFile(CppFile):
             "LongInstrn" if func_spec.is_long_instrn() else "ShortInstrn")
 
         args: List[Tuple[str,str]] = [("Environ&", "env"), (instrn_type, "instrn")]
-        self.gen_func_header("void", wrapper_name, func_name, args)
+        self.write_func_header("void", wrapper_name, func_name, args)
         self.prepare_impl_args(func_spec)
         self.make_impl_call(wrapper_name, func_name, func_spec)
         self.fprint("}")
@@ -52,13 +52,13 @@ class WrapperBodyFile(CppFile):
         wrapper_name = camel_case(module_name)
         for (func_name, func_spec) in spec_json.items():
             self.gen_func(wrapper_name, func_name, FuncSpec(func_spec))
-            self.gen_newline()
+            self.blankline()
 
     def gen_file_body(self, module_name: str, spec_json: Dict[str,Dict]):
         self.gen_includes(module_name)
-        self.gen_newline()
+        self.blankline()
         self.gen_forward_classes()
-        self.gen_newline()
+        self.blankline()
         self.gen_funcs(module_name, spec_json)
 
     def gen_file(self, module_name: str, module_file: str, hdr_file: str):

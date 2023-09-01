@@ -9,8 +9,8 @@ from typing import List
 from gen_wrpr_hdr import WrapperHdrFile
 from gen_wrpr_body import WrapperBodyFile
 from gen_impl_hdr import ImplHdrFile
-from gen_instrn_enum import InstrnEnumsFile
-from gen_decode_body import InstrnDecodeFile
+from gen_instrn_hdr import InstrnEnumsFile
+from gen_instrn_body import InstrnDecodeFile
 
 SRC_DIR = Path(__file__).resolve().parent
 
@@ -62,7 +62,7 @@ class Args(object):
         return os.path.join(SRC_DIR, self.out_dir, PATTERN[gen_type] % mod_name)
 
     def out_map_file(self, gen_type: str)->str:
-        PATTERN = {'I': "instrn_enum.h", "D": "decoder.cpp"}
+        PATTERN = {'I': "instrn_enum.h", "D": "instrns.cpp"}
         return os.path.join(SRC_DIR, self.out_dir, PATTERN[gen_type])
 
 def parseargs()->Args:

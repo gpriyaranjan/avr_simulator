@@ -1,5 +1,5 @@
 from pprint import pformat
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
 from gen_common import CppFile, read_json_file
 
@@ -103,7 +103,7 @@ class InstrnDecodeFile(CppFile):
         for instrn, pattern in self.patterns_by_instrn.items():
             self.prefix_table.add_prefix(instrn, pattern)
 
-    def gen_switches(self):
+    def write_switches(self):
 
         pat_by_len_tuples = sorted(
             self.prefix_table.by_len.items(), key=lambda x:x[0])
@@ -111,23 +111,41 @@ class InstrnDecodeFile(CppFile):
         for len, prefixes in pat_by_len_tuples:
             switch_expr: str = "instrn & %s" % prefixes.mask
 
-            self.gen_switch_function(
+            self.write_switch_func(
                 switch_expr=switch_expr, cases=list(prefixes.instrns.items()),
                 brk_flag = True, def_val = None)
-            self.gen_newline()
+            self.blankline()
 
         def_val: str = "NOP"
         self.fprint("\treturn %s;" % def_val)
 
     def gen_func(self, spec_files: List[str]):
-        self.gen_include_files(["instrn_enum.h", "../ops/decoder.h"])
-        self.gen_func_header("InstrnEnum", "Decoder", "decode", [("ShortInstrn", "instrn"),])
         self.read_all_specs(spec_files)
         self.calc_prefix_table()
-        self.gen_switches()
+
+    def write_decode_func(self):
+        self.write_func_header("InstrnEnum", "", "decode", [("ShortInstrn", "instrn"), ])
+        self.write_switches()
         self.fprint("}")
+        self.blankline()
+
+    def write_sizes_func(self):
+        def size(pattern: Pattern):
+            return str(2) if len(pattern.pattern) <= 16 else str(3)
+
+        cases: List[Tuple[str, str]] = [
+            (instrn, size(pattern)) for (instrn, pattern) in self.patterns_by_instrn.items()]
+
+        self.write_func_header("uchar_t", "", "instrn_size2", [("InstrnEnum", "instrn_enum"), ])
+        self.write_switch_func("instrn_enum", cases, False, 0)
+        self.fprint("}")
+        self.blankline()
 
     def gen_file(self, spec_files: List[str], out_file: str):
-        self.open_writer(out_file)
         self.gen_func(spec_files)
+
+        self.open_writer(out_file)
+        self.write_include_files(["instrn_enum.h", "../infra/types.h"])
+        self.write_decode_func()
+        self.write_sizes_func()
         self.close_writer()

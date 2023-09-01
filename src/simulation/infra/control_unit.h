@@ -6,6 +6,8 @@
 #include "../gen2/instrn_enum.h"
 
 class Environ;
+inline void decode(
+    const Environ &env, const TwentyTwoBit &pc, InstrnEnum &instrn, uchar_t &instrn_size);
 
 struct PCStatus {
     uchar_t L: 1; // Current instuction length
@@ -33,7 +35,7 @@ public:
         pcStatus.S = false;
     }
 
-    TwentyTwoBit getCurrPC() {
+    [[nodiscard]] TwentyTwoBit getCurrPC() const {
         return PC & 0x3FFF;
     }
 
@@ -58,7 +60,7 @@ public:
         uchar_t instrn_size;
 
         if (pcStatus.J) {
-            Decoder::decode(env, PC, currInstrn, instrn_size);
+            decode(env, PC, currInstrn, instrn_size);
             pcStatus.L = instrn_size;
             return currInstrn;
         }
@@ -66,15 +68,16 @@ public:
         PC = PC + pcStatus.L;
 
         if (pcStatus.S) {
-            Decoder::decode(env, PC, currInstrn, instrn_size);
+            decode(env, PC, currInstrn, instrn_size);
             PC += instrn_size;
         }
 
-        Decoder::decode(env, PC, currInstrn, instrn_size);
+        decode(env, PC, currInstrn, instrn_size);
         pcStatus.L = instrn_size;
         resetFlags();
         return currInstrn;
     }
+
 };
 
 #endif //ATMEGASIM_SIM_CONTROL_UNIT_H

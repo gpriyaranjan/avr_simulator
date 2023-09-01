@@ -24,25 +24,25 @@ class WrapperHdrFile(HeaderFile):
 
     def gen_struct(self, module_name: str, spec_json: Dict[str,Dict]):
         class_name: str = camel_case(module_name)
-        self.gen_class_prefix(class_name)
+        self.write_class_prefix(class_name)
 
         for (func_name, func_spec) in spec_json.items():
             self.gen_func_from_spec(func_name, FuncSpec(func_spec))
-            self.gen_newline()
+            self.blankline()
 
-        self.gen_class_suffix()
+        self.write_class_suffix()
 
 
     def gen_file_body(self, module_name: str, spec_json: Dict[str,Dict]):
-        self.gen_file_header(module_name)
-        self.gen_newline()
+        self.write_file_header(module_name)
+        self.blankline()
         self.gen_includes()
-        self.gen_newline()
+        self.blankline()
         self.gen_forward_classes()
-        self.gen_newline()
+        self.blankline()
         self.gen_struct(module_name, spec_json)
-        self.gen_newline()
-        self.gen_file_trailer(module_name)
+        self.blankline()
+        self.write_file_trailer(module_name)
 
 
     def gen_file(self, module_name: str, module_file: str, out_file: str):
