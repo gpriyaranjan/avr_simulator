@@ -22,11 +22,11 @@ class ImplHdrFile(HeaderFile, WrapperCommon):
 
     def gen_func_args(self, func_spec: FuncSpec)->List[Tuple[str,str]]:
 
-        bit_counts: ArgBitsInfo = Pattern(func_spec.P).get_bit_counts()
+        bit_counts: ArgBitsInfo = Pattern(func_spec.P).get_arg_bits_info()
         res: List[Tuple[str,str]] = []
         for ch, bit_info in bit_counts.get_items():
             bc: int = bit_info.count
-            arg_type, arg_name = WrapperCommon.gen(ch, bc)
+            arg_type, arg_name = WrapperCommon.gen_func_arg(ch, bc)
             res.append((arg_type, arg_name),)
         return res
 

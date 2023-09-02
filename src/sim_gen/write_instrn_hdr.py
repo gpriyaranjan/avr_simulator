@@ -1,15 +1,19 @@
 import os.path
 from typing import List, Dict
 
-from gen_common import HeaderFile, read_json_file, camel_case
+from gen_common import HeaderFile, read_json_file, camel_case, FuncSpec
 
 
 class InstrnEnumsFile(HeaderFile):
 
     def write_enums_for_spec(self, mod_spec: Dict[str, Dict[str, str]]):
         func_name: str
-        for func_name in mod_spec.keys():
-            self.fprint("\t%s," % func_name)
+        func_json: Dict[str, str]
+
+        for func_name, func_json in mod_spec.items():
+            func_spec: FuncSpec = FuncSpec(func_json)
+            value: str = hex(int(func_spec.pattern.instrn_mask, 2))
+            self.fprint("\t%s = %s," % (func_name, value))
 
     def write_enums_for_spec_file(self, spec_file: str):
         json_spec: Dict[str, Dict[str, str]] = read_json_file(spec_file)

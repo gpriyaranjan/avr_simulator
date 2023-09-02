@@ -22,29 +22,31 @@ class WrapperBodyFile(CppFile):
         self.fprint('class Environ;')
 
     def prepare_impl_args(self, func_spec:FuncSpec):
-        bitsInfo : ArgBitsInfo = Pattern(func_spec.P).get_bit_counts()
+
+        bitsInfo : ArgBitsInfo = func_spec.pattern.get_arg_bits_info()
+
         for ch, bitInfo in bitsInfo.__dict__.items():
-            arg_type, arg_name = WrapperCommon.gen(ch, bitInfo.count)
-            arg_init_expr = ArgBitRangesExpr.gen(
-                "instrn", func_spec.instrn_size(), bitInfo.pos)
+            arg_type, arg_name = WrapperCommon.gen_func_arg(ch, bitInfo.count)
+            arg_init_expr = ArgBitRangesExpr.gen_extraction(
+                "instrn", func_spec.pattern.instrn_size(), bitInfo.pos)
             self.fprint("\t%s %s = %s;" % (arg_type, arg_name, arg_init_expr))
 
     def make_impl_call(self, wrapper_name: str, func_name: str, func_spec: FuncSpec):
         impl_class_name: str = "%sImpl" % wrapper_name
-        bitsInfo : ArgBitsInfo = Pattern(func_spec.P).get_bit_counts()
+        bitsInfo : ArgBitsInfo = Pattern(func_spec.P).get_arg_bits_info()
         arg_names: List[str] = []
         for ch, bitInfo in bitsInfo.get_items():
-            _, arg_name = WrapperCommon.gen(ch, bitInfo.count)
+            _, arg_name = WrapperCommon.gen_func_arg(ch, bitInfo.count)
             arg_names.append(arg_name)
         args_str: str = ", ".join(["env"] + arg_names)
         self.fprint("\t%s::%s(%s);" % (impl_class_name, func_name, args_str))
 
     def gen_func(self, wrapper_name: str, func_name: str, func_spec: FuncSpec):
         instrn_type: str = (
-            "LongInstrn" if func_spec.is_long_instrn() else "ShortInstrn")
+            "LongInstrn" if func_spec.pattern.is_long_instrn() else "ShortInstrn")
 
         args: List[Tuple[str,str]] = [("Environ&", "env"), (instrn_type, "instrn")]
-        self.write_func_header("void", wrapper_name, func_name, args)
+        self.write_func_body_hdr("void", wrapper_name, func_name, args)
         self.prepare_impl_args(func_spec)
         self.make_impl_call(wrapper_name, func_name, func_spec)
         self.fprint("}")

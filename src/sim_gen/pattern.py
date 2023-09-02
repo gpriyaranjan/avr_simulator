@@ -33,6 +33,9 @@ class ArgBitInfo(object):
         x,y = self.pos[-1]
         self.pos[-1] = (x,y+1)
 
+    def __repr__(self):
+        pos_str: str = ",".join(["%d..%d" %(pos[0],pos[1]) for pos in self.pos])
+        return "%s%d(%s)" % (self.char, self.count, pos_str)
 
 class ArgBitsInfo(object):
     d:ArgBitInfo
@@ -61,11 +64,14 @@ class ArgBitsInfo(object):
     def get(self, ch):
         return self.__dict__.get(ch, ArgBitInfo(ch))
 
-    def get_items(self)->Tuple[str,ArgBitInfo]:
+    def get_items(self)->List[Tuple[str,ArgBitInfo]]:
         return [
             (x, self.__dict__[x]) for x in self.CHARS
             if x in self.__dict__.keys()]
 
+    def __repr__(self):
+        return ", ".join(["%s" % repr(arg_bit_info)
+                for arg_bit_info in self.__dict__.values()])
 
 class ArgBitRangeExpr(object):
 
@@ -96,11 +102,18 @@ class ArgBitRangeExpr(object):
         expr = "( %s & %s )" % (expr, wstr) if self.width > 0 else expr
         return expr
 
+    def gen_insertion_expr(self, var: str)->str:
+        shift: int = self.curr - self.start - self.width
+        wstr: str = self.get_mask()
+        expr:str = var
+        expr = "( %s & %s )" % (expr, wstr) if self.width > 0 else expr
+        expr = "( %s << %d )" % (expr, shift) if shift > 0 else expr
+        return expr
 
 class ArgBitRangesExpr(object):
 
     @classmethod
-    def gen(cls, var: str, size: int, ranges: List[Tuple[int,int]]):
+    def gen_extraction(cls, var: str, size: int, ranges: List[Tuple[int,int]]):
         ret : str = ""
         exprs: List[str] = []
         curr: int = size
@@ -111,23 +124,45 @@ class ArgBitRangesExpr(object):
             curr -= width
         return "( %s )" % " | ".join(exprs)
 
+    @classmethod
+    def gen_insertion(cls, var: str, size: int, ranges: List[Tuple[int,int]]):
+        ret : str = ""
+        exprs: List[str] = []
+        curr: int = size
+        for start, end in ranges[::-1]:
+            width: int = end - start + 1
+            expr: str = ArgBitRangeExpr(curr, size, start, width).gen_insertion_expr(var)
+            exprs.append(expr)
+            curr -= width
+        return "( %s )" % " | ".join(exprs)
+
 
 class Pattern(object):
 
     readable: str
-    pattern: str
+    compact: str
 
     prefix: str
     pfx_hex: str
     pfx_msk: str
     pfx_len: int
 
+    instrn_mask: str
+
+    arg_bits_info: ArgBitsInfo
+
     def __init__(self, pattern:str):
         self.readable = pattern
-        self.pattern = self.readable.replace("-", "")
+        self.compact = self.readable.replace("-", "")
 
-        self.prefix = extract_prefix(self.pattern)
+        self.prefix = extract_prefix(self.compact)
         self.set_prefix_flags()
+        self.set_instrn_mask()
+        self.set_arg_bits_info()
+
+    def set_instrn_mask(self):
+        xlate_map = {ord(ch) : "0" for ch in ArgBitsInfo.CHARS}
+        self.instrn_mask = self.compact.translate(xlate_map)
 
     def set_prefix_flags(self):
 
@@ -139,17 +174,28 @@ class Pattern(object):
         msk_bin: str = "1"*pfx_len + "0"*(INSTRN_SIZE-pfx_len)
         self.pfx_msk = hex(int(msk_bin,2))
 
-    def get_bit_counts(self)->ArgBitsInfo:
+    def set_arg_bits_info(self):
 
         bitInfo : ArgBitsInfo = ArgBitsInfo()
         prev : Optional[str] = None
-        for i,ch in enumerate(self.pattern):
+        for i,ch in enumerate(self.compact):
             if ch != prev:
                 bitInfo.start(ch,i)
             else:
                 bitInfo.cont(ch,i)
             prev = ch
-        return bitInfo
+
+        self.arg_bits_info = bitInfo
+
+    def get_arg_bits_info(self)->ArgBitsInfo:
+        return self.arg_bits_info
+
+
+    def is_long_instrn(self)->bool:
+        return self.instrn_size() > 16
+
+    def instrn_size(self)->int:
+        return len(self.compact)
 
     def __repr__(self):
         return ("PL(%s),P(%s),PH(%s),PM(%s)" %

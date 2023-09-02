@@ -58,7 +58,7 @@ class InstrnDecodeFile(CppFile):
 
 
     def write_decode_func(self):
-        self.write_func_header("InstrnEnum", "", "decode", [("ShortInstrn", "instrn"), ])
+        self.write_func_body_hdr("InstrnEnum", "", "decode", [("ShortInstrn", "instrn"), ])
         self.write_switches()
         self.fprint("}")
         self.blankline()
@@ -66,12 +66,12 @@ class InstrnDecodeFile(CppFile):
 
     def write_sizes_func(self):
         def size(pattern: Pattern):
-            return str(2) if len(pattern.pattern) <= 16 else str(3)
+            return str(2) if len(pattern.compact) <= 16 else str(3)
 
         cases: List[Tuple[str, str]] = [
             (instrn, size(pattern)) for (instrn, pattern) in self.patterns_by_instrn.items()]
 
-        self.write_func_header("uchar_t", "", "instrn_size", [("InstrnEnum", "instrn_enum"), ])
+        self.write_func_body_hdr("uchar_t", "", "instrn_size", [("InstrnEnum", "instrn_enum"), ])
         self.write_switch_func("instrn_enum", cases, True, False, "0")
         self.fprint("}")
         self.blankline()
@@ -111,7 +111,7 @@ class InstrnExecFile(CppFile):
 
     def write_exec_func(self):
         # To do - Need to split between short instrns and long instrns
-        self.write_func_header(
+        self.write_func_body_hdr(
             "void", "", "exec_instrn",
             [("Environ&", "env"), ("LongInstrn", "instrn")])
 

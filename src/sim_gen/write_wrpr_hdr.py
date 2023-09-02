@@ -15,19 +15,19 @@ class WrapperHdrFile(HeaderFile):
     def gen_forward_classes(self):
         self.fprint("class Environ;")
 
-    def gen_func_from_spec(self, func_name: str, func_spec: FuncSpec):
+    def write_impl_func(self, func_name: str, func_spec: FuncSpec):
         instrn_defn: str = (
-            "LongInstrn" if func_spec.is_long_instrn() else "ShortInstrn")
+            "LongInstrn" if func_spec.pattern.is_long_instrn() else "ShortInstrn")
         self.fprint("\tstatic void %s(Environ& env, %s instrn);" %
                     (func_name, instrn_defn) )
-
 
     def gen_struct(self, module_name: str, spec_json: Dict[str,Dict]):
         class_name: str = camel_case(module_name)
         self.write_class_prefix(class_name)
 
         for (func_name, func_spec) in spec_json.items():
-            self.gen_func_from_spec(func_name, FuncSpec(func_spec))
+            self.write_impl_func(func_name, FuncSpec(func_spec))
+
             self.blankline()
 
         self.write_class_suffix()

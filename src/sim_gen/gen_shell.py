@@ -6,11 +6,13 @@ from glob import glob
 from pathlib import Path
 from typing import List
 
-from gen_wrpr_hdr import WrapperHdrFile
-from gen_wrpr_body import WrapperBodyFile
-from gen_impl_hdr import ImplHdrFile
-from gen_instrn_hdr import InstrnEnumsFile
-from gen_instrn_body import InstrnDecodeFile, InstrnExecFile
+from src.sim_gen.write_cmpl_cpp import CompilerCppFile
+from write_wrpr_hdr import WrapperHdrFile
+from write_wrpr_cpp import WrapperBodyFile
+from write_impl_hdr import ImplHdrFile
+from write_instrn_hdr import InstrnEnumsFile
+from write_instrn_cpp import InstrnDecodeFile, InstrnExecFile
+from src.sim_gen.write_compl_hdr import CompilerHdrFile
 
 SRC_DIR = Path(__file__).resolve().parent
 
@@ -21,23 +23,41 @@ class GenType(Enum):
     IHdr = 'i'
 
 class Args(object):
+
     mod_name: str
+
     spec_dir: str
     out_dir: str
+
     all_specs: bool
+
     wrap_hdr: bool
     wrap_cpp: bool
+
+    cmpl_hdr: bool
+    cmpl_cpp: bool
+
     impl_hdr: bool
+
     instrn_map: bool
 
     def __init__(self, args):
+
         self.mod_name = args.mod_name
+
         self.spec_dir = args.spec_dir
         self.out_dir  = args.out_dir
+
         self.all_specs = args.all_specs
+
         self.wrap_hdr = args.wrap_hdr
         self.wrap_cpp = args.wrap_cpp
+
+        self.cmpl_hdr = args.cmpl_hdr
+        self.cmpl_cpp = args.cmpl_cpp
+
         self.impl_hdr = args.impl_hdr
+
         self.instrn_map = args.instrn_map
 
     def is_mod_spec(self)->bool:
@@ -50,15 +70,24 @@ class Args(object):
             self.out_dir = os.path.join(SRC_DIR, "out")
         if self.all_specs or self.instrn_map:
             self.mod_name = '*'
-        if not (self.wrap_cpp or self.wrap_hdr or self.impl_hdr or self.instrn_map):
+        if not (self.wrap_cpp
+                or self.wrap_hdr or self.impl_hdr
+                or self.cmpl_cpp or self.cmpl_hdr
+                or self.instrn_map
+        ):
             self.wrap_hdr = self.wrap_cpp = self.impl_hdr = True
+            self.cmpl_hdr = self.cmpl_cpp = True
 
     def spec_files(self)->List[str]:
         spec_file: str = os.path.join(self.spec_dir, "%s.json" % self.mod_name)
         return glob(spec_file)
 
     def out_module_file(self, mod_name: str, gen_type: str)->str:
-        PATTERN = {'w': "%s.h", 'W': "%s.cpp", 'i': "%s_impl.h"}
+        PATTERN = {
+            'w': "%s.h", 'W': "%s.cpp", 'i': "%s_impl.h",
+            'c' : '%s_cmpl.h', 'C': '%s_cmpl.cpp'
+        }
+
         return os.path.join(SRC_DIR, self.out_dir, PATTERN[gen_type] % mod_name)
 
     def out_map_file(self, gen_type: str)->str:
@@ -92,6 +121,12 @@ def parseargs()->Args:
     parser.add_argument('-I', '--instrn_map', action='store_true',
         help='Generate instruction map')
 
+    parser.add_argument('-c', '--cmpl_hdr', action='store_true',
+                        help='Generate compiler header only')
+
+    parser.add_argument('-C', '--cmpl_cpp', action='store_true',
+                        help='Generate compiler c++ code only')
+
     args = parser.parse_args()
     return Args(args)
 
@@ -107,6 +142,10 @@ def do_mod_specs(spec_files: List[str], args: Args):
             WrapperBodyFile().gen_file(mod_name, spec_file, args.out_module_file(mod_name, 'W'))
         if args.impl_hdr:
             ImplHdrFile().gen_file(mod_name, spec_file, args.out_module_file(mod_name, 'i'))
+        if args.cmpl_hdr:
+            CompilerHdrFile().gen_file(mod_name, spec_file, args.out_module_file(mod_name, 'c'))
+        if args.cmpl_cpp:
+            CompilerCppFile().gen_file(mod_name, spec_file, args.out_module_file(mod_name, 'C'))
 
 def exec(args: Args):
 

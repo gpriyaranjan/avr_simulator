@@ -1,7 +1,7 @@
 import json
 from typing import List, Dict, IO, Tuple, Optional
 
-from pattern import Pattern
+from pattern import Pattern, ArgBitInfo
 
 
 def read_json_file(module_file:str):
@@ -15,18 +15,16 @@ def read_json_file(module_file:str):
 class FuncSpec(object):
     T: str
     P: str
+    pattern: Pattern
 
     def __init__(self, func_spec: Dict[str, str]):
         self.T = func_spec["T"]
         self.P = func_spec["P"]
+        self.pattern = Pattern(self.P)
 
     def is_long_instrn(self)->bool:
-        return self.instrn_size() > 16
+        return self.pattern.instrn_size() > 16
 
-    def instrn_size(self)->int:
-        pattern: str = self.P
-        compact: str = Pattern(pattern).pattern
-        return len(compact)
 
 
 class AnyFile(object):
@@ -84,15 +82,18 @@ class HeaderFile(CLangFile):
     def write_enum_suffix(self):
         self.fprint("};")
 
-    def write_func_header(self, ret_type: str, func_name: str, args: List[Tuple[str,str]]):
+    def write_func_header(
+            self, ret_type: str, func_name: str,
+            args: List[Tuple[str,str]], indent:int=0
+    ):
         args_str: str = ", ".join(["%s %s" % (type_, name) for (type_, name) in args])
-        self.fprint("%s %s(%s);" % (ret_type, func_name, args_str))
+        self.fprint("\t"*(indent) + "%s %s(%s);" % (ret_type, func_name, args_str))
 
 
 class CppFile(CLangFile):
 
-    def write_func_header(self,
-            ret_type: str, class_name: str, func_name: str, args: List[Tuple[str,str]]):
+    def write_func_body_hdr(self,
+                            ret_type: str, class_name: str, func_name: str, args: List[Tuple[str,str]]):
 
         args_str: str = ", ".join(["%s %s" % (type_, name) for (type_, name) in args])
         func_desc = "%s::%s"%(class_name, func_name) if len(class_name) else func_name
@@ -155,7 +156,7 @@ class WrapperCommon:
     }
 
     @classmethod
-    def gen(cls, fld_type: str, fld_width: int):
+    def gen_func_arg(cls, fld_type: str, fld_width: int):
         if fld_width == 10 and fld_type == "d":
             arg_type: str = "FiveBit"
         else:
@@ -166,3 +167,13 @@ class WrapperCommon:
                 raise ex
         arg_name: str = WrapperCommon.ArgNames[fld_type]
         return (arg_type, arg_name)
+
+    @classmethod
+    def gen_func_args(cls, pattern: Pattern):
+        args: List[Tuple[str,str]] = []
+        arg_bit_info: ArgBitInfo
+
+        for ch, arg_bit_info in pattern.get_arg_bits_info().get_items():
+            fld_type, fld_name = WrapperCommon.gen_func_arg(ch, arg_bit_info.count)
+            args.append((fld_type, fld_name),)
+        return args
