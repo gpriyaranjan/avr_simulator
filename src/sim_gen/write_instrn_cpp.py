@@ -19,7 +19,8 @@ class InstrnDecodeFile(CppFile):
             spec_json = read_json_file(spec_file)
             mod_name:str = os.path.splitext(os.path.basename(spec_file))[0]
             for func_name, func_spec in spec_json.items():
-                self.patterns_by_instrn[func_name] = Pattern(func_spec["P"])
+                if not func_spec.get("A"):
+                    self.patterns_by_instrn[func_name] = Pattern(func_spec["P"])
 
 
     def calc_prefix_table(self):
@@ -100,7 +101,8 @@ class InstrnExecFile(CppFile):
             spec_json = read_json_file(spec_file)
             mod_name:str = os.path.splitext(os.path.basename(spec_file))[0]
             for func_name, func_spec in spec_json.items():
-                self.modules_by_instrn[func_name] = mod_name
+                if not func_spec.get("A"):
+                    self.modules_by_instrn[func_name] = mod_name
 
     def write_exec_includes(self):
         self.write_include_files(["instrns.h"])

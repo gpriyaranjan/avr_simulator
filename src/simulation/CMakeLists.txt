@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.26)
 project(ATMegaSim_sim)
-
 set(CMAKE_CXX_STANDARD 23)
 
 set(GEN_DIR "gen2")
@@ -60,11 +59,6 @@ set(PRJ_HDR_FILES
     infra/control_unit.h
 )
 
-set(TMP_FILES
-    expt/alu_ops2.cpp
-    expt/alu_ops2.h
-)
-
 set(SOURCE_FILES
     ${GEN_CPP_FILES}
     ${PRJ_CPP_FILES}
@@ -80,7 +74,6 @@ add_library(
     ATMegaSim_lib STATIC
     ${SOURCE_FILES}
     ${HEADER_FILES}
-    ${TMP_FILES}
 )
 
 target_link_libraries(ATMegaSim_lib)

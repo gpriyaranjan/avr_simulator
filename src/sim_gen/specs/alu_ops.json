@@ -21,7 +21,7 @@
 
     "SBC": {
         "T": "Subtract with Carry",
-        "P": "0001-10rd-dddd-rrrr"
+        "P": "0000-10rd-dddd-rrrr"
     },
 
     "SUBI": {
@@ -90,7 +90,8 @@
 
     "TST": {
         "T" :"Test for zero or minus",
-        "P" : "0010-00dd-dddd-dddd"
+        "P" : "0010-00dd-dddd-dddd",
+        "A" : "AND"
     },
 
     "CP": {

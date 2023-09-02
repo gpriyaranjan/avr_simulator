@@ -32,74 +32,90 @@
 
   "BREQ": {
     "T": "Branch if Equal",
-    "P": "1111-00kk-kkkk-k001"
+    "P": "1111-00kk-kkkk-k001",
+    "A": "BRBS"
   },
   "BRNE": {
     "T": "Branch if Not Equal",
-    "P": "1111-00kk-kkkk-k001"
+    "P": "1111-01kk-kkkk-k001",
+    "A": "BRBC"
   },
 
   "BRCS": {
     "T": "Branch if Carry Set",
-    "P": "1111-00kk-kkkk-k000"
+    "P": "1111-00kk-kkkk-k000",
+    "A": "BRBS"
   },
   "BRCC": {
     "T": "Branch if Carry Clear",
-    "P": "1111-01kk-kkkk-k000"
+    "P": "1111-01kk-kkkk-k000",
+    "A": "BRBC"
   },
 
   "BRSH": {
     "T": "Branch if Same or Higher",
-    "P": "1111-01kk-kkkk-k000"
+    "P": "1111-01kk-kkkk-k000",
+    "A": "BRBS"
   },
   "BRLO": {
     "T": "Branch if Lower",
-    "P": "1111-00kk-kkkk-k000"
+    "P": "1111-00kk-kkkk-k000",
+    "A": "BRBC"
   },
 
   "BRMI": {
     "T": "Branch if minus",
-    "P": "1111-00kk-kkkk-k010"
+    "P": "1111-00kk-kkkk-k010",
+    "A": "BRBS"
   },
   "BRPL": {
     "T": "Branch if positive",
-    "P": "1111-01kk-kkkk-k010"
+    "P": "1111-01kk-kkkk-k010",
+    "A": "BRBC"
   },
 
   "BRGE": {
     "T": "Branch if GE signed",
-    "P": "1111-01kk-kkkk-k100"
+    "P": "1111-01kk-kkkk-k100",
+    "A": "BRBS"
   },
   "BRLT": {
     "T" : "Branch if LT signed",
-    "P" : "1111-00kk-kkkk-k100"
+    "P" : "1111-00kk-kkkk-k100",
+    "A": "BRBC"
   },
 
   "BRVS": {
     "T": "Branch if overflow",
-    "P": "1111-00kk-kkkk-k011"
+    "P": "1111-00kk-kkkk-k011",
+    "A": "BRBS"
   },
   "BRVC": {
     "T": "Branch if overflow clear",
-    "P": "1111-01kk-kkkk-k011"
+    "P": "1111-01kk-kkkk-k011",
+    "A": "BRBC"
   },
 
   "BRHS": {
     "T": "Branch if half carry set",
-    "P": "1111-00kk-kkkk-k101"
+    "P": "1111-00kk-kkkk-k101",
+    "A": "BRBS"
   },
   "BRHC": {
     "T": "Branch if half carry clear, ",
-    "P": "1111-01kk-kkkk-k101"
+    "P": "1111-01kk-kkkk-k101",
+    "A": "BRBC"
   },
 
   "BRTS": {
     "T": "Branch if T flag set",
-    "P": "1111-00kk-kkkk-k110"
+    "P": "1111-00kk-kkkk-k110",
+    "A": "BRBS"
   },
   "BRTC": {
     "T": "Branch if T flag clear",
-    "P": "1111-01kk-kkkk-k110"
+    "P": "1111-01kk-kkkk-k110",
+    "A": "BRBC"
   },
 
   "BRIE": {

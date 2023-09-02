@@ -28,11 +28,13 @@
 
   "SBR": {
     "T": "Set bit in Register",
-    "P": "0110-KKKK-dddd-KKKK"
+    "P": "0110-KKKK-dddd-KKKK",
+    "A": "ORI"
   },
   "CBR": {
     "T": "Clear bit in Register",
-    "P": "0111-KKKK-dddd-KKKK"
+    "P": "0111-KKKK-dddd-KKKK",
+    "A": "ANDI"
   },
 
   "SER": {
@@ -41,12 +43,14 @@
   },
   "CLR": {
     "T": "Clear Register",
-    "P": "0010-01dd-dddd-dddd"
+    "P": "0010-01dd-dddd-dddd",
+    "A": "EOR"
   },
 
   "LSL": {
     "T": "Logical Shift Left",
-    "P": "0000-11dd-dddd-dddd"
+    "P": "0000-11dd-dddd-dddd",
+    "A": "ADD"
   },
   "LSR": {
     "T": "Logical Shift Right",
@@ -55,7 +59,8 @@
 
   "ROL": {
     "T": "Rotate Left through Carry",
-    "P": "0001-11dd-dddd-dddd"
+    "P": "0001-11dd-dddd-dddd",
+    "A": "ADC"
   },
   "ROR": {
     "T": "Rotate right through Carry",
