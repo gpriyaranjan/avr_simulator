@@ -36,6 +36,8 @@ set(GEN_HDR_FILES
     ${GEN_DIR}/sreg_ops.h
     ${GEN_DIR}/xfer_ops.h
     ${GEN_DIR}/all_ops.cpp
+    gen2/alu_ops_cmpl.cpp
+    gen2/alu_ops_cmpl.h
 )
 
 set(GEN_HDR_IMPL_FILES

@@ -45,7 +45,7 @@ class ArgBitsInfo(object):
 
     def __init__(self, pattern: str):
         self.__dict__ = OrderedDict()
-
+        self.init(pattern)
 
     def start(self, ch, pos):
         if ch in self.CHARS:
@@ -159,7 +159,7 @@ class Pattern(object):
     suffix: str
     sfx_info: BitRange
 
-    instrn_mask: str
+    instrn_info: BitRange
 
     arg_bits_info: ArgBitsInfo
 
@@ -172,13 +172,17 @@ class Pattern(object):
         self.suffix, off = self.extract_suffix(INSTRN_SIZE)
         self.set_suffix_flags(off)
 
-
-        self.set_instrn_mask()
+        self.set_instrn_flags()
         self.set_arg_bits_info()
 
-    def set_instrn_mask(self):
-        xlate_map = {ord(ch) : "0" for ch in ArgBitsInfo.CHARS}
-        self.instrn_mask = self.compact.translate(xlate_map)
+    def set_instrn_flags(self):
+        instrn_str: str = "".join([ch if ch in ["0", "1"] else "0"
+                              for ch in self.compact])
+        instrn_hex: str = hex(int(instrn_str, 2))
+        instrn_mask: str = "".join(["1" if ch in ["0","1"] else "0"
+                                    for ch in self.compact])
+        instrn_mask_hex = hex(int(instrn_mask, 2))
+        self.instrn_info = BitRange(instrn_hex, instrn_mask_hex, INSTRN_SIZE, 0)
 
     def extract_prefix(self)->str:
         prefix: str = ""
@@ -234,7 +238,6 @@ class Pattern(object):
         return len(self.compact)
 
 
-
 class Prefixes(object):
 
     len: int
@@ -275,3 +278,9 @@ class PrefixTable(object):
 
     def __repr__(self):
         return pformat(self.by_len)
+
+if __name__ == "__main__":
+    pat_str: str = "1000-000d-dddd-ffmm"
+    pat_obj: Pattern = Pattern(pat_str)
+    print(f"{pat_obj.instrn_info.mask} {pat_obj.instrn_info.hex}")
+

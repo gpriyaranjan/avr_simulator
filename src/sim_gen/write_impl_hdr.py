@@ -2,7 +2,7 @@ import logging
 from typing import Dict, List, Tuple
 
 from gen_common import (
-    read_json_file,
+    SpecCommon,
     HeaderFile,
     camel_case,
     FuncSpec,
@@ -69,7 +69,7 @@ class ImplHdrFile(HeaderFile, WrapperCommon):
         logging.info("Generating ImpHdr logs for %s from %s and writing to %s"
                      % (module_name, module_file, out_file))
         self.open_writer(out_file)
-        spec_json: Dict[str,Dict[str,str]] = read_json_file(module_file)
+        spec_json: Dict[str,Dict[str,str]] = SpecCommon.read_json_file(module_file)
         self.gen_file_body(module_name, spec_json)
         self.close_writer()
         logging.info("Generated ImplHdr file")

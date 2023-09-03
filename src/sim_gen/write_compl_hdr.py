@@ -1,6 +1,6 @@
 import logging
 from typing import Dict, Tuple, List
-from gen_common import HeaderFile, camel_case, FuncSpec, WrapperCommon, read_json_file
+from gen_common import HeaderFile, camel_case, FuncSpec, WrapperCommon, SpecCommon
 from pattern import Pattern, ArgBitInfo
 
 
@@ -42,7 +42,7 @@ class CompilerHdrFile(HeaderFile):
         logging.info("Generating CmplHdr logs for %s from %s and writing to %s"
                          % (module_name, module_file, out_file))
         self.out_fp = open(out_file, "w+")
-        spec_json: Dict[str,Dict[str,str]] = read_json_file(module_file)
+        spec_json: Dict[str,Dict[str,str]] = SpecCommon.read_json_file(module_file)
         class_mod_name = "%s_cmpl" % module_name
         self.gen_file_body(class_mod_name, spec_json)
         self.out_fp.close()

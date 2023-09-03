@@ -6,13 +6,13 @@ from glob import glob
 from pathlib import Path
 from typing import List
 
-from src.sim_gen.write_cmpl_cpp import CompilerCppFile
+from write_cmpl_cpp import CompilerCppFile
 from write_wrpr_hdr import WrapperHdrFile
 from write_wrpr_cpp import WrapperBodyFile
 from write_impl_hdr import ImplHdrFile
 from write_instrn_hdr import InstrnEnumsFile
 from write_instrn_cpp import InstrnDecodeFile, InstrnExecFile
-from src.sim_gen.write_compl_hdr import CompilerHdrFile
+from write_compl_hdr import CompilerHdrFile
 
 SRC_DIR = Path(__file__).resolve().parent
 
@@ -161,9 +161,9 @@ def exec(args: Args):
         do_mod_specs(spec_files, args)
 
     if args.instrn_map:
-        InstrnEnumsFile().gen_file(spec_files, args.out_map_file('I'))
+        # InstrnEnumsFile().gen_file(spec_files, args.out_map_file('I'))
         InstrnDecodeFile().gen_file(spec_files, args.out_map_file('D'))
-        InstrnExecFile().gen_file(spec_files, args.out_map_file('E'))
+        # InstrnExecFile().gen_file(spec_files, args.out_map_file('E'))
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

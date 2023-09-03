@@ -15,12 +15,14 @@
 
   "LDS" : {
     "T" : "Load Direct from Data Space",
-    "P" : "1001-000d-dddd-0000-kkkk-kkkk-kkkk-kkkk"
+    "P" : "1001-000d-dddd-0000-kkkk-kkkk-kkkk-kkkk",
+    "D" : "manual"
   },
 
   "LD" : {
     "T" : "Load indirect (different modes)",
-    "P" : "1000-000d-dddd-ffmm"
+    "P" : "1000-000d-dddd-ffmm",
+    "D" : "manual"
   },
 
   "LDD" : {
@@ -35,12 +37,14 @@
 
   "ST" : {
     "T" : "Store Indirect",
-    "P" : "1000-000d-dddd-ffmm"
+    "P" : "1000-001d-dddd-ffmm",
+    "D" : "manual"
   },
 
   "STD" : {
     "T" : "Store Indirect with Displacement",
-    "P" : "10q0-qq0d-dddd-fqqq"
+    "P" : "10q0-qq1r-rrrr-fqqq",
+    "D" : "manual"
   },
 
   "LPM" : {

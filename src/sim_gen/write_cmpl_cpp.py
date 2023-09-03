@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, List, Tuple
 
-from gen_common import read_json_file, camel_case, FuncSpec, WrapperCommon, CppFile
+from gen_common import SpecCommon, camel_case, FuncSpec, WrapperCommon, CppFile
 from pattern import Pattern, ArgBitsInfo, ArgBitRangesExpr
 
 
@@ -20,7 +20,7 @@ class CompilerCppFile(CppFile):
             arg_type, arg_name = WrapperCommon.gen_func_arg(ch, bitInfo.count)
             arg_init_expr = ArgBitRangesExpr.gen_insertion(
                 arg_name, pattern.instrn_size(), bitInfo.pos)
-            self.fprintln("\t%s = %s | %s;" % (ret_var, ret_var, arg_init_expr))
+            self.fprintln(f"\t{ret_var} = ${ret_var} | ${arg_init_expr};")
 
 
     def gen_func(self, wrapper_name: str, func_name: str, func_spec: FuncSpec):
@@ -32,10 +32,10 @@ class CompilerCppFile(CppFile):
         self.write_func_body_hdr(ret_type, wrapper_name, func_name, args)
 
         ret_var: str = "instrn"
-        self.fprintln("\t%s %s = InstrnEnum::%s;" % (ret_type, ret_var, func_name))
+        self.fprintln(f"\t{ret_type} {ret_var} = InstrnMask::{func_name};")
 
         self.prepare_impl_args(ret_var, pattern)
-        self.fprintln("\treturn %s;" % ret_var)
+        self.fprintln(f"\treturn {ret_var};")
         self.fprintln("}")
 
 
@@ -43,7 +43,7 @@ class CompilerCppFile(CppFile):
         wrapper_name = camel_case(module_name)
         for (func_name, func_spec) in spec_json.items():
             self.gen_func(wrapper_name, func_name, FuncSpec(func_spec))
-            self.blankline()
+            self.fprintln()
 
     def gen_file_body(self, mod_class_name: str, spec_json: Dict[str,Dict]):
         self.gen_includes(mod_class_name)
@@ -56,8 +56,8 @@ class CompilerCppFile(CppFile):
         logging.info("Generating CmplCpp logs for %s from %s and writing to %s"
                      % (module_name, module_file, out_file))
         self.out_fp = open(out_file, "w+")
-        spec_json: Dict[str,Dict[str,str]] = read_json_file(module_file)
-        class_mod_name = "%s_cmpl" % module_name
+        spec_json: Dict[str,Dict[str,str]] = SpecCommon.read_json_file(module_file)
+        class_mod_name = f"{module_name}_cmpl"
         self.gen_file_body(class_mod_name, spec_json)
         self.out_fp.close()
         logging.info("Generated CmplCpp file")

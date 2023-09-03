@@ -3,7 +3,7 @@ from typing import Dict, List, Tuple
 
 from gen_common import (
     CppFile,
-    read_json_file,
+    SpecCommon,
     camel_case,
     FuncSpec,
     WrapperCommon
@@ -68,7 +68,7 @@ class WrapperBodyFile(CppFile):
         logging.info("Generating WrapCpp logs for %s from %s and writing to %s"
                      % (module_name, module_file, hdr_file))
         self.out_fp = open(hdr_file, "w")
-        spec_json: Dict[str,Dict[str,str]] = read_json_file(module_file)
+        spec_json: Dict[str,Dict[str,str]] = SpecCommon.read_json_file(module_file)
         self.gen_file_body(module_name, spec_json)
         self.out_fp.close()
         logging.info("Generated WrapCpp file")

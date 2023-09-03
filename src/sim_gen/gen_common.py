@@ -1,26 +1,37 @@
 import json
+import os.path
 from typing import List, Dict, IO, Tuple, Optional
 
 from pattern import Pattern, ArgBitInfo
 
+class SpecCommon(object):
 
-def read_json_file(module_file:str):
-    data: str
-    with open(module_file, "r") as fp:
-        data = fp.read()
-    obj = json.loads(data)
-    return obj
+    @classmethod
+    def read_json_file(cls, module_file:str):
+        data: str
+        with open(module_file, "r") as fp:
+            data = fp.read()
+        obj = json.loads(data)
+        return obj
+
+    @classmethod
+    def mod_name(cls, spec_file: str):
+        return os.path.splitext(os.path.basename(spec_file))[0]
 
 
 class FuncSpec(object):
     T: str
     P: str
+    man_dcd: bool # manual decode
+    mod_name: str
     pattern: Pattern
 
-    def __init__(self, func_spec: Dict[str, str]):
+    def __init__(self, func_spec: Dict[str, str], mod_name: str=None):
         self.T = func_spec["T"]
         self.P = func_spec["P"]
+        self.man_dcd = (func_spec.get("D", "auto") == "manual")
         self.pattern = Pattern(self.P)
+        self.mod_name = mod_name
 
     def is_long_instrn(self)->bool:
         return self.pattern.instrn_size() > 16
@@ -86,10 +97,13 @@ class HeaderFile(CLangFile):
 
     def write_func_header(
             self, ret_type: str, func_name: str,
-            args: List[Tuple[str,str]], indent:int=0
+            args: List[Tuple[str,str]],
+            indent:int=0, static:bool=False
     ):
-        args_str: str = ", ".join(["%s %s" % (type_, name) for (type_, name) in args])
-        self.fprintln("\t" * (indent) + "%s %s(%s);" % (ret_type, func_name, args_str))
+        args_str: str = ", ".join([f"{type_} {name}" for (type_, name) in args])
+        static_pfx: str = "static" if static else ""
+        self.fprintln(" ".join(
+            ["\t"*(indent), static_pfx, f"{ret_type} {func_name}({args_str});"]))
 
 
 class CppFile(CLangFile):

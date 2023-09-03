@@ -1,8 +1,9 @@
 import os.path
+from collections import Counter
 from typing import List, Dict, Tuple, Set
 
-from gen_common import CppFile, read_json_file, camel_case
-from pattern import Pattern, PrefixTable, BitRange
+from gen_common import CppFile, SpecCommon, camel_case
+from pattern import Pattern, PrefixTable, BitRange, Hex
 
 
 class InstrnDecodeFile(CppFile):
@@ -17,7 +18,7 @@ class InstrnDecodeFile(CppFile):
 
         spec_file: str
         for spec_file in spec_files:
-            spec_json = read_json_file(spec_file)
+            spec_json = SpecCommon.read_json_file(spec_file)
             mod_name:str = os.path.splitext(os.path.basename(spec_file))[0]
             for func_name, func_spec in spec_json.items():
                 if not func_spec.get("A"):
@@ -34,6 +35,40 @@ class InstrnDecodeFile(CppFile):
 
     def write_all_includes(self):
         self.write_include_files(["instrns.h", "../infra/types.h"])
+
+
+    def write_secondary_func(self, instrns_set: Dict[str, BitRange]):
+
+        by_mask: Dict[Hex, Dict[str, BitRange]] = {}
+        for instrn, sfx_info in instrns_set.items():
+            sfx_mask: Hex = sfx_info.mask
+            by_mask[sfx_mask] = by_mask.get(sfx_mask, {})
+            by_mask[sfx_mask][instrn] = sfx_info
+
+        def tabs(i: int):
+            self.fprint("\t"*i)
+
+        self.fprintln()
+        for sfx_mask, instrns_set in by_mask.items():
+
+            hex_codes: List[str] = list(set([x.hex for x in instrns_set.values()]))
+
+            if len(hex_codes) == 1:
+                hex_code = hex_codes[0]
+                instrn: str = [instrn for instrn, sfx_info in instrns_set.items()
+                                if sfx_info.hex == hex_code][0]
+                tabs(3); self.fprintln(
+                    "if ( (instrn & %s) == %s ) return %s;" % (sfx_mask, hex_code, instrn))
+
+            elif len(hex_codes) > 1:
+                tabs(3); self.fprintln("switch(instrn & %s) {" % sfx_mask)
+                for instrn, sfx_info in instrns_set.items():
+                    if sfx_info.hex in hex_codes:
+                        tabs(4); self.fprintln("case %s : return %s;" % (sfx_info.hex, instrn))
+                tabs(4); self.fprintln("default: break;")
+                tabs(3); self.fprintln("}")
+
+        tabs(3); self.fprintln("break;")
 
     def write_switches(self):
 
@@ -52,12 +87,7 @@ class InstrnDecodeFile(CppFile):
                     instrn = list(instrns_having_pfx.keys())[0]
                     self.fprintln("return %s;" % (instrn))
                 else:
-                    self.fprintln(" { // %s" % (" ".join(instrns_having_pfx.keys())))
-                    for instrn, sfx_info in instrns_having_pfx.items():
-                        self.fprint("\t\t\t\t")
-                        sfx_tst: str = "(instrn & %s) == %s" % (sfx_info.mask, sfx_info.hex)
-                        self.fprintln("if (%s) return %s;" % (sfx_tst, instrn))
-                    self.fprintln("\t\t\t}")
+                    self.write_secondary_func(instrns_having_pfx)
 
             self.fprintln("\t\tdefault: break;")
             self.fprintln("\t};")
@@ -111,7 +141,7 @@ class InstrnExecFile(CppFile):
     def read_all_specs(self, spec_files: List[str]):
         spec_file: str
         for spec_file in spec_files:
-            spec_json = read_json_file(spec_file)
+            spec_json = SpecCommon.read_json_file(spec_file)
             mod_name:str = os.path.splitext(os.path.basename(spec_file))[0]
             for func_name, func_spec in spec_json.items():
                 if not func_spec.get("A"):
