@@ -20,7 +20,7 @@ class CompilerCppFile(CppFile):
             arg_type, arg_name = WrapperCommon.gen_func_arg(ch, bitInfo.count)
             arg_init_expr = ArgBitRangesExpr.gen_insertion(
                 arg_name, pattern.instrn_size(), bitInfo.pos)
-            self.fprint("\t%s = %s | %s;" % (ret_var, ret_var, arg_init_expr))
+            self.fprintln("\t%s = %s | %s;" % (ret_var, ret_var, arg_init_expr))
 
 
     def gen_func(self, wrapper_name: str, func_name: str, func_spec: FuncSpec):
@@ -32,11 +32,11 @@ class CompilerCppFile(CppFile):
         self.write_func_body_hdr(ret_type, wrapper_name, func_name, args)
 
         ret_var: str = "instrn"
-        self.fprint("\t%s %s = InstrnEnum::%s;" % (ret_type, ret_var, func_name))
+        self.fprintln("\t%s %s = InstrnEnum::%s;" % (ret_type, ret_var, func_name))
 
         self.prepare_impl_args(ret_var, pattern)
-        self.fprint("\treturn %s;" % ret_var)
-        self.fprint("}")
+        self.fprintln("\treturn %s;" % ret_var)
+        self.fprintln("}")
 
 
     def gen_funcs(self, module_name: str, spec_json: Dict[str,Dict]):

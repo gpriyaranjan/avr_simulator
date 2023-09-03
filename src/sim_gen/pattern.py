@@ -1,15 +1,10 @@
+import logging
 from collections import OrderedDict
+from dataclasses import dataclass
 from pprint import pformat
 from typing import Dict, List, Tuple, Optional
 
 INSTRN_SIZE = 16
-
-def extract_prefix(pattern:str)->str:
-    prefix: str = ""
-    for ch in pattern:
-        if ch not in ['0','1']: break
-        prefix = prefix + ch
-    return prefix
 
 Hex = str
 
@@ -48,8 +43,9 @@ class ArgBitsInfo(object):
 
     CHARS = ["d", "r", "k", "K", "A", "q", "s", "b", "m", "f"]
 
-    def __init__(self):
+    def __init__(self, pattern: str):
         self.__dict__ = OrderedDict()
+
 
     def start(self, ch, pos):
         if ch in self.CHARS:
@@ -68,6 +64,15 @@ class ArgBitsInfo(object):
         return [
             (x, self.__dict__[x]) for x in self.CHARS
             if x in self.__dict__.keys()]
+
+    def init(self, pattern: str):
+        prev : Optional[str] = None
+        for i,ch in enumerate(pattern):
+            if ch != prev:
+                self.start(ch,i)
+            else:
+                self.cont(ch,i)
+            prev = ch
 
     def __repr__(self):
         return ", ".join(["%s" % repr(arg_bit_info)
@@ -136,6 +141,12 @@ class ArgBitRangesExpr(object):
             curr -= width
         return "( %s )" % " | ".join(exprs)
 
+@dataclass
+class BitRange:
+    hex: str
+    mask: str
+    len_: int
+    off: int   # Offset from conventional start pos - left for prefix, right for suffix
 
 class Pattern(object):
 
@@ -143,9 +154,10 @@ class Pattern(object):
     compact: str
 
     prefix: str
-    pfx_hex: str
-    pfx_msk: str
-    pfx_len: int
+    pfx_info: BitRange
+
+    suffix: str
+    sfx_info: BitRange
 
     instrn_mask: str
 
@@ -155,8 +167,12 @@ class Pattern(object):
         self.readable = pattern
         self.compact = self.readable.replace("-", "")
 
-        self.prefix = extract_prefix(self.compact)
+        self.prefix = self.extract_prefix()
         self.set_prefix_flags()
+        self.suffix, off = self.extract_suffix(INSTRN_SIZE)
+        self.set_suffix_flags(off)
+
+
         self.set_instrn_mask()
         self.set_arg_bits_info()
 
@@ -164,32 +180,52 @@ class Pattern(object):
         xlate_map = {ord(ch) : "0" for ch in ArgBitsInfo.CHARS}
         self.instrn_mask = self.compact.translate(xlate_map)
 
-    def set_prefix_flags(self):
+    def extract_prefix(self)->str:
+        prefix: str = ""
+        for ch in self.compact:
+            if ch not in ['0','1']: break
+            prefix = prefix + ch
+        return prefix
 
-        self.pfx_len = len(self.prefix)
+    def set_prefix_flags(self):
 
         pfx_len: int = len(self.prefix)
         pfx_bin: str = self.prefix + "0"*(INSTRN_SIZE-pfx_len)
-        self.pfx_hex = hex(int(pfx_bin,2))
+        pfx_hex: str = hex(int(pfx_bin,2))
         msk_bin: str = "1"*pfx_len + "0"*(INSTRN_SIZE-pfx_len)
-        self.pfx_msk = hex(int(msk_bin,2))
+        msk_hex: str = hex(int(msk_bin,2))
+        self.pfx_info = BitRange(pfx_hex, msk_hex, pfx_len, 0)
+
+    def extract_suffix(self, upto:int)->Tuple[str,int]:
+        suffix: str = ""
+        rev_str = self.compact[upto:0:-1]
+
+        off: int = 0
+        while rev_str[off] not in ['0','1']:
+            off = off + 1
+
+        i: int = off
+        while i < len(rev_str):
+            ch = rev_str[i]
+            if ch not in ['0','1']: break
+            suffix = suffix + ch
+            i = i + 1
+        return suffix[::-1], off
+
+    def set_suffix_flags(self, off):
+
+        sfx_len: int = len(self.suffix)
+        sfx_bin: str = "0"*(INSTRN_SIZE-sfx_len) + self.suffix + "0"*off
+        sfx_hex: str = hex(int(sfx_bin,2))
+        msk_bin: str = "0"*(INSTRN_SIZE-sfx_len) + "1"*sfx_len + "0"*off
+        msk_hex: str = hex(int(msk_bin,2))
+        self.sfx_info = BitRange(sfx_hex, msk_hex, sfx_len, off)
 
     def set_arg_bits_info(self):
-
-        bitInfo : ArgBitsInfo = ArgBitsInfo()
-        prev : Optional[str] = None
-        for i,ch in enumerate(self.compact):
-            if ch != prev:
-                bitInfo.start(ch,i)
-            else:
-                bitInfo.cont(ch,i)
-            prev = ch
-
-        self.arg_bits_info = bitInfo
+        self.arg_bits_info = ArgBitsInfo(self.compact)
 
     def get_arg_bits_info(self)->ArgBitsInfo:
         return self.arg_bits_info
-
 
     def is_long_instrn(self)->bool:
         return self.instrn_size() > 16
@@ -197,23 +233,26 @@ class Pattern(object):
     def instrn_size(self)->int:
         return len(self.compact)
 
-    def __repr__(self):
-        return ("PL(%s),P(%s),PH(%s),PM(%s)" %
-                (self.pfx_len, self.prefix, self.pfx_hex, self.pfx_msk))
 
 
 class Prefixes(object):
+
     len: int
     mask: str
-    instrns: Dict[Hex,str]
+    instrns: Dict[Hex, Dict[str, BitRange]]
 
     def __init__(self, len:int, mask:str):
         self.len = len
         self.mask = mask
         self.instrns = {}
 
-    def set(self, hex:Hex, instrn:str):
-        self.instrns[hex] = instrn
+    def set(self, hex:Hex, instrn:str, sfx_info: BitRange):
+        if not self.instrns.get(hex):
+            self.instrns[hex] = {}
+        else:
+            logging.error("Conflict PM(%s) PH(%s) %s %s"
+                          % (self.mask, hex, instrn, self.instrns.get(hex)))
+        self.instrns[hex][instrn] = sfx_info
 
     def __repr__(self):
         instrns = ["<%s,%s>" % (mask, instrn)
@@ -229,9 +268,9 @@ class PrefixTable(object):
         self.by_len = {}
 
     def add_prefix(self, instrn:str, pattern: Pattern):
-        len: int = pattern.pfx_len
-        prefixes: Prefixes = self.by_len.get(len, Prefixes(len, pattern.pfx_msk))
-        prefixes.set(pattern.pfx_hex, instrn)
+        len: int = pattern.pfx_info.len_
+        prefixes: Prefixes = self.by_len.get(len, Prefixes(len, pattern.pfx_info.mask))
+        prefixes.set(pattern.pfx_info.hex, instrn, pattern.sfx_info)
         self.by_len[len] = prefixes
 
     def __repr__(self):

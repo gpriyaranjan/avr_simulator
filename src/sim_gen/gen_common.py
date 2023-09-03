@@ -31,11 +31,14 @@ class AnyFile(object):
 
     out_fp: IO
 
-    def fprint(self, str_):
+    def fprintln(self, str_=""):
         print(str_, file=self.out_fp)
 
+    def fprint(self, str_=""):
+        print(str_, file=self.out_fp, end='')
+
     def blankline(self):
-        self.fprint("")
+        self.fprintln("")
 
     def open_writer(self, out_file:str):
         self.out_fp = open(out_file, "w")
@@ -43,7 +46,6 @@ class AnyFile(object):
     def close_writer(self):
         self.out_fp.close()
 
-    pass
 
 
 class CLangFile(AnyFile):
@@ -51,7 +53,7 @@ class CLangFile(AnyFile):
     def write_include_files(self, includes: List[str]):
         include: str
         for include in includes:
-            self.fprint('#include "%s"' % include)
+            self.fprintln('#include "%s"' % include)
         self.blankline()
 
 
@@ -59,35 +61,35 @@ class HeaderFile(CLangFile):
 
     def write_file_header(self, module_name: str):
         macro_name: str = "%s_H" % module_name.upper()
-        self.fprint("#ifndef %s" % macro_name)
-        self.fprint("#define %s" % macro_name)
+        self.fprintln("#ifndef %s" % macro_name)
+        self.fprintln("#define %s" % macro_name)
 
     def write_file_trailer(self, module_name: str):
         macro_name: str = "%s_H" % module_name.upper()
         line:str = "#endif // %s" % (macro_name)
-        self.fprint(line)
+        self.fprintln(line)
 
     def write_class_prefix(self, class_name: str):
-        self.fprint("class %s {" % class_name)
-        self.fprint("public:")
+        self.fprintln("class %s {" % class_name)
+        self.fprintln("public:")
         self.blankline()
 
     def write_enum_prefix(self, enum_name: str):
-        self.fprint("enum %s {" % enum_name)
+        self.fprintln("enum %s {" % enum_name)
         self.blankline()
 
     def write_class_suffix(self):
-        self.fprint("};")
+        self.fprintln("};")
 
     def write_enum_suffix(self):
-        self.fprint("};")
+        self.fprintln("};")
 
     def write_func_header(
             self, ret_type: str, func_name: str,
             args: List[Tuple[str,str]], indent:int=0
     ):
         args_str: str = ", ".join(["%s %s" % (type_, name) for (type_, name) in args])
-        self.fprint("\t"*(indent) + "%s %s(%s);" % (ret_type, func_name, args_str))
+        self.fprintln("\t" * (indent) + "%s %s(%s);" % (ret_type, func_name, args_str))
 
 
 class CppFile(CLangFile):
@@ -98,24 +100,24 @@ class CppFile(CLangFile):
         args_str: str = ", ".join(["%s %s" % (type_, name) for (type_, name) in args])
         func_desc = "%s::%s"%(class_name, func_name) if len(class_name) else func_name
         func_header: str = "%s %s(%s) {" % (ret_type, func_desc, args_str)
-        self.fprint(func_header)
+        self.fprintln(func_header)
 
     def write_switch_func(self, switch_expr: str, cases: List[Tuple[str, str]],
                           ret_flag: bool, def_ret_flag: bool, def_val: Optional[str]):
 
-        self.fprint("\tswitch(%s) {" % switch_expr)
+        self.fprintln("\tswitch(%s) {" % switch_expr)
         for check_val, ret_val in cases:
             if ret_flag:
-                self.fprint("\t\tcase %s: return %s;" % (check_val, ret_val))
+                self.fprintln("\t\tcase %s: return %s;" % (check_val, ret_val))
             else:
-                self.fprint("\t\tcase %s: %s; break;" % (check_val, ret_val))
+                self.fprintln("\t\tcase %s: %s; break;" % (check_val, ret_val))
 
         if def_ret_flag:
-            self.fprint("\t\tdefault: break;")
+            self.fprintln("\t\tdefault: break;")
         else:
-            self.fprint("\t\tdefault: return %s;" % def_val)
+            self.fprintln("\t\tdefault: return %s;" % def_val)
 
-        self.fprint("\t};")
+        self.fprintln("\t};")
 
 
 def camel_case(word: str)->str:

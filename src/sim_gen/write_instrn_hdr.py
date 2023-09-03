@@ -13,12 +13,12 @@ class InstrnEnumsFile(HeaderFile):
         for func_name, func_json in mod_spec.items():
             func_spec: FuncSpec = FuncSpec(func_json)
             value: str = hex(int(func_spec.pattern.instrn_mask, 2))
-            self.fprint("\t%s = %s," % (func_name, value))
+            self.fprintln("\t%s = %s," % (func_name, value))
 
     def write_enums_for_spec_file(self, spec_file: str):
         json_spec: Dict[str, Dict[str, str]] = read_json_file(spec_file)
         mod_name: str = os.path.splitext(os.path.basename(spec_file))[0]
-        self.fprint("\t// %s" % camel_case(mod_name))
+        self.fprintln("\t// %s" % camel_case(mod_name))
         self.write_enums_for_spec(json_spec)
 
     def write_enums_for_spec_files(self, spec_files: List[str]):

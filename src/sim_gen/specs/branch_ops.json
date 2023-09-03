@@ -120,10 +120,12 @@
 
   "BRIE": {
     "T": "Branch if interrupt flag enabled",
-    "P": "1111-00kk-kkkk-k111"
+    "P": "1111-00kk-kkkk-k111",
+    "A": "BRBS"
   },
   "BRID": {
     "T": "Branch if interrupt flag disabled",
-    "P": "1111-01kk-kkkk-k111"
+    "P": "1111-01kk-kkkk-k111",
+    "A": "BRBC"
   }
 }

@@ -15,10 +15,10 @@ from src.sim_gen.pattern import ArgBitsInfo
 class ImplHdrFile(HeaderFile, WrapperCommon):
 
     def gen_includes(self):
-        self.fprint('#include "../infra/types.h"')
+        self.fprintln('#include "../infra/types.h"')
 
     def gen_forward_classes(self):
-        self.fprint("class Environ;")
+        self.fprintln("class Environ;")
 
     def gen_func_args(self, func_spec: FuncSpec)->List[Tuple[str,str]]:
 
@@ -39,7 +39,7 @@ class ImplHdrFile(HeaderFile, WrapperCommon):
         args: List[Tuple[str,str]] = [("Environ&", "env")] + func_args
         args_list: List[str] = list(map(lambda x: x[0] + " " + x[1], args))
         args_str: str = ", ".join(args_list)
-        self.fprint("\tstatic void %s(%s);" % (func_name, args_str))
+        self.fprintln("\tstatic void %s(%s);" % (func_name, args_str))
 
 
     def gen_class(self, module_name: str, spec_json: Dict[str,Dict]):

@@ -10,16 +10,16 @@ from gen_common import (
 class WrapperHdrFile(HeaderFile):
 
     def gen_includes(self):
-        self.fprint('#include "../infra/types.h"')
+        self.fprintln('#include "../infra/types.h"')
 
     def gen_forward_classes(self):
-        self.fprint("class Environ;")
+        self.fprintln("class Environ;")
 
     def write_impl_func(self, func_name: str, func_spec: FuncSpec):
         instrn_defn: str = (
             "LongInstrn" if func_spec.pattern.is_long_instrn() else "ShortInstrn")
-        self.fprint("\tstatic void %s(Environ& env, %s instrn);" %
-                    (func_name, instrn_defn) )
+        self.fprintln("\tstatic void %s(Environ& env, %s instrn);" %
+                      (func_name, instrn_defn))
 
     def gen_struct(self, module_name: str, spec_json: Dict[str,Dict]):
         class_name: str = camel_case(module_name)

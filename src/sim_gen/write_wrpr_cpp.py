@@ -15,11 +15,11 @@ from src.sim_gen.pattern import ArgBitInfo, ArgBitsInfo, ArgBitRangesExpr
 class WrapperBodyFile(CppFile):
 
     def gen_includes(self, module_name: str):
-        self.fprint('#include "%s.h"' % module_name)
-        self.fprint('#include "%s_impl.h"' % module_name)
+        self.fprintln('#include "%s.h"' % module_name)
+        self.fprintln('#include "%s_impl.h"' % module_name)
 
     def gen_forward_classes(self):
-        self.fprint('class Environ;')
+        self.fprintln('class Environ;')
 
     def prepare_impl_args(self, func_spec:FuncSpec):
 
@@ -29,7 +29,7 @@ class WrapperBodyFile(CppFile):
             arg_type, arg_name = WrapperCommon.gen_func_arg(ch, bitInfo.count)
             arg_init_expr = ArgBitRangesExpr.gen_extraction(
                 "instrn", func_spec.pattern.instrn_size(), bitInfo.pos)
-            self.fprint("\t%s %s = %s;" % (arg_type, arg_name, arg_init_expr))
+            self.fprintln("\t%s %s = %s;" % (arg_type, arg_name, arg_init_expr))
 
     def make_impl_call(self, wrapper_name: str, func_name: str, func_spec: FuncSpec):
         impl_class_name: str = "%sImpl" % wrapper_name
@@ -39,7 +39,7 @@ class WrapperBodyFile(CppFile):
             _, arg_name = WrapperCommon.gen_func_arg(ch, bitInfo.count)
             arg_names.append(arg_name)
         args_str: str = ", ".join(["env"] + arg_names)
-        self.fprint("\t%s::%s(%s);" % (impl_class_name, func_name, args_str))
+        self.fprintln("\t%s::%s(%s);" % (impl_class_name, func_name, args_str))
 
     def gen_func(self, wrapper_name: str, func_name: str, func_spec: FuncSpec):
         instrn_type: str = (
@@ -49,7 +49,7 @@ class WrapperBodyFile(CppFile):
         self.write_func_body_hdr("void", wrapper_name, func_name, args)
         self.prepare_impl_args(func_spec)
         self.make_impl_call(wrapper_name, func_name, func_spec)
-        self.fprint("}")
+        self.fprintln("}")
 
     def gen_funcs(self, module_name: str, spec_json: Dict[str,Dict]):
         wrapper_name = camel_case(module_name)
